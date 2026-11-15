@@ -40,7 +40,8 @@ def test_presets_come_from_presets_json():
     assert by["chakwal"]["rotation_name"] == "Wheat then bare fallow"
     assert by["chakwal"]["rotation_crops"][0]["plant_date"] == "1 Nov"
     assert by["chakwal"]["water_label"] == "Rainfed" and by["sheikhupura"]["water_label"] == "Irrigated"
-    assert by["sheikhupura"]["data_status"]["soilgrids"] == "not_cached"
+    # not looked up in the delivered package; "no_data" once a lookup has been made (SoilGrids has none there)
+    assert by["sheikhupura"]["data_status"]["soilgrids"] in ("not_cached", "no_data")
     assert by["ames_iowa"]["data_status"]["soilgrids"] == "profile"
     assert body["default_priorities"]["stability"] == 4
 

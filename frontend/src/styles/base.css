@@ -238,6 +238,20 @@
   border-radius: 0.5rem;
 }
 
+@keyframes hs-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.bar-grow-x {
+  transform-origin: left;
+  animation: hs-grow-x 0.7s var(--ease-soft) both;
+}
+
 .bar-grow {
   transform-origin: bottom;
   animation: hs-grow-y 0.7s var(--ease-soft) both;
@@ -284,5 +298,138 @@
   }
   .reveal-line > * {
     transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------- workspace controls */
+
+.hs-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1.75rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: pan-y;
+}
+
+.hs-range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-sand-300) 0 var(--from, 0%),
+    var(--color-forest-950) var(--from, 0%) var(--to, 50%),
+    var(--color-sand-300) var(--to, 50%) 100%
+  );
+}
+
+.hs-range::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-sand-300) 0 var(--from, 0%),
+    var(--color-forest-950) var(--from, 0%) var(--to, 50%),
+    var(--color-sand-300) var(--to, 50%) 100%
+  );
+}
+
+.hs-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: -8px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--color-forest-950);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s var(--ease-soft);
+}
+
+.hs-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--color-forest-950);
+  box-shadow: var(--shadow-soft);
+}
+
+.hs-range:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+
+.hs-range:focus-visible {
+  outline: none;
+}
+
+.hs-range:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--color-forest-950);
+  outline-offset: 3px;
+}
+
+.hs-range:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--color-forest-950);
+  outline-offset: 3px;
+}
+
+/* Leaflet inside the brand: rounded controls, brand pin, readable attribution. */
+.hs-map .leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--color-sand);
+}
+
+.hs-map .leaflet-control-zoom {
+  border: 0;
+  box-shadow: var(--shadow-soft);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.hs-map .leaflet-control-zoom a {
+  color: var(--color-forest-950);
+  width: 34px;
+  height: 34px;
+  line-height: 34px;
+}
+
+.hs-map .leaflet-control-attribution {
+  font-size: 11px;
+  background: rgb(255 253 249 / 0.9);
+  border-top-left-radius: 0.5rem;
+}
+
+.hs-pin {
+  width: 34px;
+  height: 34px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  background: var(--color-forest-950);
+  border: 3px solid var(--color-lime);
+  box-shadow: 0 6px 16px rgb(28 58 42 / 0.4);
+}
+
+.hs-pin::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: var(--color-lime);
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+  @page {
+    margin: 14mm;
   }
 }

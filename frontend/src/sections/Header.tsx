@@ -1,7 +1,7 @@
 import { Menu, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Logo } from '../components/brand/Logo'
-import { ButtonLink } from '../components/ui/Button'
+import { ButtonRouterLink } from '../components/ui/Button'
 import { useScrolled, useScrollSpy } from '../hooks/useScroll'
 import { cx } from '../lib/cx'
 
@@ -87,9 +87,9 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <div className="hidden sm:block">
-            <ButtonLink href="#explore" arrow>
+            <ButtonRouterLink to="/app/analysis" arrow>
               Explore Your Field
-            </ButtonLink>
+            </ButtonRouterLink>
           </div>
           <button
             ref={toggleRef}
@@ -140,9 +140,9 @@ export function Header() {
             ))}
           </ul>
         </nav>
-        <ButtonLink href="#explore" arrow size="lg" className="mt-3 w-full justify-between" onClick={() => setOpen(false)}>
+        <ButtonRouterLink to="/app/analysis" arrow size="lg" className="mt-3 w-full justify-between" onClick={() => setOpen(false)}>
           Explore Your Field
-        </ButtonLink>
+        </ButtonRouterLink>
       </div>
     </header>
   )

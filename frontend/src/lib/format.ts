@@ -46,3 +46,16 @@ export function fmtTime(iso: string | null | undefined): string | null {
   const d = new Date(iso)
   return Number.isNaN(d.getTime()) ? null : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
+
+/** "1994, 1998, 2000–2002" */
+export function yearList(years: number[]): string {
+  const ys = [...years].sort((a, b) => a - b)
+  const out: string[] = []
+  for (let i = 0; i < ys.length; i++) {
+    let j = i
+    while (j + 1 < ys.length && ys[j + 1] === ys[j] + 1) j++
+    out.push(j - i >= 2 ? `${ys[i]}–${ys[j]}` : ys.slice(i, j + 1).join(', '))
+    i = j
+  }
+  return out.join(', ')
+}

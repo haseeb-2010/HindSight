@@ -8,7 +8,7 @@ const STEPS = [
   {
     icon: MapPin,
     title: 'Choose your field',
-    body: 'Select a demonstration location now, or enter your own field location once the full analysis workspace is available.',
+    body: 'Select a demonstration location, or place your own field on the map in the analysis workspace.',
   },
   {
     icon: Layers,

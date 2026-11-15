@@ -1,6 +1,7 @@
 # HindSight frontend
 
-React + TypeScript + Vite + Tailwind CSS. Phase 01 is the homepage (`/`).
+React + TypeScript + Vite + Tailwind CSS. `/` is the homepage; `/app` is the farm analysis workspace
+(`/app/analysis` is the step-by-step analysis and results).
 
 ## Run
 
@@ -34,6 +35,7 @@ homepage, so `http://localhost:8000` runs the whole app from one process.
 | `src/lib/api.ts`, `src/lib/types.ts` | API client and response types |
 | `src/lib/analysis.ts` | Read-only selectors over engine output (no science is recomputed here) |
 | `src/sections/` | One file per homepage section |
+| `src/app/` | The workspace: `steps/` (inputs), `results/` (tabs, exports, print report), `state/` (session state, analysis jobs), `lib/` (request builder, labels, CSV) |
 | `src/components/` | Shared UI, charts, logo |
 | `public/logo`, `public/mascots` | Supplied brand assets, unmodified |
 

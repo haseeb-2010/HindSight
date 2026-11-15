@@ -1,5 +1,6 @@
 import { Compass, RefreshCw } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Button } from '../components/ui/Button'
 import { Reveal } from '../components/ui/Reveal'
 import { SectionHeading } from '../components/ui/SectionHeading'
@@ -83,7 +84,13 @@ export function DemoFarms({ presets, onRetryPresets }: DemoFarmsProps) {
         <Reveal delay={220} className="mt-6 flex justify-center">
           <p className="inline-flex items-center gap-2.5 rounded-2xl bg-sand px-4 py-2.5 text-[0.8125rem] leading-snug font-bold text-ink sm:rounded-full sm:py-2">
             <Compass className="h-4 w-4 shrink-0 text-forest-800" aria-hidden="true" />
-            Analysis for your own field location arrives with the full workspace. Each farm below runs the real engine.
+            <span>
+              Each farm below runs the real engine. To analyse your own field,{' '}
+              <Link to="/app/analysis" className="font-extrabold text-forest-950 underline decoration-sage underline-offset-2 hover:decoration-forest-950">
+                open the analysis workspace
+              </Link>
+              .
+            </span>
           </p>
         </Reveal>
 

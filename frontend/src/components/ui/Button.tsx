@@ -1,5 +1,6 @@
 import { ArrowRight, LoaderCircle } from 'lucide-react'
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react'
+import { Link, type LinkProps as RouterLinkBaseProps } from 'react-router-dom'
 import { cx } from '../../lib/cx'
 
 type Variant = 'primary' | 'accent' | 'secondary' | 'ghostDark'
@@ -99,5 +100,18 @@ export function ButtonLink({ variant = 'primary', size = 'md', arrow, icon, chil
         {children}
       </Inner>
     </a>
+  )
+}
+
+type RouterLinkProps = CommonProps & Omit<RouterLinkBaseProps, 'children'>
+
+/** Same look as ButtonLink, for in-app routes (no full page load). */
+export function ButtonRouterLink({ variant = 'primary', size = 'md', arrow, icon, children, className, ...rest }: RouterLinkProps) {
+  return (
+    <Link {...rest} className={classes(variant, size, arrow, className)}>
+      <Inner variant={variant} size={size} arrow={arrow} icon={icon}>
+        {children}
+      </Inner>
+    </Link>
   )
 }

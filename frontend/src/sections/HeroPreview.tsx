@@ -8,21 +8,8 @@ import { usePointerParallax } from '../hooks/useMotion'
 import type { Resource } from '../hooks/useResource'
 import { currentRotation, failureThreshold, indexVaries, rankText, rotationLabel, seasonsFailed, topAlternative } from '../lib/analysis'
 import { cx } from '../lib/cx'
-import { fmtIndex, fmtMm } from '../lib/format'
+import { fmtIndex, fmtMm, yearList } from '../lib/format'
 import type { AnalysisEnvelope, Preset } from '../lib/types'
-
-/** "1994, 1998, 2000–2002" */
-export function yearList(years: number[]): string {
-  const ys = [...years].sort((a, b) => a - b)
-  const out: string[] = []
-  for (let i = 0; i < ys.length; i++) {
-    let j = i
-    while (j + 1 < ys.length && ys[j + 1] === ys[j] + 1) j++
-    out.push(j - i >= 2 ? `${ys[i]}–${ys[j]}` : ys.slice(i, j + 1).join(', '))
-    i = j
-  }
-  return out.join(', ')
-}
 
 function FloatCard({ className, delay, children }: { className?: string; delay: number; children: ReactNode }) {
   return (

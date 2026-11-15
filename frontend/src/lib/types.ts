@@ -150,7 +150,13 @@ export interface AnalysisResult {
     name: string
     lat: number
     lon: number
-    soil_used?: { source?: string; texture_class?: string; available_water_mm_per_m?: number }
+    soil_used?: {
+      source?: string
+      texture_class?: string
+      field_capacity_frac?: number
+      wilting_point_frac?: number
+      available_water_mm_per_m?: number
+    }
     climate_summary?: { annual_rain_mm?: number; annual_et0_mm?: number; mean_temp_c?: number }
   }
   climate_shift?: ClimateShift[]
@@ -159,20 +165,160 @@ export interface AnalysisResult {
   provenance?: { item: string; kind: string; source: string }[]
 }
 
+/** The request the engine actually ran with, echoed back by the API. */
+export interface EngineRequest {
+  location?: { lat?: number; lon?: number; name?: string | null; preset_id?: string | null }
+  soil?: { texture_class?: string | null; organic_matter_level?: string | null; depth_cm?: number | null }
+  water?: { mode?: string; seasonal_cap_mm?: number | null }
+  current_rotation?: { cycle_years?: number; slots?: RotationSlot[] }
+  priorities?: Record<string, number>
+  constraints?: { excluded_crops?: string[]; market_rating?: Record<string, number>; max_cycle_years?: number }
+  scenario?: { temp_delta_c?: number; precip_factor?: number }
+  options?: { apply_legume_effect?: boolean; failure_threshold?: number; top_n?: number }
+}
+
 export interface AnalysisEnvelope {
   source: 'live' | 'saved'
-  preset_id: string
+  preset_id: string | null
+  analysis_id?: string
   engine_version?: string | null
   computed_at?: string
   elapsed_ms?: number
   notice?: string
+  notes?: string[]
   fallback_reason?: string | null
   saved_file?: string
   inputs?: {
-    climate?: { source?: string; start?: string; end?: string; grid_note?: string }
-    soil?: { used?: string; soilgrids?: string }
-    ndvi?: { used?: boolean; point?: { lat: number; lon: number } }
+    climate?: { source?: string; start?: string; end?: string; grid_note?: string; from_cache?: boolean; elevation_m?: number | null }
+    soil?: { used?: string; requested?: string; soilgrids?: string; profile?: SoilProfile | null }
+    ndvi?: { used?: boolean; point?: { lat: number; lon: number }; reason?: string | null }
   }
-  request?: { options?: { failure_threshold?: number; top_n?: number }; water?: { mode?: string } }
+  request?: EngineRequest
   result: AnalysisResult
+}
+
+/* ---------------------------------------------------------------- workspace (Phase 02) */
+
+export interface Crop {
+  id: string
+  name: string
+  group: string | null
+  family: string | null
+  is_legume: boolean
+  is_forage: boolean
+  season_type: string | null
+  season_days: number
+}
+
+export interface CropsResponse {
+  crops: Crop[]
+  unavailable: { id: string; name: string; reason: string }[]
+  default_market_rating: number
+  limits: {
+    depth_cm: [number, number]
+    seasonal_cap_mm: [number, number]
+    temp_delta_c: [number, number]
+    precip_factor: [number, number]
+    failure_threshold: [number, number]
+    top_n: [number, number]
+    max_slots: number
+  }
+  soil_textures: string[]
+  organic_matter_levels: string[]
+}
+
+export interface SoilProfile {
+  source: string
+  texture_class: string
+  sand_pct: number
+  clay_pct: number
+  organic_matter_pct: number | null
+  ph: number | null
+  depth_cm: number | null
+}
+
+export interface SoilLookup {
+  status: 'profile' | 'no_data' | 'unavailable'
+  profile: SoilProfile | null
+  lat: number
+  lon: number
+  source_label: string
+  message: string
+  depth_note: string
+}
+
+export interface SoilResolved {
+  source: string
+  texture_class: string
+  field_capacity_frac: number
+  wilting_point_frac: number
+  available_water_mm_per_m: number
+  depth_cm: number
+  from_profile: boolean
+  method: string
+}
+
+export interface SeasonPreview {
+  crop_id: string
+  crop_name: string
+  year_offset: number
+  plant_doy: number
+  plant_date: string
+  season_days: number
+  harvest_year_offset: number
+  harvest_date: string
+}
+
+/** Returned when the engine's schedule check rejects a rotation (e.g. overlapping seasons). */
+export interface RotationRejected {
+  valid: false
+  error: string
+  detail: string
+}
+
+export interface RotationPreview {
+  valid: true
+  name: string
+  cycle_years: number
+  calendar: CalendarCell[]
+  seasons: SeasonPreview[]
+  cover_frac: number
+  legume_share: number
+  forage_share: number
+}
+
+export interface GeocodeResponse {
+  query: string
+  results: { name: string; lat: number; lon: number }[]
+  attribution: string
+}
+
+export interface JobStage {
+  id: string
+  label: string
+  state: 'done' | 'active' | 'pending' | 'error'
+  detail: string | null
+}
+
+export interface JobState {
+  analysis_id: string
+  status: 'queued' | 'running' | 'done' | 'error'
+  stage: string | null
+  stages: JobStage[]
+  elapsed_ms: number
+  envelope: AnalysisEnvelope | null
+  error: { code: string; detail: string } | null
+}
+
+/** What the workspace sends to POST /api/analyze. */
+export interface AnalyzeBody {
+  location: { lat: number; lon: number; name: string | null; preset_id: string | null }
+  soil: { texture_class: string; organic_matter_level: string; depth_cm: number }
+  soil_source: 'farmer' | 'soilgrids'
+  water: { mode: string; seasonal_cap_mm: number | null }
+  current_rotation: { cycle_years: number; slots: RotationSlot[] }
+  priorities: Record<string, number>
+  constraints: { excluded_crops: string[]; market_rating: Record<string, number>; max_cycle_years: number }
+  scenario: { temp_delta_c: number; precip_factor: number }
+  options: { apply_legume_effect: boolean; failure_threshold: number; top_n: number }
 }

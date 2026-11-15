@@ -17,6 +17,8 @@ interface IndexLinesProps {
   highlightLabel?: string
   caption: string
   height?: number
+  /** Shown above the vertical axis, e.g. "Season index (S)". */
+  yLabel?: string
 }
 
 const PAD = { l: 34, r: 12, t: 14, b: 26 }
@@ -37,7 +39,7 @@ function pathFor(values: (number | null)[], x: (i: number) => number, y: (v: num
 
 /** Season index per year for several rotations, with failure line, highlighted years,
  *  pointer + keyboard crosshair, and a screen-reader data table. */
-export function IndexLines({ years, series, threshold, highlightYears = [], highlightLabel, caption, height = 248 }: IndexLinesProps) {
+export function IndexLines({ years, series, threshold, highlightYears = [], highlightLabel, caption, height = 248, yLabel }: IndexLinesProps) {
   const [wrap, width] = useElementWidth<HTMLDivElement>(640)
   const [active, setActive] = useState<number | null>(null)
   const n = years.length
@@ -110,6 +112,11 @@ export function IndexLines({ years, series, threshold, highlightYears = [], high
           )}
         </div>
       </div>
+      {yLabel && (
+        <p className="mb-1 text-[0.75rem] font-extrabold text-muted" aria-hidden="true">
+          {yLabel}
+        </p>
+      )}
       <div
         ref={wrap}
         tabIndex={0}

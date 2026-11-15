@@ -1,4 +1,15 @@
-import type { AnalysisEnvelope, PresetsResponse } from './types'
+import type {
+  AnalysisEnvelope,
+  AnalyzeBody,
+  CropsResponse,
+  GeocodeResponse,
+  JobState,
+  PresetsResponse,
+  RotationPreview,
+  RotationRejected,
+  SoilLookup,
+  SoilResolved,
+} from './types'
 
 const BASE = (import.meta.env.VITE_API_BASE_URL ?? '').replace(/\/+$/, '')
 
@@ -52,12 +63,33 @@ async function request<T>(path: string, init: RequestInit = {}, timeoutMs = 45_0
   }
 }
 
+function post<T>(path: string, body: unknown, signal?: AbortSignal, timeoutMs = 45_000) {
+  return request<T>(
+    path,
+    { method: 'POST', body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' }, signal },
+    timeoutMs,
+  )
+}
+
 export const api = {
   presets: (signal?: AbortSignal) => request<PresetsResponse>('/api/presets', { signal }),
   demo: (presetId: string, signal?: AbortSignal) =>
     request<AnalysisEnvelope>(`/api/demo/${encodeURIComponent(presetId)}`, { signal }),
   analyzePreset: (presetId: string, signal?: AbortSignal) =>
     request<AnalysisEnvelope>(`/api/analyze/preset/${encodeURIComponent(presetId)}`, { method: 'POST', signal }, 90_000),
+
+  // Workspace
+  crops: (signal?: AbortSignal) => request<CropsResponse>('/api/crops', { signal }),
+  geocode: (q: string, signal?: AbortSignal) =>
+    request<GeocodeResponse>(`/api/geocode?q=${encodeURIComponent(q)}`, { signal }, 20_000),
+  soilLookup: (lat: number, lon: number, signal?: AbortSignal) => post<SoilLookup>('/api/soil/lookup', { lat, lon }, signal, 30_000),
+  soilResolve: (body: { lat: number; lon: number; soil: AnalyzeBody['soil']; soil_source: string }, signal?: AbortSignal) =>
+    post<SoilResolved>('/api/soil/resolve', body, signal),
+  rotationPreview: (rotation: AnalyzeBody['current_rotation'], signal?: AbortSignal) =>
+    post<RotationPreview | RotationRejected>('/api/rotation/preview', rotation, signal),
+  startAnalysis: (body: AnalyzeBody, signal?: AbortSignal) =>
+    post<{ analysis_id: string; status: string }>('/api/analyze', body, signal),
+  analysis: (id: string, signal?: AbortSignal) => request<JobState>(`/api/analysis/${encodeURIComponent(id)}`, { signal }, 20_000),
 }
 
 export function errorMessage(err: unknown): string {

@@ -8,6 +8,10 @@ try_cache.py
 # Partial MODIS downloads (see docs/FOR_PERSON_3.md)
 backend/data/cache/ndvi_partial_*.json
 backend/data/cache/*.tmp
+# Weather and soil downloaded for custom fields (the three demo-farm caches stay tracked)
+backend/data/cache/power_*.json
+backend/data/cache/soil_*.json
+backend/data/cache/ndvi_*.json
 
 # Frontend
 frontend/node_modules/
