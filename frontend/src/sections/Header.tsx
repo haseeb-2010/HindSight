@@ -87,7 +87,7 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <div className="hidden sm:block">
-            <ButtonRouterLink to="/app/analysis" arrow>
+            <ButtonRouterLink to="/app" arrow>
               Explore Your Field
             </ButtonRouterLink>
           </div>
@@ -140,7 +140,7 @@ export function Header() {
             ))}
           </ul>
         </nav>
-        <ButtonRouterLink to="/app/analysis" arrow size="lg" className="mt-3 w-full justify-between" onClick={() => setOpen(false)}>
+        <ButtonRouterLink to="/app" arrow size="lg" className="mt-3 w-full justify-between" onClick={() => setOpen(false)}>
           Explore Your Field
         </ButtonRouterLink>
       </div>
