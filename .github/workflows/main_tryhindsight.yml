@@ -1,29 +1,14 @@
-# Builds HindSight and deploys it to the Azure App Service "tryhindsight".
-#
-# One App Service serves everything: FastAPI (backend/api.py) answers /api/* and
-# also serves the built frontend (frontend/dist), so the site and the API share one URL.
-#
-# The deploy job also makes sure the App Service is configured for this app
-# (Linux Python runtime, startup command, build-on-deploy), so no portal setup is needed.
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy HindSight to Azure Web App - tryhindsight
+name: Build and deploy Python app to Azure Web App - tryhindsight
 
 on:
   push:
     branches:
       - 'main'
   workflow_dispatch:
-
-env:
-  APP_NAME: tryhindsight
-  PYTHON_VERSION: '3.14'
-  NODE_VERSION: '24'
-  # One process only: analysis jobs are kept in memory, so several workers would lose them.
-  STARTUP_COMMAND: python -m uvicorn backend.api:app --host 0.0.0.0 --port 8000
-
-concurrency:
-  group: deploy-tryhindsight
-  cancel-in-progress: false
 
 jobs:
   build:
@@ -34,48 +19,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python version
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: '3.15'
 
-      - name: Install backend dependencies
-        run: python -m pip install -r backend/requirements.txt
-
-      - name: Run backend tests
-        run: python -m pytest backend/tests -q
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Build frontend
-        working-directory: frontend
+      # 🛠️ Local Build Section (Optional)
+      # The following section in your workflow is designed to catch build issues early on the client side, before deployment. This can be helpful for debugging and validation. However, if this step significantly increases deployment time and early detection is not critical for your workflow, you may remove this section to streamline the deployment process.
+      - name: Create and Start virtual environment and Install dependencies
         run: |
-          npm ci
-          npm test
-          npm run build
-
-      - name: Assemble deployment package
-        run: |
-          mkdir -p package/frontend
-          cp -r backend scripts package/
-          rm -rf package/backend/tests
-          find package -name __pycache__ -type d -prune -exec rm -rf {} +
-          cp -r frontend/dist package/frontend/dist
-          # App Service installs dependencies from a requirements.txt at the package root.
-          cp backend/requirements.txt package/requirements.txt
-          (cd package && zip -qr ../release.zip .)
-          ls -lh release.zip
-
-      - name: Upload artifact for deployment job
+          python -m venv antenv
+          source antenv/bin/activate
+          pip install -r requirements.txt
+                
+      # By default, when you enable GitHub CI/CD integration through the Azure portal, the platform automatically sets the SCM_DO_BUILD_DURING_DEPLOYMENT application setting to true. This triggers the use of Oryx, a build engine that handles application compilation and dependency installation (e.g., pip install) directly on the platform during deployment. Hence, we exclude the antenv virtual environment directory from the deployment artifact to reduce the payload size. 
+      - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
-          name: hindsight-app
-          path: release.zip
+          name: python-app
+          path: |
+            .
+            !antenv/
+
+      # 🚫 Opting Out of Oryx Build
+      # If you prefer to disable the Oryx build process during deployment, follow these steps:
+      # 1. Remove the SCM_DO_BUILD_DURING_DEPLOYMENT app setting from your Azure App Service Environment variables.
+      # 2. Refer to sample workflows for alternative deployment strategies: https://github.com/Azure/actions-workflow-samples/tree/master/AppService
+      
 
   deploy:
     runs-on: ubuntu-latest
@@ -88,102 +58,19 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: hindsight-app
-
+          name: python-app
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1BAD8016E8824EECBE3712A9C3C3132D }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_25EC56780F2A42568B7D757C3AA1F87C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E2D59127ACAA4FD09150920176AFE507 }}
-
-      - name: Configure the App Service for Python
-        id: configure
-        run: |
-          set -euo pipefail
-          manual() {
-            echo "::error::$1"
-            echo "Set these by hand in the Azure portal (App Service '$APP_NAME'), then re-run this workflow:"
-            echo "  Settings > Configuration > Stack settings: Python $PYTHON_VERSION"
-            echo "  Settings > Configuration > Startup command: $STARTUP_COMMAND"
-            echo "  Settings > Environment variables: SCM_DO_BUILD_DURING_DEPLOYMENT = true"
-            exit 1
-          }
-
-          RG=$(az webapp list --query "[?name=='$APP_NAME'].resourceGroup | [0]" -o tsv)
-          [ -n "$RG" ] || manual "Could not find the App Service '$APP_NAME' with this deployment identity."
-          echo "rg=$RG" >> "$GITHUB_OUTPUT"
-
-          KIND=$(az webapp show -g "$RG" -n "$APP_NAME" --query kind -o tsv)
-          case "$KIND" in
-            *linux*) ;;
-            *) echo "::error::App Service '$APP_NAME' is a Windows app (kind: $KIND). Python needs a Linux App Service - create a new one with the Python runtime."; exit 1 ;;
-          esac
-
-          if ! az webapp list-runtimes --os-type linux -o tsv 2>/dev/null | grep -q "PYTHON:$PYTHON_VERSION"; then
-            echo "::warning::Python $PYTHON_VERSION was not found in this region's App Service runtime list. If the site does not start, lower PYTHON_VERSION in this workflow."
-          fi
-
-          WANT_FX="PYTHON|$PYTHON_VERSION"
-          HAVE_FX=$(az webapp config show -g "$RG" -n "$APP_NAME" --query linuxFxVersion -o tsv)
-          HAVE_CMD=$(az webapp config show -g "$RG" -n "$APP_NAME" --query appCommandLine -o tsv)
-          HAVE_BUILD=$(az webapp config appsettings list -g "$RG" -n "$APP_NAME" --query "[?name=='SCM_DO_BUILD_DURING_DEPLOYMENT'].value | [0]" -o tsv)
-          CHANGED=0
-
-          if [ "$HAVE_FX" != "$WANT_FX" ] || [ "$HAVE_CMD" != "$STARTUP_COMMAND" ]; then
-            echo "Runtime: '$HAVE_FX' -> '$WANT_FX'; startup command: '$HAVE_CMD' -> '$STARTUP_COMMAND'"
-            az webapp config set -g "$RG" -n "$APP_NAME" --linux-fx-version "$WANT_FX" --startup-file "$STARTUP_COMMAND" -o none \
-              || manual "This deployment identity is not allowed to change the App Service runtime."
-            CHANGED=1
-          fi
-
-          if [ "$HAVE_BUILD" != "true" ] && [ "$HAVE_BUILD" != "1" ]; then
-            echo "Turning on build-on-deploy (SCM_DO_BUILD_DURING_DEPLOYMENT)"
-            az webapp config appsettings set -g "$RG" -n "$APP_NAME" --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true -o none \
-              || manual "This deployment identity is not allowed to change the App Service settings."
-            CHANGED=1
-          fi
-
-          if [ "$CHANGED" = "1" ]; then
-            echo "Configuration changed - waiting for the App Service to restart before deploying."
-            sleep 90
-          else
-            echo "App Service is already configured."
-          fi
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0893517FE61C41DFACE736426AB8EA67 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3417BC201F82480BAEFF0406B2DB8040 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CD3952AA17CA4D6A8918E2DC3FCBA28E }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: ${{ env.APP_NAME }}
+          app-name: 'tryhindsight'
           slot-name: 'Production'
-          package: release.zip
-
-      - name: Check the live site
-        run: |
-          set -euo pipefail
-          HOST=$(az webapp show -g "${{ steps.configure.outputs.rg }}" -n "$APP_NAME" --query defaultHostName -o tsv)
-          URL="https://$HOST"
-          echo "Site: $URL"
-          for i in $(seq 1 40); do
-            BODY=$(curl -fsS -m 20 "$URL/api/health" 2>/dev/null || true)
-            if echo "$BODY" | grep -q '"engine_version"'; then
-              echo "API is up: $BODY"
-              curl -fsS -m 20 -o /dev/null "$URL/" && echo "Homepage is served."
-              {
-                echo "### HindSight is live"
-                echo ""
-                echo "$URL"
-              } >> "$GITHUB_STEP_SUMMARY"
-              exit 0
-            fi
-            echo "Not ready yet (attempt $i/40)..."
-            sleep 15
-          done
-          echo "::error::Deployed, but $URL/api/health did not answer within 10 minutes. Check Log stream for the App Service in the Azure portal."
-          {
-            echo "### Deployed, but the site did not answer"
-            echo ""
-            echo "$URL - check **Log stream** for the App Service in the Azure portal."
-          } >> "$GITHUB_STEP_SUMMARY"
-          exit 1
+          
