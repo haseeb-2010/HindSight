@@ -39,7 +39,7 @@ function Card({
       as="article"
       delay={delay}
       className={cx(
-        'group flex flex-col rounded-[1.75rem] p-2.5 transition-[transform,box-shadow] duration-500 ease-(--ease-soft) hover:-translate-y-1',
+        'group flex min-w-0 flex-col rounded-[1.75rem] p-2.5 transition-[transform,box-shadow] duration-500 ease-(--ease-soft) hover:-translate-y-1',
         tone === 'sand' && 'bg-sand hover:shadow-lift',
         tone === 'white' && 'bg-white shadow-hairline ring-1 ring-border hover:shadow-lift',
         tone === 'lime' && 'bg-lime hover:shadow-lift',
@@ -120,7 +120,7 @@ export function Features({ spotlight, presets, placeName }: FeaturesProps) {
           </Reveal>
         </div>
 
-        <div className="mt-14 grid gap-4 lg:grid-cols-12">
+        <div className="mt-14 grid grid-cols-1 gap-4 lg:grid-cols-12">
           <Card
             className="lg:col-span-7"
             icon={<History className="h-[1.15rem] w-[1.15rem]" aria-hidden="true" />}
@@ -141,7 +141,7 @@ export function Features({ spotlight, presets, placeName }: FeaturesProps) {
                       { icon: Thermometer, label: 'Mean temp.', value: `${fmtNum(climate.mean_temp_c, 1)} °C`, tip: null },
                     ].map((m) => (
                       <div key={m.label} className="flex items-center justify-between gap-3 rounded-2xl bg-sand/80 px-3.5 py-2.5 sm:block sm:p-3.5">
-                        <dt className="flex items-center gap-1.5 text-[0.8125rem] font-bold whitespace-nowrap text-ink sm:text-[0.75rem]">
+                        <dt className="flex min-w-0 items-center gap-1.5 text-[0.8125rem] leading-tight font-bold text-ink sm:text-[0.75rem] sm:whitespace-nowrap">
                           <m.icon className="h-3.5 w-3.5 shrink-0 text-forest-800" aria-hidden="true" />
                           <span>{m.label}</span>
                           {m.tip && <InfoTip label="Reference evapotranspiration (ET₀)">{m.tip}</InfoTip>}
