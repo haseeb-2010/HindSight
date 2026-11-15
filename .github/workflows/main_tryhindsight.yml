@@ -3,8 +3,7 @@
 # One App Service serves everything: FastAPI (backend/api.py) answers /api/* and
 # also serves the built frontend (frontend/dist), so the site and the API share one URL.
 #
-# The deploy job also makes sure the App Service is configured for this app
-# (Linux Python runtime, startup command, build-on-deploy), so no portal setup is needed.
+# The deploy job publishes release.zip and verifies the live /api/health endpoint.
 
 name: Build and deploy HindSight to Azure Web App - tryhindsight
 
