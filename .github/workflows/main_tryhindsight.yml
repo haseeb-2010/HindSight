@@ -1,18 +1,8 @@
-# HindSight: test, build and deploy to Azure on every push to main.
-#
-#   Azure App Service "tryhindsight" (Linux, Python)  -> the FastAPI backend (backend/api.py)
-#   Azure Static Web App "yellow-sand-042ef870f"      -> the React/Vite frontend, built to call that backend
-#
-# The pipeline is self-wiring: it reads the App Service's real hostname, builds the frontend against it,
-# and then allows the Static Web App's origin in the backend's CORS setting. Nothing has to be typed
-# into the Azure portal. The App Service also serves a same-origin copy of the built site, so the
-# backend URL works on its own as a fallback.
-#
-# Secrets (GitHub > Settings > Secrets and variables > Actions), all created by the Azure portal:
-#   AZUREAPPSERVICE_CLIENTID_... / TENANTID_... / SUBSCRIPTIONID_...  federated (OIDC) sign-in for the App Service
-#   AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_SAND_042EF870F             deployment token of the Static Web App
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
 
-name: Build and deploy HindSight to Azure (tryhindsight)
+name: Build and deploy Python app to Azure Web App - tryhindsight
 
 on:
   push:
@@ -20,24 +10,8 @@ on:
       - 'main'
   workflow_dispatch:
 
-env:
-  APP_NAME: tryhindsight
-  PYTHON_VERSION: '3.14'
-  NODE_VERSION: '24'
-  # startup.sh seeds the persistent cache and starts one uvicorn process (analysis jobs are kept in memory,
-  # so several workers would lose them).
-  STARTUP_COMMAND: bash startup.sh
-  # Weather downloaded for custom fields is kept here. /home is the App Service's persistent share,
-  # so it survives restarts and redeployments; the app's own folder does not.
-  CACHE_DIR: /home/hindsight-cache
-
-concurrency:
-  group: deploy-tryhindsight
-  cancel-in-progress: false
-
 jobs:
   build:
-    name: Test and build
     runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
@@ -45,294 +19,58 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Set up Python version
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: '3.14'
 
-      - name: Install backend dependencies
-        run: python -m pip install -r backend/requirements.txt
-
-      - name: Run backend tests
-        run: python -m pytest backend/tests -q
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Test and build the frontend (same-origin copy served by the backend)
-        working-directory: frontend
+      # 🛠️ Local Build Section (Optional)
+      # The following section in your workflow is designed to catch build issues early on the client side, before deployment. This can be helpful for debugging and validation. However, if this step significantly increases deployment time and early detection is not critical for your workflow, you may remove this section to streamline the deployment process.
+      - name: Create and Start virtual environment and Install dependencies
         run: |
-          npm ci
-          npm test
-          npm run build
-
-      - name: Assemble the backend package
-        run: |
-          mkdir -p package/frontend
-          cp -r backend scripts package/
-          rm -rf package/backend/tests
-          find package -name __pycache__ -type d -prune -exec rm -rf {} +
-          cp -r frontend/dist package/frontend/dist
-          # App Service installs dependencies from a requirements.txt at the package root.
-          cp backend/requirements.txt package/requirements.txt
-          cp scripts/azure_startup.sh package/startup.sh
-          (cd package && zip -qr ../release.zip .)
-          ls -lh release.zip
-
-      - name: Upload artifact for deployment job
+          python -m venv antenv
+          source antenv/bin/activate
+          pip install -r requirements.txt
+                
+      # By default, when you enable GitHub CI/CD integration through the Azure portal, the platform automatically sets the SCM_DO_BUILD_DURING_DEPLOYMENT application setting to true. This triggers the use of Oryx, a build engine that handles application compilation and dependency installation (e.g., pip install) directly on the platform during deployment. Hence, we exclude the antenv virtual environment directory from the deployment artifact to reduce the payload size. 
+      - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v4
         with:
-          name: hindsight-app
-          path: release.zip
+          name: python-app
+          path: |
+            .
+            !antenv/
 
-  deploy-api:
-    name: Deploy the backend (App Service)
+      # 🚫 Opting Out of Oryx Build
+      # If you prefer to disable the Oryx build process during deployment, follow these steps:
+      # 1. Remove the SCM_DO_BUILD_DURING_DEPLOYMENT app setting from your Azure App Service Environment variables.
+      # 2. Refer to sample workflows for alternative deployment strategies: https://github.com/Azure/actions-workflow-samples/tree/master/AppService
+      
+
+  deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
       id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
-    outputs:
-      api_url: ${{ steps.health.outputs.api_url }}
-      resource_group: ${{ steps.configure.outputs.rg }}
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: hindsight-app
-
+          name: python-app
+      
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0893517FE61C41DFACE736426AB8EA67 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3417BC201F82480BAEFF0406B2DB8040 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CD3952AA17CA4D6A8918E2DC3FCBA28E }}
-
-      - name: Configure the App Service
-        id: configure
-        run: |
-          set -euo pipefail
-          manual() {
-            echo "::error::$1"
-            echo "Set these by hand in the Azure portal (App Service '$APP_NAME'), then re-run this workflow:"
-            echo "  Settings > Configuration > Stack settings: Python $PYTHON_VERSION"
-            echo "  Settings > Configuration > Startup command: $STARTUP_COMMAND"
-            echo "  Settings > Environment variables: SCM_DO_BUILD_DURING_DEPLOYMENT = true, HINDSIGHT_CACHE_DIR = $CACHE_DIR"
-            exit 1
-          }
-
-          RG=$(az webapp list --query "[?name=='$APP_NAME'].resourceGroup | [0]" -o tsv)
-          [ -n "$RG" ] || manual "Could not find the App Service '$APP_NAME' with this deployment identity."
-          echo "rg=$RG" >> "$GITHUB_OUTPUT"
-
-          KIND=$(az webapp show -g "$RG" -n "$APP_NAME" --query kind -o tsv)
-          case "$KIND" in
-            *linux*) ;;
-            *) echo "::error::App Service '$APP_NAME' is a Windows app (kind: $KIND). Python needs a Linux App Service."; exit 1 ;;
-          esac
-
-          echo "Resource group: $RG"
-          echo "Region: $(az webapp show -g "$RG" -n "$APP_NAME" --query location -o tsv)"
-          PLAN_ID=$(az webapp show -g "$RG" -n "$APP_NAME" --query appServicePlanId -o tsv)
-          echo "Plan: $(basename "$PLAN_ID") ($(az appservice plan show --ids "$PLAN_ID" --query "join(' ', [sku.tier, sku.name])" -o tsv 2>/dev/null || echo 'tier not readable with this identity'))"
-
-          if ! az webapp list-runtimes --os-type linux -o tsv 2>/dev/null | grep -q "PYTHON:$PYTHON_VERSION"; then
-            echo "::warning::Python $PYTHON_VERSION was not found in the App Service runtime list. If the site does not start, change PYTHON_VERSION in this workflow."
-          fi
-
-          WANT_FX="PYTHON|$PYTHON_VERSION"
-          HAVE_FX=$(az webapp config show -g "$RG" -n "$APP_NAME" --query linuxFxVersion -o tsv)
-          HAVE_CMD=$(az webapp config show -g "$RG" -n "$APP_NAME" --query appCommandLine -o tsv)
-          CHANGED=0
-          if [ "$HAVE_FX" != "$WANT_FX" ] || [ "$HAVE_CMD" != "$STARTUP_COMMAND" ]; then
-            echo "Runtime: '$HAVE_FX' -> '$WANT_FX'; startup command: '$HAVE_CMD' -> '$STARTUP_COMMAND'"
-            az webapp config set -g "$RG" -n "$APP_NAME" --linux-fx-version "$WANT_FX" --startup-file "$STARTUP_COMMAND" -o none \
-              || manual "This deployment identity is not allowed to change the App Service runtime."
-            CHANGED=1
-          fi
-
-          setting() { az webapp config appsettings list -g "$RG" -n "$APP_NAME" --query "[?name=='$1'].value | [0]" -o tsv; }
-          WANTED=""
-          BUILD=$(setting SCM_DO_BUILD_DURING_DEPLOYMENT)
-          if [ "$BUILD" != "true" ] && [ "$BUILD" != "1" ]; then WANTED="$WANTED SCM_DO_BUILD_DURING_DEPLOYMENT=true"; fi
-          if [ "$(setting HINDSIGHT_CACHE_DIR)" != "$CACHE_DIR" ]; then WANTED="$WANTED HINDSIGHT_CACHE_DIR=$CACHE_DIR"; fi
-          if [ -n "$WANTED" ]; then
-            echo "Application settings to set:$WANTED"
-            # shellcheck disable=SC2086
-            az webapp config appsettings set -g "$RG" -n "$APP_NAME" --settings $WANTED -o none \
-              || manual "This deployment identity is not allowed to change the App Service settings."
-            CHANGED=1
-          fi
-
-          # Health check path (ignored by tiers that do not offer it) and HTTPS only.
-          az webapp config set -g "$RG" -n "$APP_NAME" --generic-configurations '{"healthCheckPath": "/api/health"}' -o none 2>/dev/null \
-            || echo "::notice::Health check path could not be set on this plan; the pipeline's own check below still runs."
-          az webapp update -g "$RG" -n "$APP_NAME" --https-only true -o none 2>/dev/null || true
-
-          if [ "$CHANGED" = "1" ]; then
-            echo "Configuration changed - waiting for the App Service to restart before deploying."
-            sleep 90
-          else
-            echo "App Service is already configured."
-          fi
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A8BC4619D4A54B0D88DF92B12C7F1A96 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FA47815862E44F63A6F4630C3B2B3318 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DA8F571C30674FBCABFAD5A108E45385 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: ${{ env.APP_NAME }}
+          app-name: 'tryhindsight'
           slot-name: 'Production'
-          package: release.zip
-
-      - name: Check the live backend
-        id: health
-        run: |
-          set -uo pipefail
-          RG="${{ steps.configure.outputs.rg }}"
-          HOST=$(az webapp show -g "$RG" -n "$APP_NAME" --query defaultHostName -o tsv)
-          URL="https://$HOST"
-          echo "api_url=$URL" >> "$GITHUB_OUTPUT"
-          echo "Backend: $URL"
-          for i in $(seq 1 48); do
-            BODY=$(curl -fsS -m 20 "$URL/api/health" 2>/dev/null || true)
-            if echo "$BODY" | grep -q '"engine_version"'; then
-              echo "API is up: $BODY"
-              exit 0
-            fi
-            echo "Not ready yet (attempt $i/48)..."
-            sleep 15
-          done
-          echo "::error::Deployed, but $URL/api/health did not answer within 12 minutes. The end of the container log follows."
-          if az webapp log download -g "$RG" -n "$APP_NAME" --log-file logs.zip -o none 2>/dev/null; then
-            unzip -oq logs.zip -d logs
-            find logs -name '*docker.log' -print0 | xargs -0 -r ls -t | head -2 | xargs -r -d '\n' tail -n 80
-          else
-            echo "(the log could not be downloaded with this identity; open Log stream for the App Service in the Azure portal)"
-          fi
-          exit 1
-
-  deploy-site:
-    name: Deploy the frontend (Static Web App) and connect it
-    runs-on: ubuntu-latest
-    needs: deploy-api
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Build the frontend against the production API
-        working-directory: frontend
-        env:
-          VITE_API_BASE_URL: ${{ needs.deploy-api.outputs.api_url }}
-        run: |
-          test -n "$VITE_API_BASE_URL" || { echo "::error::The backend URL was not passed from the deploy-api job."; exit 1; }
-          echo "API base URL: $VITE_API_BASE_URL"
-          npm ci
-          npm run build
-
-      - name: Deploy to Azure Static Web Apps
-        id: swa
-        uses: Azure/static-web-apps-deploy@v1
-        with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_SAND_042EF870F }}
-          action: "upload"
-          # Built above with Node 24 (Vite needs a newer Node than the action's own builder), so only upload.
-          app_location: "frontend/dist"
-          api_location: ""
-          output_location: ""
-          skip_app_build: true
-
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0893517FE61C41DFACE736426AB8EA67 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3417BC201F82480BAEFF0406B2DB8040 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CD3952AA17CA4D6A8918E2DC3FCBA28E }}
-
-      - name: Allow the website's origin in the backend (CORS)
-        env:
-          SITE_URL: ${{ steps.swa.outputs.static_web_app_url }}
-          RG: ${{ needs.deploy-api.outputs.resource_group }}
-        run: |
-          set -euo pipefail
-          SITE="${SITE_URL%/}"
-          test -n "$SITE" || { echo "::error::The Static Web App did not report its URL."; exit 1; }
-          echo "Website: $SITE"
-          HAVE=$(az webapp config appsettings list -g "$RG" -n "$APP_NAME" --query "[?name=='HINDSIGHT_CORS_ORIGINS'].value | [0]" -o tsv)
-          if [ "$HAVE" != "$SITE" ]; then
-            echo "Setting HINDSIGHT_CORS_ORIGINS (was '${HAVE:-unset}')"
-            az webapp config appsettings set -g "$RG" -n "$APP_NAME" --settings "HINDSIGHT_CORS_ORIGINS=$SITE" -o none
-            echo "Waiting for the backend to restart with the new setting."
-            sleep 60
-          else
-            echo "CORS origin already set."
-          fi
-
-      - name: Verify the live application
-        env:
-          SITE_URL: ${{ steps.swa.outputs.static_web_app_url }}
-          API: ${{ needs.deploy-api.outputs.api_url }}
-        run: |
-          set -euo pipefail
-          SITE="${SITE_URL%/}"
-          fail() { echo "::error::$1"; exit 1; }
-
-          echo "1. Backend health"
-          for i in $(seq 1 40); do
-            curl -fsS -m 20 -o health.json "$API/api/health" 2>/dev/null || true
-            if grep -q '"engine_version"' health.json 2>/dev/null; then break; fi
-            if [ "$i" = 40 ]; then fail "The backend did not come back after the CORS change."; fi
-            sleep 15
-          done
-          cat health.json; echo
-
-          echo "2. Website and client-side routes"
-          curl -fsS -m 30 -o index.html "$SITE/" || fail "The website did not answer."
-          grep -q 'id="root"' index.html || fail "The website did not serve the app shell."
-          curl -fsS -m 30 -o deep.html "$SITE/app/analysis" || fail "Deep link /app/analysis is not served (navigation fallback)."
-          grep -q 'id="root"' deep.html || fail "Deep link /app/analysis did not return the app shell."
-          ASSET=$(grep -o '/assets/index-[^"]*\.js' index.html | head -1 || true)
-          test -n "$ASSET" || fail "The website's script bundle was not found in its HTML."
-          curl -fsS -m 30 -o bundle.js "$SITE$ASSET" || fail "The website's script bundle could not be downloaded."
-          grep -q "$API" bundle.js || fail "The deployed frontend was not built against $API."
-          for f in /fonts/Outfit-Variable.woff2 /fonts/Nunito-Variable.woff2 /mascots/mascot-blue.webp /logo/hindsight-mark.svg; do
-            curl -fsS -m 30 -o /dev/null "$SITE$f" || fail "Static asset $f is missing on the website."
-          done
-
-          echo "3. CORS from the website's origin"
-          curl -fsS -m 20 -D - -o /dev/null -H "Origin: $SITE" "$API/api/presets" | grep -i "^access-control-allow-origin: $SITE" \
-            || fail "The backend does not allow requests from $SITE."
-          curl -fsS -m 20 -D - -o /dev/null -X OPTIONS -H "Origin: $SITE" -H "Access-Control-Request-Method: POST" \
-            -H "Access-Control-Request-Headers: content-type" "$API/api/analyze" | grep -i "^access-control-allow-origin: $SITE" \
-            || fail "The CORS preflight for POST /api/analyze was refused."
-
-          echo "4. A real engine run for each demonstration farm"
-          for farm in chakwal sheikhupura ames_iowa; do
-            curl -fsS -m 180 -o run.json -X POST "$API/api/analyze/preset/$farm" || fail "The analysis of $farm failed on the deployed backend."
-            grep -q '"source":"live"' run.json || fail "The analysis of $farm did not run live on the deployed backend."
-            echo "   $farm: live engine run OK ($(grep -o '"elapsed_ms":[0-9]*' run.json | head -1 || true))"
-          done
-
-          {
-            echo "### HindSight is live"
-            echo ""
-            echo "| | |"
-            echo "| --- | --- |"
-            echo "| Website | $SITE |"
-            echo "| Backend API | $API |"
-            echo "| Health | $API/api/health |"
-          } >> "$GITHUB_STEP_SUMMARY"
+          
