@@ -1,3 +1,12 @@
+# Optional second copy of the frontend on Azure Static Web Apps.
+#
+# The App Service (main_tryhindsight.yml) already serves the whole app on one URL.
+# This workflow only runs once the repository variable HINDSIGHT_API_URL is set
+# (GitHub > Settings > Secrets and variables > Actions > Variables) to the App Service
+# URL, e.g. https://tryhindsight-xxxx.azurewebsites.net - a static site has no API of
+# its own, so without that URL it would publish a site that cannot run analyses.
+# The App Service also needs the app setting HINDSIGHT_CORS_ORIGINS = this site's URL.
+
 name: Azure Static Web Apps CI/CD
 
 on:
@@ -11,30 +20,43 @@ on:
 
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: vars.HINDSIGHT_API_URL != '' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed'))
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: true
           lfs: false
-      - name: Build And Deploy
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Build frontend
+        working-directory: frontend
+        env:
+          VITE_API_BASE_URL: ${{ vars.HINDSIGHT_API_URL }}
+        run: |
+          npm ci
+          npm run build
+      - name: Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_SAND_042EF870F }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "./frontend" # App source code path
-          api_location: "" # Api source code path - optional
-          output_location: "build" # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
+          # The site is built above (Vite needs a newer Node than the built-in builder provides),
+          # so the action only uploads the finished folder.
+          app_location: "frontend/dist"
+          api_location: ""
+          output_location: ""
+          skip_app_build: true
 
   close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    if: vars.HINDSIGHT_API_URL != '' && github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
     steps:
