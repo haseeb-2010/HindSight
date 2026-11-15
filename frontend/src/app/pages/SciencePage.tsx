@@ -33,7 +33,7 @@ const STEPS = [
   ['Robustness', 'Ranks are recomputed with rainfall ±30% and with the legume effect at 0%, 7%, 20% and 32%.'],
 ]
 
-export function SciencePage() {
+export default function SciencePage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-6">

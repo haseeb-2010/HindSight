@@ -25,6 +25,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from backend import schemas
+from backend.context import climate_context, ndvi_coverage
 from backend.data_sources import cache, modis_ndvi, power, soilgrids
 from backend.data_sources.errors import DataSourceError
 from backend.engine import ENGINE_VERSION, EngineError, run_analysis
@@ -35,7 +36,7 @@ from backend.jobs import STAGES, Job, JobError, JobManager
 # The preset request is built exactly as scripts/run_site.py builds it, which is how the saved responses were made.
 from scripts.run_site import PRIORITIES, build_request
 
-API_VERSION = "2.0.0"
+API_VERSION = "3.0.0"
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "backend" / "data"
 FRONTEND_DIST = ROOT / "frontend" / "dist"
@@ -187,12 +188,50 @@ _live_cache: dict[str, dict] = {}
 _locks = {pid: threading.Lock() for pid in PRESETS_BY_ID}
 
 
+_saved_extras_cache: dict[str, dict] = {}
+
+
+def _climate_inputs(climate: dict, from_cache: bool | None = None) -> dict:
+    out = {"source": climate.get("source"), "start": climate.get("start"), "end": climate.get("end"),
+           "grid_note": climate.get("grid_note"), "elevation_m": climate.get("elevation_m"),
+           "days": len(climate.get("dates") or [])}
+    if from_cache is not None:
+        out["from_cache"] = from_cache
+    return out
+
+
+def _saved_extras(preset: dict) -> dict:
+    """Inputs and yearly context for a saved result, read from the cached data it was generated from."""
+    pid = preset["id"]
+    if pid not in _saved_extras_cache:
+        extras: dict = {"inputs": None, "context": {"climate": None}}
+        try:
+            climate = _climate_cached(preset["lat"], preset["lon"])
+            profile, soil_status = _soil_cached(preset["lat"], preset["lon"])
+            pt = _ndvi_point(preset)
+            ndvi = _ndvi_cached(pt["lat"], pt["lon"])
+            request = build_request(preset)
+            extras = {
+                "inputs": {
+                    "climate": _climate_inputs(climate, from_cache=True),
+                    "soil": {"soilgrids": soil_status, "profile": profile},
+                    "ndvi": {"used": ndvi is not None, "point": pt, **ndvi_coverage(ndvi)},
+                },
+                "context": {"climate": climate_context(climate, request.get("scenario"))},
+            }
+        except Exception:  # the saved result still stands on its own without the extras
+            log.exception("could not read cached inputs for the saved result of %s", pid)
+        _saved_extras_cache[pid] = extras
+    return _saved_extras_cache[pid]
+
+
 def _saved_envelope(preset_id: str, fallback_reason: str | None = None) -> dict | None:
     path = DATA / "saved" / f"{preset_id}_response.json"
     if not path.is_file():
         return None
     result = _load_json(path)
-    return {
+    extras = _saved_extras(PRESETS_BY_ID[preset_id])
+    env = {
         "source": "saved",
         "preset_id": preset_id,
         "engine_version": (result.get("meta") or {}).get("engine_version"),
@@ -200,8 +239,13 @@ def _saved_envelope(preset_id: str, fallback_reason: str | None = None) -> dict 
         "fallback_reason": fallback_reason,
         "saved_file": path.relative_to(ROOT).as_posix(),
         "request": build_request(PRESETS_BY_ID[preset_id]),  # saved files are produced by run_site with this request
+        "context": extras["context"],
         "result": result,
     }
+    if extras["inputs"]:
+        soil_used = ((result.get("site") or {}).get("soil_used") or {}).get("source")
+        env["inputs"] = {**extras["inputs"], "soil": {**extras["inputs"]["soil"], "used": soil_used}}
+    return env
 
 
 def _run_live(preset: dict) -> dict:
@@ -221,12 +265,12 @@ def _run_live(preset: dict) -> dict:
         "computed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "elapsed_ms": round((time.perf_counter() - t0) * 1000),
         "inputs": {
-            "climate": {"source": climate.get("source"), "start": climate.get("start"), "end": climate.get("end"),
-                        "grid_note": climate.get("grid_note")},
-            "soil": {"used": result["site"]["soil_used"]["source"], "soilgrids": soil_status},
-            "ndvi": {"used": ndvi is not None, "point": pt},
+            "climate": _climate_inputs(climate, from_cache=True),
+            "soil": {"used": result["site"]["soil_used"]["source"], "soilgrids": soil_status, "profile": soil},
+            "ndvi": {"used": ndvi is not None, "point": pt, **ndvi_coverage(ndvi)},
         },
         "request": request,
+        "context": {"climate": climate_context(climate, request.get("scenario"))},
         "result": result,
     }
 
@@ -273,8 +317,8 @@ def _engine_request(body: schemas.AnalyzeBody, preset: dict | None, use_profile:
     }
 
 
-def _run_job(job: Job, body: schemas.AnalyzeBody) -> dict:
-    t0 = time.perf_counter()
+def _gather(job: Job, body: schemas.AnalyzeBody) -> dict:
+    """Read everything an analysis of this field needs, once: weather, optional soil profile, stored NDVI."""
     job.enter("prepare")
     lat, lon = _r2(body.location.lat), _r2(body.location.lon)
     preset = _matching_preset(body.location)
@@ -305,8 +349,13 @@ def _run_job(job: Job, body: schemas.AnalyzeBody) -> dict:
 
     pt = _ndvi_point(preset) if preset else {"lat": lat, "lon": lon}
     ndvi = _ndvi_cached(pt["lat"], pt["lon"])  # cached series only; never starts a MODIS download
+    return {"preset": preset, "notes": notes, "climate": climate, "from_cache": from_cache, "profile": profile,
+            "soil_status": soil_status, "ndvi": ndvi, "ndvi_point": pt}
 
-    job.enter("simulate")
+
+def _simulate(job: Job, body: schemas.AnalyzeBody, data: dict, t0: float, allow_saved_fallback: bool = True) -> dict:
+    """One engine run on already-gathered data. The engine output goes into the envelope unchanged."""
+    preset, climate, profile, ndvi = data["preset"], data["climate"], data["profile"], data["ndvi"]
     request = _engine_request(body, preset, use_profile=profile is not None)
     try:
         result = run_analysis(request, climate, profile, CROPS, LIBRARY, ndvi=ndvi)
@@ -315,7 +364,7 @@ def _run_job(job: Job, body: schemas.AnalyzeBody) -> dict:
         raise JobError(str(exc.code).lower(), exc.message) from exc
     except Exception as exc:
         # A demonstration farm with untouched settings still has its saved engine output to fall back on.
-        if preset and request == build_request(preset):
+        if allow_saved_fallback and preset and request == build_request(preset):
             log.exception("job %s failed; using the saved result for %s", job.id, preset["id"])
             env = _saved_envelope(preset["id"], f"Unexpected error during analysis ({type(exc).__name__})")
             if env:
@@ -329,14 +378,12 @@ def _run_job(job: Job, body: schemas.AnalyzeBody) -> dict:
         "engine_version": result["meta"]["engine_version"],
         "computed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "elapsed_ms": round((time.perf_counter() - t0) * 1000),
-        "notes": notes,
+        "notes": list(data["notes"]),
         "inputs": {
-            "climate": {"source": climate.get("source"), "start": climate.get("start"), "end": climate.get("end"),
-                        "grid_note": climate.get("grid_note"), "from_cache": from_cache,
-                        "elevation_m": climate.get("elevation_m")},
+            "climate": _climate_inputs(climate, from_cache=data["from_cache"]),
             "soil": {"used": result["site"]["soil_used"]["source"], "requested": body.soil_source,
-                     "soilgrids": soil_status, "profile": profile},
-            "ndvi": {"used": ndvi is not None, "point": pt,
+                     "soilgrids": data["soil_status"], "profile": profile},
+            "ndvi": {"used": ndvi is not None, "point": data["ndvi_point"], **ndvi_coverage(ndvi),
                      "reason": None if ndvi_check else (
                          "No MODIS NDVI series is stored for this location, so the optional check was skipped."
                          if ndvi is None else
@@ -344,7 +391,43 @@ def _run_job(job: Job, body: schemas.AnalyzeBody) -> dict:
                          "to year (as under full irrigation) or fewer than 8 years overlap.")},
         },
         "request": request,
+        "context": {"climate": climate_context(climate, request.get("scenario"))},
         "result": result,
+    }
+
+
+def _run_job(job: Job, body: schemas.AnalyzeBody) -> dict:
+    t0 = time.perf_counter()
+    data = _gather(job, body)
+    job.enter("simulate")
+    return _simulate(job, body, data, t0)
+
+
+def _run_compare(job: Job, body: schemas.CompareBody) -> dict:
+    """Several engine runs for one field that differ only in scenario or priorities.
+
+    Weather, soil and NDVI are read once and reused, so no data is downloaded twice.
+    """
+    t0 = time.perf_counter()
+    data = _gather(job, body.base)
+    variants = []
+    for i, v in enumerate(body.variants):
+        job.enter("simulate", f"Run {i + 1} of {len(body.variants)}: {v.label}")
+        update: dict = {}
+        if v.scenario is not None:
+            update["scenario"] = v.scenario
+        if v.priorities is not None:
+            update["priorities"] = {**body.base.priorities, **v.priorities}
+        t1 = time.perf_counter()
+        env = _simulate(job, body.base.model_copy(update=update), data, t1, allow_saved_fallback=False)
+        env["analysis_id"] = f"{job.id}-{v.id}"
+        variants.append({"id": v.id, "label": v.label, "envelope": env})
+    return {
+        "kind": "comparison",
+        "computed_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "elapsed_ms": round((time.perf_counter() - t0) * 1000),
+        "weather_from_cache": data["from_cache"],
+        "variants": variants,
     }
 
 
@@ -403,7 +486,7 @@ def crops():
         "limits": {"depth_cm": schemas.DEPTH_CM, "seasonal_cap_mm": schemas.CAP_MM,
                    "temp_delta_c": schemas.TEMP_DELTA_C, "precip_factor": schemas.PRECIP_FACTOR,
                    "failure_threshold": schemas.FAILURE_THRESHOLD, "top_n": schemas.TOP_N,
-                   "max_slots": schemas.MAX_SLOTS},
+                   "max_slots": schemas.MAX_SLOTS, "max_compare_runs": schemas.MAX_VARIANTS},
         "soil_textures": schemas.TEXTURES,
         "organic_matter_levels": schemas.OM_LEVEL_NAMES,
     }
@@ -535,6 +618,16 @@ def analyze_preset(preset_id: str):
 @app.post("/api/analyze", status_code=202)
 def analyze(body: schemas.AnalyzeBody):
     """Start an analysis for any field. Poll GET /api/analysis/{analysis_id} for its state."""
+    bad = _check_body(body)
+    if bad:
+        return bad
+    job = jobs.submit(_run_job, body)
+    return {"analysis_id": job.id, "status": job.status, "poll": f"/api/analysis/{job.id}",
+            "stages": [{"id": s, "label": label} for s, label in STAGES]}
+
+
+def _check_body(body: schemas.AnalyzeBody):
+    """Checks shared by every analysis request. Returns an error response or None."""
     if body.location.preset_id and body.location.preset_id not in PRESETS_BY_ID:
         return _unknown(body.location.preset_id)
     bad = _check_crops(body, body.current_rotation, body.constraints)
@@ -544,8 +637,18 @@ def analyze(body: schemas.AnalyzeBody):
         schedule(body.current_rotation.model_dump(), CROPS_BY_ID)
     except EngineError as exc:
         return _error(422, str(exc.code).lower(), exc.message)
-    job = jobs.submit(_run_job, body)
-    return {"analysis_id": job.id, "status": job.status, "poll": f"/api/analysis/{job.id}",
+    return None
+
+
+@app.post("/api/scenarios/compare", status_code=202)
+def scenarios_compare(body: schemas.CompareBody):
+    """Run the same field under several scenarios or priority sets. Poll GET /api/analysis/{analysis_id}."""
+    bad = _check_body(body.base)
+    if bad:
+        return bad
+    job = jobs.submit(_run_compare, body)
+    return {"analysis_id": job.id, "status": job.status, "poll": f"/api/analysis/{job.id}", "kind": "comparison",
+            "variants": [{"id": v.id, "label": v.label} for v in body.variants],
             "stages": [{"id": s, "label": label} for s, label in STAGES]}
 
 

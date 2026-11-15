@@ -5,13 +5,15 @@ Needs both servers running (API on :8000, frontend on :5173) and Playwright with
 --custom also runs a real custom-location analysis (downloads weather from NASA POWER).
 Exits non-zero if any check fails."""
 import json
+import os
 import sys
 from pathlib import Path
 
 from playwright.sync_api import expect, sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
-BASE = "http://127.0.0.1:5173"
+# HINDSIGHT_BASE points the same checks at a deployed site, e.g. the Azure website URL.
+BASE = os.environ.get("HINDSIGHT_BASE", "http://127.0.0.1:5173").rstrip("/")
 ARGS = sys.argv[1:]
 SHOTS = Path(ARGS[ARGS.index("--shots") + 1]) if "--shots" in ARGS else None
 CUSTOM = "--custom" in ARGS
@@ -108,7 +110,7 @@ with sync_playwright() as p:
     text = pg.locator("main").inner_text()
     check("results show live calculation and period", "Live calculation" in text and "1985–2024" in text and "Engine v0.3.0" in text)
     shot(pg, "chakwal_7_overview")
-    env = pg.evaluate("JSON.parse(sessionStorage.getItem('hindsight.workspace.v1')).history[0].envelope")
+    env = pg.evaluate("JSON.parse(localStorage.getItem('hindsight.library.v1'))[0].envelope")
     rots = env["result"]["rotations"]
     check("engine response stored with current rotation first", rots[0]["is_current"] and len(rots) >= 3, len(rots))
     cur = rots[0]
@@ -176,7 +178,7 @@ with sync_playwright() as p:
     pg.wait_for_selector("text=What-if: rainfall 80%", timeout=120_000)
     pg.wait_for_timeout(600)
     t = pg.locator("main").inner_text()
-    env2 = pg.evaluate("JSON.parse(sessionStorage.getItem('hindsight.workspace.v1')).history[0].envelope")
+    env2 = pg.evaluate("JSON.parse(localStorage.getItem('hindsight.library.v1'))[0].envelope")
     check("rerun sent the scenario", body2["scenario"]["precip_factor"] == 0.8)
     check("new results reflect the new request", "These results are from your previous settings." not in t and "not a climate forecast" in t
           and env2["result"]["site"]["climate_summary"]["annual_rain_mm"] < env["result"]["site"]["climate_summary"]["annual_rain_mm"])
@@ -189,7 +191,7 @@ with sync_playwright() as p:
         cont(pg); cont(pg)
         pg.wait_for_selector("text=Everything ready?")
         body = run_and_wait(pg)
-        e = pg.evaluate("JSON.parse(sessionStorage.getItem('hindsight.workspace.v1')).history[0].envelope")
+        e = pg.evaluate("JSON.parse(localStorage.getItem('hindsight.library.v1'))[0].envelope")
         saved = json.loads((Path(__file__).resolve().parents[1] / f"backend/data/saved/{pid}_response.json").read_text(encoding="utf-8"))
         check(f"{pid}: untouched farm reproduces the saved engine output", e["result"] == saved)
         check(f"{pid}: at least three rotations", len(e["result"]["rotations"]) >= 3)
@@ -240,7 +242,7 @@ with sync_playwright() as p:
         cont(pg); cont(pg); cont(pg)
         pg.wait_for_selector("text=Everything ready?")
         body = run_and_wait(pg)
-        e = pg.evaluate("JSON.parse(sessionStorage.getItem('hindsight.workspace.v1')).history[0].envelope")
+        e = pg.evaluate("JSON.parse(localStorage.getItem('hindsight.library.v1'))[0].envelope")
         check("custom field analysed with real NASA POWER weather", e["source"] == "live" and e["preset_id"] is None and len(e["result"]["rotations"]) >= 2
               and e["result"]["site"]["soil_used"]["texture_class"] == "clay_loam", (e["source"], len(e["result"]["rotations"])))
         check("custom field: NDVI unavailable is explained", e["result"]["validation"]["ndvi_check"] is None and "No MODIS NDVI series" in e["inputs"]["ndvi"]["reason"])

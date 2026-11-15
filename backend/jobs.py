@@ -42,6 +42,7 @@ class Job:
         self.created = time.time()
         self.finished: float | None = None
         self.envelope: dict | None = None
+        self.comparison: dict | None = None  # set instead of envelope when the job compared several runs
         self.error: dict | None = None
 
     def enter(self, stage: str, detail: str | None = None):
@@ -64,7 +65,7 @@ class Job:
         return {
             "analysis_id": self.id, "status": self.status, "stage": self.stage, "stages": stages,
             "elapsed_ms": round(((self.finished or time.time()) - self.created) * 1000),
-            "envelope": self.envelope, "error": self.error,
+            "envelope": self.envelope, "comparison": self.comparison, "error": self.error,
         }
 
 
@@ -92,8 +93,12 @@ class JobManager:
     def _run(job: Job, fn, args):
         job.status = "running"
         try:
-            job.envelope = fn(job, *args)
-            job.envelope["analysis_id"] = job.id
+            out = fn(job, *args)
+            out["analysis_id"] = job.id
+            if out.get("kind") == "comparison":
+                job.comparison = out
+            else:
+                job.envelope = out
             job.status = "done"
         except JobError as exc:
             job.error = {"code": exc.code, "detail": exc.detail}

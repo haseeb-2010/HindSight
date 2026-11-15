@@ -1,5 +1,6 @@
-import { ArrowDown, Check } from 'lucide-react'
+import { ArrowDown, Check, PlayCircle } from 'lucide-react'
 import type { CSSProperties } from 'react'
+import { Link } from 'react-router-dom'
 import { ButtonLink } from '../components/ui/Button'
 import { Pill } from '../components/ui/Pill'
 import type { Resource } from '../hooks/useResource'
@@ -101,6 +102,17 @@ export function Hero({ spotlight, spotlightPreset, onRetry }: HeroProps) {
                 See How It Works
               </ButtonLink>
             </div>
+
+            <p className="animate-rise mt-5" style={{ '--delay': '940ms' } as CSSProperties}>
+              <Link
+                to="/demo"
+                className="group inline-flex items-center gap-2 rounded-full text-[0.9375rem] font-extrabold text-forest-950 underline decoration-sage decoration-2 underline-offset-4 transition-colors hover:decoration-forest-950"
+              >
+                <PlayCircle className="h-5 w-5 transition-transform group-hover:scale-110" aria-hidden="true" />
+                Take the Guided Tour
+              </Link>
+              <span className="ml-2 text-[0.875rem] font-bold text-muted">3 to 5 minutes</span>
+            </p>
 
             <ul
               className="animate-rise mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold text-muted"

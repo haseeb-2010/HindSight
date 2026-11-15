@@ -1,4 +1,4 @@
-import { ArrowLeft, FlaskConical, FolderClock, LayoutDashboard, LifeBuoy, MapPin, Sprout } from 'lucide-react'
+import { ArrowLeft, BookOpenText, FileText, FlaskConical, FolderClock, LayoutDashboard, LifeBuoy, Lightbulb, MapPin, PlayCircle, Sprout } from 'lucide-react'
 import { useEffect } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Logo } from '../components/brand/Logo'
@@ -10,8 +10,11 @@ import { useWorkspace } from './state/workspace'
 const NAV = [
   { to: '/app', label: 'Overview', icon: LayoutDashboard, end: true },
   { to: '/app/analysis', label: 'Farm Analysis', icon: Sprout, end: false },
+  { to: '/app/insights', label: 'Field Intelligence', icon: Lightbulb, end: false },
+  { to: '/app/scenarios', label: 'Scenario Lab', icon: FlaskConical, end: false },
+  { to: '/app/brief', label: 'Decision Brief', icon: FileText, end: false },
   { to: '/app/analyses', label: 'My Analyses', icon: FolderClock, end: false },
-  { to: '/app/science', label: 'Data & Science', icon: FlaskConical, end: false },
+  { to: '/app/science', label: 'Science', icon: BookOpenText, end: false },
   { to: '/app/help', label: 'Help', icon: LifeBuoy, end: false },
 ]
 
@@ -43,32 +46,7 @@ export function AppShell() {
           <span className="hidden h-6 w-px bg-border-strong sm:block" aria-hidden="true" />
           <p className="hidden text-[0.8125rem] font-bold text-muted sm:block">Analysis workspace</p>
 
-          <nav aria-label="Workspace" className="mx-auto hidden lg:block">
-            <ul className="flex items-center gap-0.5">
-              {NAV.map((n) => (
-                <li key={n.to}>
-                  <NavLink
-                    to={n.to}
-                    end={n.end}
-                    className={({ isActive }) =>
-                      cx(
-                        'flex items-center gap-2 rounded-full px-3.5 py-2 text-[0.875rem] font-bold transition-colors',
-                        isActive ? 'bg-forest-950 text-cream-50' : 'text-forest-950/75 hover:bg-forest-950/[0.06] hover:text-forest-950',
-                      )
-                    }
-                  >
-                    <n.icon className="h-4 w-4" aria-hidden="true" />
-                    {n.label}
-                    {n.to === '/app/analyses' && history.length > 0 && (
-                      <span className="rounded-full bg-lime px-1.5 text-[0.6875rem] leading-5 font-extrabold text-forest-950 tabular-nums">{history.length}</span>
-                    )}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          <div className="ml-auto flex min-w-0 items-center gap-2 lg:ml-0">
+          <div className="ml-auto flex min-w-0 items-center gap-2">
             {farm && (
               <Link
                 to="/app/analysis"
@@ -80,17 +58,26 @@ export function AppShell() {
               </Link>
             )}
             <Link
+              to="/app/demo"
+              className="flex shrink-0 items-center gap-1.5 rounded-full bg-lime px-3 py-1.5 text-[0.8125rem] font-extrabold text-forest-950 transition-colors hover:bg-[#f3f79e]"
+            >
+              <PlayCircle className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">Guided tour</span>
+              <span className="sm:hidden">Tour</span>
+            </Link>
+            <Link
               to="/"
               className="flex shrink-0 items-center gap-1.5 rounded-full border border-border-strong bg-white px-3 py-1.5 text-[0.8125rem] font-bold text-forest-950 transition-colors hover:border-forest-950/40"
             >
               <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-              Home
+              <span className="hidden sm:inline">Home</span>
+              <span className="sr-only sm:hidden">Home</span>
             </Link>
           </div>
         </div>
 
-        {/* Compact navigation below the bar on smaller screens */}
-        <nav aria-label="Workspace" className="border-t border-forest-950/[0.06] lg:hidden">
+        {/* Section navigation: scrolls sideways on narrow screens */}
+        <nav aria-label="Workspace" className="border-t border-forest-950/[0.06]">
           <ul className="mx-auto flex max-w-[92rem] gap-1 overflow-x-auto px-3 py-1.5 [scrollbar-width:none] sm:px-5 [&::-webkit-scrollbar]:hidden">
             {NAV.map((n) => (
               <li key={n.to} className="shrink-0">
@@ -106,6 +93,9 @@ export function AppShell() {
                 >
                   <n.icon className="h-3.5 w-3.5" aria-hidden="true" />
                   {n.label}
+                  {n.to === '/app/analyses' && history.length > 0 && (
+                    <span className="rounded-full bg-lime px-1.5 text-[0.6875rem] leading-5 font-extrabold text-forest-950 tabular-nums">{history.length}</span>
+                  )}
                 </NavLink>
               </li>
             ))}

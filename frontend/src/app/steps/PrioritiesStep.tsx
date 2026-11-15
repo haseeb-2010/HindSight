@@ -1,13 +1,16 @@
-import { RotateCcw, Scale } from 'lucide-react'
+import { Droplets, Layers, RotateCcw, Scale, ShieldCheck, SlidersHorizontal } from 'lucide-react'
 import { useId } from 'react'
 import { Button } from '../../components/ui/Button'
 import { cx } from '../../lib/cx'
-import { Callout, Card, Segmented, Slider } from '../components/controls'
+import { Callout, Card, ChoiceCard, Segmented, Slider } from '../components/controls'
 import { PRIORITIES, PRIORITY_ORDER } from '../lib/labels'
+import { PRIORITY_TEMPLATES, matchingTemplate, templateWeights, type PriorityTemplate } from '../lib/priorityTemplates'
+import { Chip } from '../results/shared'
 import { useWorkspace } from '../state/workspace'
 import { StepFrame } from './StepFrame'
 
 const WORDS = ['Ignored', 'Minor', 'Low', 'Moderate', 'High', 'Top priority']
+const TEMPLATE_ICONS: Record<PriorityTemplate['id'], typeof Scale> = { balanced: Scale, water: Droplets, soil: Layers, stable: ShieldCheck }
 
 function PriorityRow({ id, value, isDefault, onChange }: { id: string; value: number; isDefault: boolean; onChange: (v: number) => void }) {
   const meta = PRIORITIES[id]
@@ -47,6 +50,11 @@ export function PrioritiesStep({ onBack, onNext }: { onBack: () => void; onNext:
   const changed = Object.keys(config.priorities).some((k) => config.priorities[k] !== defaultPriorities[k])
   const allZero = PRIORITY_ORDER.every((k) => value(k) === 0)
   const set = (k: string, v: number) => update((c) => ({ ...c, priorities: { ...c.priorities, [k]: v } }))
+  const weights = Object.fromEntries(PRIORITY_ORDER.map((k) => [k, value(k)]))
+  const active = presets.status === 'ready' ? matchingTemplate(weights, defaultPriorities) : null
+  const templateName = useId()
+  // A template only fills in the sliders; the farmer can still move every one of them afterwards.
+  const applyTemplate = (t: PriorityTemplate) => update((c) => ({ ...c, priorities: t.weights ? templateWeights(t, defaultPriorities) : {} }))
   const marketOn = value('market') > 0
   const list = crops.data?.crops ?? []
   const fallback = crops.data?.default_market_rating ?? 2
@@ -81,6 +89,39 @@ export function PrioritiesStep({ onBack, onNext }: { onBack: () => void; onNext:
           </span>
         </span>
       </Callout>
+
+      <Card as="section">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="max-w-3xl">
+            <h2 className="text-[1.25rem]">Start from a priority profile</h2>
+            <p className="mt-1 text-[0.9375rem] text-muted">
+              Optional starting points. Choosing one fills in the seven sliders below, and you can still adjust each of them. These are preference templates, not
+              scientifically optimal settings: the right weights are the ones that describe your farm.
+            </p>
+          </div>
+          <Chip tone={active ? 'lime' : 'white'}>
+            <SlidersHorizontal className="h-3 w-3" aria-hidden="true" /> {active ? active.label : 'Custom weights'}
+          </Chip>
+        </div>
+        <div role="radiogroup" aria-label="Priority profile" className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {PRIORITY_TEMPLATES.map((t) => {
+            const Icon = TEMPLATE_ICONS[t.id]
+            const w = templateWeights(t, defaultPriorities)
+            return (
+              <ChoiceCard key={t.id} name={templateName} checked={active?.id === t.id} onChange={() => applyTemplate(t)} icon={<Icon className="h-4 w-4" aria-hidden="true" />} title={t.label}>
+                {t.summary}
+                <span className="mt-2 block text-[0.75rem] font-bold text-forest-800 tabular-nums">
+                  {PRIORITY_ORDER.map((k) => `${PRIORITIES[k].short} ${w[k]}`).join(' · ')}
+                </span>
+              </ChoiceCard>
+            )
+          })}
+        </div>
+        <p className="mt-3 text-[0.8125rem] leading-snug text-ink">
+          The weights are applied the next time you run the analysis. Results already on screen keep the weights they were run with, and those exact weights are shown with
+          every saved analysis and in the Decision Brief.
+        </p>
+      </Card>
 
       {presets.status === 'loading' ? (
         <div className="grid gap-3 lg:grid-cols-2" aria-hidden="true">

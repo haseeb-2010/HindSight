@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Link, Route, Routes } from 'react-router-dom'
+import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { Logo } from './components/brand/Logo'
 import { HomePage } from './pages/HomePage'
 
@@ -44,6 +44,12 @@ export default function App() {
           </Suspense>
         }
       />
+      {/* Short addresses for the main Phase 03 experiences */}
+      <Route path="/insights" element={<Navigate to="/app/insights" replace />} />
+      <Route path="/scenarios" element={<Navigate to="/app/scenarios" replace />} />
+      <Route path="/decision-brief" element={<Navigate to="/app/brief" replace />} />
+      <Route path="/science" element={<Navigate to="/app/science" replace />} />
+      <Route path="/demo" element={<Navigate to="/app/demo" replace />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

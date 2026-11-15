@@ -3,13 +3,37 @@ import { useEffect, useState } from 'react'
 import { Button } from '../../components/ui/Button'
 import { Mascot } from '../../components/ui/Mascot'
 import { cx } from '../../lib/cx'
-import type { RunState } from '../state/workspace'
+import type { JobState } from '../../lib/types'
+
+/** The parts of a run this panel needs; satisfied by the workspace's RunState and by useComparison(). */
+export interface ProgressState {
+  status: 'idle' | 'running' | 'error' | 'done'
+  job: JobState | null
+  error: string | null
+  startedAt: number | null
+}
 
 // Shown until the server reports its own stages (the same four it will report).
 const PLANNED = ['Preparing your farm profile', 'Retrieving historical weather', 'Checking available soil information', 'Simulating and comparing crop rotations']
 
 /** Live state of an analysis job: the server's real stages, elapsed time, and failure with retry. */
-export function RunProgress({ run, onRetry, onCancel, onEdit }: { run: RunState; onRetry: () => void; onCancel: () => void; onEdit?: () => void }) {
+export function RunProgress({
+  run,
+  onRetry,
+  onCancel,
+  onEdit,
+  title = 'Analysing your farm…',
+  failedTitle = 'The analysis could not be completed',
+  intro = 'Replaying four decades of daily weather for your rotation and its alternatives.',
+}: {
+  run: ProgressState
+  onRetry: () => void
+  onCancel: () => void
+  onEdit?: () => void
+  title?: string
+  failedTitle?: string
+  intro?: string
+}) {
   const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
     if (run.status !== 'running') return
@@ -27,10 +51,10 @@ export function RunProgress({ run, onRetry, onCancel, onEdit }: { run: RunState;
         <Mascot name={failed ? 'mint' : 'blue'} decorative className={cx('mx-auto w-24 md:w-28', !failed && 'animate-float')} sizes="112px" />
         <div className="min-w-0">
           <div role="status" aria-live="polite">
-            <h2 className="text-[1.375rem] leading-tight">{failed ? 'The analysis could not be completed' : 'Analysing your farm…'}</h2>
+            <h2 className="text-[1.375rem] leading-tight">{failed ? failedTitle : title}</h2>
             {!failed && (
               <p className="mt-1 text-[0.9375rem] text-ink">
-                Replaying four decades of daily weather for your rotation and its alternatives.{' '}
+                {intro}{' '}
                 <span className="font-bold text-muted tabular-nums">{secs.toFixed(0)} s</span>
               </p>
             )}

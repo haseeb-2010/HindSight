@@ -245,7 +245,25 @@ export function FieldStep({ onNext, issue }: { onNext: () => void; issue?: strin
           </div>
 
           <div className="min-w-0">
-            <LocationMap lat={lat} lon={lon} onPick={(a, b) => setLocation(a, b)} className="h-[20rem] sm:h-[26rem]" />
+            <LocationMap
+              lat={lat}
+              lon={lon}
+              onPick={(a, b) => setLocation(a, b)}
+              className="h-[20rem] sm:h-[26rem]"
+              markers={(presets.data?.presets ?? []).map((p) => ({
+                id: p.id,
+                lat: p.lat,
+                lon: p.lon,
+                label: `${p.display.place}${p.display.country ? `, ${p.display.country}` : ''}: demonstration farm${preset_id === p.id ? ', selected' : '. Select to use it.'}`,
+                active: preset_id === p.id,
+              }))}
+              onMarkerSelect={(id) => {
+                const p = presets.data?.presets.find((x) => x.id === id)
+                if (p) selectPreset(p)
+              }}
+              showScale
+              legend={{ point: 'Selected field point', place: 'Demonstration farm (select to use it)' }}
+            />
             <p className="mt-2.5 flex items-start gap-2 text-[0.8125rem] leading-snug text-ink">
               <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-forest-800" aria-hidden="true" />
               <span>

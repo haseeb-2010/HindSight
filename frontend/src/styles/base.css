@@ -421,15 +421,84 @@
 }
 
 @media print {
+  /* Paper: A4 portrait. The margins leave room for a browser's own header and footer lines. */
+  @page {
+    size: A4 portrait;
+    margin: 14mm 13mm 15mm;
+  }
+
   html,
   body {
     background: #fff !important;
   }
+
+  /* The workspace frame paints the cream page colour; paper stays white. */
+  .bg-background {
+    background-color: #fff !important;
+  }
+
+  /* Nothing moves on paper, and nothing may be caught half-way through an entrance animation. */
+  *,
+  ::before,
+  ::after {
+    animation: none !important;
+    transition: none !important;
+  }
   .reveal {
     opacity: 1 !important;
-    animation: none !important;
   }
-  @page {
-    margin: 14mm;
+  .draw-path {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  /* A heading stays with what follows it; images and table rows are not cut in two; a table that
+     runs over a page repeats its header row. Longer blocks opt in with the break-inside-avoid utility. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+  }
+  img,
+  svg,
+  tr {
+    break-inside: avoid;
+  }
+  thead {
+    display: table-header-group;
+    break-after: avoid;
+  }
+  p,
+  li {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* ---- The Rotation Decision Brief (app/brief/DecisionBrief.tsx) ---- */
+
+  /* The report is sized in rem throughout, so one smaller root size sets all of it for paper. */
+  html:has([data-brief='page']) {
+    font-size: 13px;
+  }
+
+  /* Chart marks, chips and tinted boxes are drawn with background colours. They carry data, so they
+     print even when the browser's "background graphics" option is off. */
+  [data-brief],
+  [data-brief] * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Help buttons open pop-overs, which paper cannot show. The brief explains its terms in its own text. */
+  [data-brief] button[aria-label^='About:'] {
+    display: none !important;
+  }
+
+  /* Links stay readable in ink, and their address is printed as the link text. */
+  [data-brief] a {
+    color: var(--color-forest-950) !important;
+    text-decoration: underline !important;
+    text-decoration-color: currentColor !important;
   }
 }

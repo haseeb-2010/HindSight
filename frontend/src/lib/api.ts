@@ -1,6 +1,7 @@
 import type {
   AnalysisEnvelope,
   AnalyzeBody,
+  CompareVariant,
   CropsResponse,
   GeocodeResponse,
   JobState,
@@ -89,6 +90,8 @@ export const api = {
     post<RotationPreview | RotationRejected>('/api/rotation/preview', rotation, signal),
   startAnalysis: (body: AnalyzeBody, signal?: AbortSignal) =>
     post<{ analysis_id: string; status: string }>('/api/analyze', body, signal),
+  startComparison: (base: AnalyzeBody, variants: CompareVariant[], signal?: AbortSignal) =>
+    post<{ analysis_id: string; status: string }>('/api/scenarios/compare', { base, variants }, signal),
   analysis: (id: string, signal?: AbortSignal) => request<JobState>(`/api/analysis/${encodeURIComponent(id)}`, { signal }, 20_000),
 }
 

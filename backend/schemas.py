@@ -20,6 +20,7 @@ PRECIP_FACTOR = (0.5, 1.5)
 FAILURE_THRESHOLD = (0.1, 0.9)
 TOP_N = (2, 8)
 MAX_SLOTS = 9
+MAX_VARIANTS = 6  # engine runs in one comparison
 
 FIELD_LABELS = {
     "location.lat": "Latitude", "location.lon": "Longitude", "location.name": "Field name",
@@ -30,11 +31,20 @@ FIELD_LABELS = {
     "constraints.excluded_crops": "Excluded crops", "scenario.temp_delta_c": "Temperature adjustment",
     "scenario.precip_factor": "Rainfall adjustment", "options.failure_threshold": "Failure threshold",
     "options.top_n": "Number of alternatives", "lat": "Latitude", "lon": "Longitude",
+    "variants": "Scenarios to compare",
 }
 
 
 class _Model(BaseModel):
     model_config = ConfigDict(extra="ignore")
+
+
+def _check_weights(priorities: dict[str, float]):
+    for key, weight in priorities.items():
+        if key not in PRIORITY_KEYS:
+            raise ValueError(f"Unknown priority '{key}'.")
+        if not 0 <= weight <= 5:
+            raise ValueError(f"The weight for '{key}' must be between 0 and 5.")
 
 
 class Location(_Model):
@@ -119,11 +129,32 @@ class AnalyzeBody(_Model):
 
     @model_validator(mode="after")
     def _priority_weights(self):
-        for key, weight in self.priorities.items():
-            if key not in PRIORITY_KEYS:
-                raise ValueError(f"Unknown priority '{key}'.")
-            if not 0 <= weight <= 5:
-                raise ValueError(f"The weight for '{key}' must be between 0 and 5.")
+        _check_weights(self.priorities)
+        return self
+
+
+class Variant(_Model):
+    """One run in a comparison: the base request with a different scenario and/or priorities."""
+    id: str = Field(min_length=1, max_length=40, pattern=r"^[A-Za-z0-9_-]+$")
+    label: str = Field(min_length=1, max_length=80)
+    scenario: Scenario | None = None
+    priorities: dict[str, float] | None = None
+
+    @model_validator(mode="after")
+    def _priority_weights(self):
+        _check_weights(self.priorities or {})
+        return self
+
+
+class CompareBody(_Model):
+    base: AnalyzeBody
+    variants: list[Variant] = Field(min_length=1, max_length=MAX_VARIANTS)
+
+    @model_validator(mode="after")
+    def _unique_ids(self):
+        ids = [v.id for v in self.variants]
+        if len(set(ids)) != len(ids):
+            raise ValueError("Each run in a comparison needs its own id.")
         return self
 
 

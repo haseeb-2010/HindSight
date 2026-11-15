@@ -1,4 +1,6 @@
+import { Sparkles } from 'lucide-react'
 import { ButtonRouterLink } from '../../components/ui/Button'
+import { Mascot } from '../../components/ui/Mascot'
 import { Card, MascotNote } from '../components/controls'
 import { Accordion } from '../results/ProvenanceTab'
 import { TIP } from '../results/shared'
@@ -10,6 +12,8 @@ const HOW: [string, string][] = [
   ['Set your priorities', 'Move the seven sliders. They change how rotations are ranked against each other, not the simulation itself.'],
   ['Optional: scenario and advanced settings', 'Test a warmer, cooler, wetter or drier version of the past record, or adjust assumptions. These are what-if checks on history, not forecasts.'],
   ['Review, run and explore', 'Check the summary, run the analysis and move through the result tabs. Change any setting and rerun whenever you like.'],
+  ['Read the findings', 'Field Intelligence explains the analysis in plain language: how local conditions changed, when the soil is bare, which rotations held up in hard years, and the water and soil-care trade-offs.'],
+  ['Test what-ifs and take the brief with you', 'The Scenario Lab re-runs the engine with warmer or drier versions of the past record. The Decision Brief gathers the evidence, trade-offs and local checks on one page you can print or save as a PDF.'],
 ]
 
 const QA: [string, string][] = [
@@ -31,7 +35,15 @@ const QA: [string, string][] = [
   ],
   [
     'Are my analyses saved?',
-    'Only in this browser tab, for this session. There are no accounts. Use Export to download the JSON, a CSV of the comparison, or a print-friendly report.',
+    'Yes, on this device only. Each finished analysis is kept in this browser’s storage and listed under My Analyses, where you can rename, compare, export or delete it. There are no accounts and nothing is synchronised to other devices, so clearing your browser data removes them: export the JSON first if you want to keep one.',
+  ],
+  [
+    'Are the Scenario Lab results climate forecasts?',
+    'No. A scenario adds the same temperature offset to every day of the 1985–2024 record, or multiplies every day’s rain by the same factor, and replays the rotations through that adjusted past. It does not simulate future weather timing or changing rainfall patterns. Use it as a stress test of how sensitive the ranking is.',
+  ],
+  [
+    'What is the difference between a live analysis and a saved demonstration result?',
+    'A live analysis was calculated by the engine when you asked for it. A saved demonstration result is engine output that was generated earlier from the same stored NASA data and is shown as-is. HindSight always labels which one you are looking at.',
   ],
   [
     'What if SoilGrids or the weather service is unavailable?',
@@ -60,10 +72,34 @@ export function HelpPage() {
           <h1 className="text-[1.875rem] leading-[1.08] tracking-[-0.03em] sm:text-[2.375rem]">Help</h1>
           <p className="mt-2.5 text-[1.0625rem] leading-relaxed text-muted">How to run an analysis, what the terms mean, and answers to common questions.</p>
         </div>
-        <ButtonRouterLink to="/app/analysis" arrow>
-          Go to Farm Analysis
-        </ButtonRouterLink>
+        <div className="flex flex-wrap gap-2">
+          <ButtonRouterLink to="/app?tour=1" variant="secondary" icon={<Sparkles />} data-tour-replay-link>
+            Take a tour
+          </ButtonRouterLink>
+          <ButtonRouterLink to="/app/demo" variant="secondary">
+            Guided Tour of an analysis
+          </ButtonRouterLink>
+          <ButtonRouterLink to="/app/analysis" arrow>
+            Go to Farm Analysis
+          </ButtonRouterLink>
+        </div>
       </div>
+
+      <section className="flex flex-col gap-4 rounded-[1.5rem] bg-lime-100 p-5 ring-1 ring-forest-950/10 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div className="flex items-center gap-4">
+          <Mascot name="blue" decorative className="w-16 shrink-0" sizes="64px" />
+          <div>
+            <h2 className="text-[1.25rem] leading-tight">Need a refresher? Take the tour again.</h2>
+            <p className="mt-1 max-w-2xl text-[0.9375rem] text-ink">
+              The dashboard tour takes about a minute: the blue mascot walks you through your field, the climate patterns, the rotation comparison, your priorities, the
+              Scenario Lab and the Decision Brief. Replaying it changes nothing in your farm settings or analyses.
+            </p>
+          </div>
+        </div>
+        <ButtonRouterLink to="/app?tour=1" arrow className="shrink-0 self-start sm:self-center">
+          Take a tour
+        </ButtonRouterLink>
+      </section>
 
       <Card as="section">
         <h2 className="text-[1.375rem]">Running an analysis</h2>

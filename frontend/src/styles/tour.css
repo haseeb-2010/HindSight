@@ -1,0 +1,314 @@
+/*
+ * Dashboard tour: spotlight, mascot and message board.
+ * Movement uses transform and opacity only. Everything here is switched to plain fades by the
+ * global prefers-reduced-motion rule in base.css plus the overrides at the end of this file.
+ */
+
+.tour-root {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+}
+
+/* Catches clicks so the dashboard underneath cannot be used by accident during the tour. */
+.tour-blocker {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+}
+
+/* The lit area. Its huge shadow is the dimmer, so there is one element and no seams. */
+.tour-spot {
+  position: fixed;
+  border-radius: 1.75rem;
+  box-shadow: 0 0 0 200vmax rgb(16 34 25 / 0.6);
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    top var(--tour-spot-ms, 260ms) var(--ease-soft),
+    left var(--tour-spot-ms, 260ms) var(--ease-soft),
+    width var(--tour-spot-ms, 260ms) var(--ease-soft),
+    height var(--tour-spot-ms, 260ms) var(--ease-soft),
+    opacity 240ms ease;
+}
+.tour-spot.is-on {
+  opacity: 1;
+}
+.tour-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 3px solid var(--color-lime);
+  box-shadow:
+    0 0 0 7px rgb(238 243 132 / 0.22),
+    0 18px 48px -12px rgb(0 0 0 / 0.5);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+.tour-ring.is-on {
+  opacity: 1;
+  animation: tour-ring-pulse 2.4s ease-in-out infinite;
+}
+@keyframes tour-ring-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 7px rgb(238 243 132 / 0.22),
+      0 18px 48px -12px rgb(0 0 0 / 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 0 12px rgb(238 243 132 / 0.1),
+      0 18px 48px -12px rgb(0 0 0 / 0.5);
+  }
+}
+
+/* Mascot and board travel together as one unit. */
+.tour-unit {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 72;
+  width: min(23rem, calc(100vw - 1.5rem));
+  will-change: transform, opacity;
+  opacity: 0;
+  transition:
+    transform var(--tour-move-ms, 600ms) cubic-bezier(0.3, 0.72, 0.2, 1),
+    opacity 240ms ease;
+}
+.tour-unit.is-visible {
+  opacity: 1;
+}
+.tour-unit.is-instant {
+  transition: opacity 240ms ease;
+}
+.tour-unit.is-sheet {
+  width: calc(100vw - 1.5rem);
+  max-width: 30rem;
+}
+
+/* The hop while travelling: up and over, leaning into the direction of travel. */
+.tour-hop.is-hopping {
+  animation: tour-hop var(--tour-move-ms, 600ms) cubic-bezier(0.3, 0.72, 0.2, 1) both;
+}
+@keyframes tour-hop {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  45% {
+    transform: translate3d(0, -26px, 0) rotate(var(--tour-lean, 4deg));
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+}
+
+/* ---- message board */
+.tour-board-wrap {
+  perspective: 1100px;
+}
+.tour-board {
+  transform: rotateY(0deg);
+  transform-origin: 50% 50%;
+  backface-visibility: hidden;
+  transition: transform 210ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.tour-board.is-flip-out {
+  transform: rotateY(89deg);
+  transition: transform 170ms cubic-bezier(0.55, 0, 0.85, 0.4);
+}
+.tour-board.is-flip-pre {
+  transform: rotateY(-89deg);
+  transition: none;
+}
+
+/* ---- mascot */
+.tour-mascot {
+  position: relative;
+  transform-origin: 50% 92%;
+}
+.tour-mascot img {
+  filter: drop-shadow(0 6px 10px rgb(16 34 25 / 0.28));
+}
+.tour-mascot.is-entering {
+  animation: tour-enter 620ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+.tour-mascot.is-talking {
+  animation: tour-talk 1.7s ease-in-out infinite;
+}
+.tour-mascot.is-anticipating {
+  animation: tour-anticipate 170ms ease-out both;
+}
+.tour-mascot.is-landing {
+  animation: tour-land 420ms cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+.tour-mascot.is-celebrating {
+  animation: tour-celebrate 900ms cubic-bezier(0.3, 0.7, 0.2, 1) 2 both;
+}
+@keyframes tour-enter {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 46px, 0) scale(0.7, 0.8);
+  }
+  60% {
+    opacity: 1;
+    transform: translate3d(0, -8px, 0) scale(1.05, 0.97);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* A small bob with a side-to-side sway: reads as the mascot talking. */
+@keyframes tour-talk {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-1.4deg) scale(1, 1);
+  }
+  25% {
+    transform: translate3d(1px, -4px, 0) rotate(0.6deg) scale(1.012, 0.992);
+  }
+  50% {
+    transform: translate3d(0, 0, 0) rotate(1.4deg) scale(1, 1);
+  }
+  75% {
+    transform: translate3d(-1px, -3px, 0) rotate(-0.4deg) scale(1.01, 0.994);
+  }
+}
+@keyframes tour-anticipate {
+  to {
+    transform: translate3d(0, 4px, 0) scale(1.07, 0.9);
+  }
+}
+@keyframes tour-land {
+  0% {
+    transform: translate3d(0, 3px, 0) scale(1.09, 0.89);
+  }
+  55% {
+    transform: translate3d(0, -4px, 0) scale(0.97, 1.05);
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes tour-celebrate {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate3d(0, -20px, 0) rotate(-7deg) scale(1.03, 1);
+  }
+  60% {
+    transform: translate3d(0, -6px, 0) rotate(6deg);
+  }
+  80% {
+    transform: translate3d(0, 1px, 0) rotate(0deg) scale(1.05, 0.94);
+  }
+}
+
+/* Ground shadow: shrinks a little when the mascot bobs up. */
+.tour-shadow {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: -2px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgb(16 34 25 / 0.3);
+  filter: blur(4px);
+}
+.is-talking > .tour-shadow {
+  animation: tour-shadow 1.7s ease-in-out infinite;
+}
+@keyframes tour-shadow {
+  0%,
+  50%,
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  25%,
+  75% {
+    transform: scaleX(0.9);
+    opacity: 0.8;
+  }
+}
+
+/* Speech marks: three little arcs that pulse outwards while the mascot is presenting. */
+.tour-speech path {
+  opacity: 0.15;
+}
+.is-talking .tour-speech path {
+  animation: tour-speech 1.2s ease-in-out infinite;
+}
+.is-talking .tour-speech path:nth-child(2) {
+  animation-delay: 0.16s;
+}
+.is-talking .tour-speech path:nth-child(3) {
+  animation-delay: 0.32s;
+}
+@keyframes tour-speech {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+/* The second mascot and the sparkles of the final step. */
+.tour-friend {
+  animation: tour-enter 560ms cubic-bezier(0.34, 1.4, 0.64, 1) 180ms both;
+}
+.tour-spark {
+  position: absolute;
+  opacity: 0;
+  animation: tour-spark 1.1s ease-out both;
+}
+@keyframes tour-spark {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 6px, 0) scale(0.3) rotate(0deg);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--dx, 0), var(--dy, -34px), 0) scale(1) rotate(70deg);
+  }
+}
+
+/* Reduced motion: no travel, hop, flip or bounce. Content and controls are unchanged. */
+@media (prefers-reduced-motion: reduce) {
+  .tour-unit,
+  .tour-unit.is-instant {
+    transition: opacity 160ms ease !important;
+  }
+  .tour-board,
+  .tour-board.is-flip-out,
+  .tour-board.is-flip-pre {
+    transform: none !important;
+    transition: opacity 140ms ease !important;
+  }
+  .tour-board.is-flip-out,
+  .tour-board.is-flip-pre {
+    opacity: 0;
+  }
+  .tour-hop,
+  .tour-mascot,
+  .tour-shadow,
+  .tour-friend,
+  .tour-ring,
+  .tour-speech path {
+    animation: none !important;
+  }
+  .tour-spark {
+    display: none;
+  }
+  .tour-spot {
+    transition: opacity 160ms ease !important;
+  }
+}

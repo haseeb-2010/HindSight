@@ -189,12 +189,56 @@ export interface AnalysisEnvelope {
   fallback_reason?: string | null
   saved_file?: string
   inputs?: {
-    climate?: { source?: string; start?: string; end?: string; grid_note?: string; from_cache?: boolean; elevation_m?: number | null }
+    climate?: {
+      source?: string
+      start?: string
+      end?: string
+      grid_note?: string
+      from_cache?: boolean
+      elevation_m?: number | null
+      /** Daily records in the retrieved NASA POWER series. */
+      days?: number
+    }
     soil?: { used?: string; requested?: string; soilgrids?: string; profile?: SoilProfile | null }
-    ndvi?: { used?: boolean; point?: { lat: number; lon: number }; reason?: string | null }
+    ndvi?: {
+      used?: boolean
+      point?: { lat: number; lon: number }
+      reason?: string | null
+      source?: string | null
+      first_date?: string
+      last_date?: string
+      observations?: number
+      good_quality_observations?: number
+    }
   }
   request?: EngineRequest
+  /** Yearly and monthly values of the weather record behind `result` (backend/context.py). Absent on analyses saved before Phase 03. */
+  context?: { climate?: ClimateContext | null } | null
   result: AnalysisResult
+}
+
+export interface MonthlyClimate {
+  month: number
+  rain_mm: number
+  et0_mm: number
+  heavy_rain_days: number
+  hot_days: number
+  frost_days: number
+  mean_temp_c: number
+}
+
+/** Descriptive values read from the same NASA POWER record (and scenario) the engine used. */
+export interface ClimateContext {
+  record: { start_year: number; end_year: number }
+  scenario_applied: boolean
+  years: number[]
+  /** One value per year, keyed by the id of the matching `climate_shift` indicator. */
+  annual: Record<string, number[]>
+  /** Twelve entries, January to December: averages over the record. */
+  monthly: MonthlyClimate[]
+  thresholds: { hot_day_c: number; frost_day_c: number; heavy_rain_mm: number }
+  warm_half_year_months: number[]
+  note?: string
 }
 
 /* ---------------------------------------------------------------- workspace (Phase 02) */
@@ -222,6 +266,7 @@ export interface CropsResponse {
     failure_threshold: [number, number]
     top_n: [number, number]
     max_slots: number
+    max_compare_runs?: number
   }
   soil_textures: string[]
   organic_matter_levels: string[]
@@ -307,7 +352,26 @@ export interface JobState {
   stages: JobStage[]
   elapsed_ms: number
   envelope: AnalysisEnvelope | null
+  /** Set instead of `envelope` when the job compared several runs (POST /api/scenarios/compare). */
+  comparison?: Comparison | null
   error: { code: string; detail: string } | null
+}
+
+/** One run in a comparison: the base request with a different scenario and/or priorities. */
+export interface CompareVariant {
+  id: string
+  label: string
+  scenario?: { temp_delta_c: number; precip_factor: number }
+  priorities?: Record<string, number>
+}
+
+export interface Comparison {
+  kind: 'comparison'
+  analysis_id: string
+  computed_at: string
+  elapsed_ms: number
+  weather_from_cache: boolean
+  variants: { id: string; label: string; envelope: AnalysisEnvelope }[]
 }
 
 /** What the workspace sends to POST /api/analyze. */

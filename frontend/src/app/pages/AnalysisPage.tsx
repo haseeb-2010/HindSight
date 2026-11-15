@@ -68,7 +68,7 @@ export function AnalysisPage() {
           (current ? (
             <ResultsView analysis={current} tab={tab} onTab={(t) => setParams(t === 'overview' ? { step: 'results' } : { step: 'results', tab: t }, { replace: true })} onEdit={() => go('review')} />
           ) : run.status !== 'idle' ? (
-            <RunProgress run={run} onRetry={ws.analyse} onCancel={ws.cancelRun} onEdit={() => go('review')} />
+            <RunProgress run={run} onRetry={() => ws.analyse()} onCancel={ws.cancelRun} onEdit={() => go('review')} />
           ) : (
             <div className="flex flex-col items-start gap-4 rounded-[1.5rem] bg-white p-8 ring-1 ring-border">
               <MascotNote mascot="blue">No analysis yet. Review your settings and run one to see results here.</MascotNote>

@@ -1,5 +1,6 @@
-import { AlertTriangle, Database, Download, FileJson, History, Pencil, Printer, RefreshCw, Table2, Zap } from 'lucide-react'
+import { AlertTriangle, Database, Download, FileJson, FileText, History, Pencil, RefreshCw, Table2, Zap } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../../components/ui/Button'
 import { rankedRotations, topAlternative } from '../../lib/analysis'
 import { cx } from '../../lib/cx'
@@ -14,7 +15,6 @@ import { CompareTab } from './CompareTab'
 import { DetailsTab } from './DetailsTab'
 import { EvidenceTab } from './EvidenceTab'
 import { OverviewTab } from './OverviewTab'
-import { PrintReport } from './PrintReport'
 import { ProvenanceTab } from './ProvenanceTab'
 import { RunProgress } from './RunProgress'
 import { Chip } from './shared'
@@ -39,6 +39,7 @@ interface ResultsViewProps {
 
 export function ResultsView({ analysis, tab, onTab, onEdit }: ResultsViewProps) {
   const { stale, run, analyse, cancelRun, presets, crops } = useWorkspace()
+  const navigate = useNavigate()
   const env = analysis.envelope
   const res = env.result
   const names = useMemo(() => ({ ...(presets.data?.crop_names ?? {}), ...Object.fromEntries((crops.data?.crops ?? []).map((c) => [c.id, c.name])) }), [presets.data, crops.data])
@@ -94,7 +95,7 @@ export function ResultsView({ analysis, tab, onTab, onEdit }: ResultsViewProps) 
 
   return (
     <>
-      <div className="animate-rise min-w-0 space-y-5 print:hidden">
+      <div className="animate-rise min-w-0 space-y-5">
         <header className="rounded-[1.5rem] bg-white p-5 shadow-hairline ring-1 ring-border sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
             <div className="min-w-0">
@@ -117,9 +118,9 @@ export function ResultsView({ analysis, tab, onTab, onEdit }: ResultsViewProps) 
                 {menu && (
                   <div role="menu" aria-label="Export options" className="animate-pop absolute right-0 z-30 mt-2 w-72 rounded-2xl bg-white p-1.5 shadow-float ring-1 ring-border">
                     {[
-                      { icon: FileJson, label: 'Download analysis (JSON)', hint: 'The complete engine response, as received', act: () => downloadJson(env) },
-                      { icon: Table2, label: 'Rotation comparison (CSV)', hint: 'One row per rotation, for a spreadsheet', act: () => downloadCsv(env) },
-                      { icon: Printer, label: 'Print-friendly report', hint: 'Opens your browser’s print dialog (save as PDF)', act: () => window.print() },
+                      { icon: FileText, label: 'Decision Brief (print / PDF)', hint: 'Opens the full report, ready to print or save as PDF', act: () => navigate('/app/brief') },
+                      { icon: Table2, label: 'Rotation comparison (CSV)', hint: 'One row per rotation, for a spreadsheet', act: () => downloadCsv(env, { id: analysis.id, at: analysis.at }) },
+                      { icon: FileJson, label: 'Download analysis (JSON)', hint: 'The complete engine response, as received', act: () => downloadJson(env, { id: analysis.id, at: analysis.at }) },
                     ].map((o) => (
                       <button
                         key={o.label}
@@ -183,7 +184,7 @@ export function ResultsView({ analysis, tab, onTab, onEdit }: ResultsViewProps) 
         </header>
 
         {running ? (
-          <RunProgress run={run} onRetry={analyse} onCancel={cancelRun} onEdit={() => { cancelRun(); onEdit() }} />
+          <RunProgress run={run} onRetry={() => analyse()} onCancel={cancelRun} onEdit={() => { cancelRun(); onEdit() }} />
         ) : (
           stale && (
             <div role="status" className="flex flex-col gap-3 rounded-2xl bg-signal-50 p-4 ring-1 ring-signal/30 sm:flex-row sm:items-center sm:justify-between">
@@ -198,7 +199,7 @@ export function ResultsView({ analysis, tab, onTab, onEdit }: ResultsViewProps) 
                 <Button variant="secondary" onClick={onEdit}>
                   Review changes
                 </Button>
-                <Button icon={<RefreshCw />} onClick={analyse}>
+                <Button icon={<RefreshCw />} onClick={() => analyse()}>
                   Rerun analysis
                 </Button>
               </div>
@@ -260,7 +261,6 @@ export function ResultsView({ analysis, tab, onTab, onEdit }: ResultsViewProps) 
           {tab === 'data' && <ProvenanceTab env={env} />}
         </div>
       </div>
-      <PrintReport env={env} names={names} />
     </>
   )
 }

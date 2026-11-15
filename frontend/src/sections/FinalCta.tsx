@@ -1,4 +1,4 @@
-import { ButtonLink } from '../components/ui/Button'
+import { ButtonLink, ButtonRouterLink } from '../components/ui/Button'
 import { Mascot } from '../components/ui/Mascot'
 import { Pill } from '../components/ui/Pill'
 import { Reveal } from '../components/ui/Reveal'
@@ -28,9 +28,9 @@ export function FinalCta() {
             <ButtonLink href="#explore" variant="accent" size="lg" arrow className="justify-between sm:justify-center">
               Explore a Demo Farm
             </ButtonLink>
-            <ButtonLink href="#science" variant="ghostDark" size="lg">
-              Read the science
-            </ButtonLink>
+            <ButtonRouterLink to="/demo" variant="ghostDark" size="lg">
+              Take the Guided Tour
+            </ButtonRouterLink>
           </Reveal>
         </div>
 

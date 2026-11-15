@@ -1,4 +1,4 @@
-import type { AnalyzeBody, Preset } from '../../lib/types'
+import type { AnalysisEnvelope, AnalyzeBody, EngineRequest, Preset } from '../../lib/types'
 
 export interface SlotDraft {
   key: string
@@ -61,6 +61,42 @@ export function configFromPreset(p: Preset): FarmConfig {
   }
 }
 
+/**
+ * The workspace settings that correspond to a request the engine ran with (as echoed in an envelope).
+ * Used to reopen an analysis whose own settings were not stored with it, e.g. one run in the Scenario Lab.
+ * Soil comes back as "entered by the farmer" unless the request carried no texture (a SoilGrids profile was used).
+ */
+export function configFromRequest(req: EngineRequest | undefined | null, presetId: string | null = null): FarmConfig {
+  if (!req) return EMPTY_CONFIG
+  const mode = WATER_MODES.find((m) => m === req.water?.mode) ?? 'rainfed'
+  const usedProfile = !!req.soil && req.soil.texture_class === null
+  return {
+    location: {
+      lat: typeof req.location?.lat === 'number' ? req.location.lat : null,
+      lon: typeof req.location?.lon === 'number' ? req.location.lon : null,
+      name: req.location?.name ?? '',
+      preset_id: req.location?.preset_id ?? presetId,
+    },
+    soil: {
+      source: usedProfile ? 'soilgrids' : 'farmer',
+      texture_class: req.soil?.texture_class ?? EMPTY_CONFIG.soil.texture_class,
+      organic_matter_level: req.soil?.organic_matter_level ?? EMPTY_CONFIG.soil.organic_matter_level,
+      depth_cm: req.soil?.depth_cm ?? EMPTY_CONFIG.soil.depth_cm,
+    },
+    water: { mode, seasonal_cap_mm: req.water?.seasonal_cap_mm ?? EMPTY_CONFIG.water.seasonal_cap_mm },
+    rotation: {
+      cycle_years: req.current_rotation?.cycle_years ?? 1,
+      slots: (req.current_rotation?.slots ?? []).map((s) => ({ year_offset: s.year_offset, plant_doy: s.plant_doy, crop_id: s.crop_id, key: newKey() })),
+    },
+    priorities: { ...(req.priorities ?? {}) },
+    market_rating: { ...(req.constraints?.market_rating ?? {}) },
+    excluded_crops: [...(req.constraints?.excluded_crops ?? [])],
+    max_cycle_years: req.constraints?.max_cycle_years ?? EMPTY_CONFIG.max_cycle_years,
+    options: { ...EMPTY_CONFIG.options, ...(req.options ?? {}) },
+    scenario: { temp_delta_c: req.scenario?.temp_delta_c ?? 0, precip_factor: req.scenario?.precip_factor ?? 1 },
+  }
+}
+
 export const hasLocation = (c: FarmConfig) => c.location.lat !== null && c.location.lon !== null
 
 export function validLat(v: number | null): v is number {
@@ -92,6 +128,15 @@ export function toRequest(c: FarmConfig, defaultPriorities: Record<string, numbe
     scenario: { ...c.scenario },
     options: { ...c.options },
   }
+}
+
+/**
+ * The request that repeats an envelope's run: same field, soil, water, rotation, priorities and scenario.
+ * Pages that re-run the engine for an open analysis (Scenario Lab, priority explorer, guided tour) start from this,
+ * so their comparisons belong to the analysis on screen and not to unsaved edits in the form.
+ */
+export function requestFromEnvelope(env: AnalysisEnvelope, defaultPriorities: Record<string, number>): AnalyzeBody | null {
+  return toRequest(configFromRequest(env.request, env.preset_id), defaultPriorities)
 }
 
 /** Stable text form of a request, used to tell whether shown results match the current settings. */

@@ -2,25 +2,18 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { useResource, type Resource } from '../../hooks/useResource'
 import { api, errorMessage } from '../../lib/api'
 import type { AnalysisEnvelope, AnalyzeBody, CropsResponse, JobState, Preset, PresetsResponse } from '../../lib/types'
-import { EMPTY_CONFIG, configFromPreset, signatureOf, toRequest, type FarmConfig } from '../lib/config'
+import { EMPTY_CONFIG, configFromPreset, configFromRequest, signatureOf, toRequest, type FarmConfig } from '../lib/config'
+import { loadLibrary, MAX_LIBRARY, normaliseAnalysis, saveLibrary, type Analysis } from '../lib/library'
+import { pollJob } from '../lib/poll'
 
-const STORAGE_KEY = 'hindsight.workspace.v1'
-const MAX_HISTORY = 6
+export type { Analysis } from '../lib/library'
 
-/** One finished analysis with the settings that produced it. Kept for this browser session only. */
-export interface Analysis {
-  id: string
-  at: string
-  name: string
-  config: FarmConfig
-  signature: string
-  envelope: AnalysisEnvelope
-}
+const SESSION_KEY = 'hindsight.workspace.v1'
 
-interface Persisted {
+/** What belongs to this browser tab: the form being edited and which analysis is open. */
+interface Session {
   config: FarmConfig
   currentId: string | null
-  history: Analysis[]
 }
 
 export interface RunState {
@@ -42,67 +35,83 @@ interface Workspace {
   defaultPriorities: Record<string, number>
   body: AnalyzeBody | null
   run: RunState
-  analyse: () => Promise<boolean>
+  /** Runs the engine for the current settings, or for `override` (which then becomes the current settings). */
+  analyse: (override?: FarmConfig) => Promise<boolean>
+  /** Selects a demonstration farm with its own settings and analyses it. */
+  analysePreset: (p: Preset) => Promise<boolean>
   cancelRun: () => void
   current: Analysis | null
   stale: boolean
+  /** Analyses saved on this device, newest first. */
   history: Analysis[]
+  /** Set when the browser refused to store analyses; they then live in memory only. */
+  storageError: string | null
   openAnalysis: (id: string) => void
   removeAnalysis: (id: string) => void
+  renameAnalysis: (id: string, name: string) => void
+  /** Adds an engine result obtained elsewhere (e.g. one run of a scenario comparison) to the saved analyses. */
+  saveEnvelope: (envelope: AnalysisEnvelope, opts?: { name?: string; open?: boolean }) => string
 }
 
 const Ctx = createContext<Workspace | null>(null)
 const IDLE: RunState = { status: 'idle', job: null, error: null, startedAt: null }
 
-function load(): Persisted {
+function loadSession(): { session: Session; legacy: unknown[] } {
   try {
-    const raw = sessionStorage.getItem(STORAGE_KEY)
+    const raw = sessionStorage.getItem(SESSION_KEY)
     if (raw) {
-      const p = JSON.parse(raw) as Partial<Persisted>
-      if (p.config?.location && p.config.rotation && Array.isArray(p.history)) {
-        return { config: { ...EMPTY_CONFIG, ...p.config }, currentId: p.currentId ?? null, history: p.history }
+      const p = JSON.parse(raw) as Partial<Session> & { history?: unknown[] }
+      if (p.config?.location && p.config.rotation) {
+        // Before Phase 03 the analyses themselves lived in the session; they move to the device library.
+        return { session: { config: { ...EMPTY_CONFIG, ...p.config }, currentId: p.currentId ?? null }, legacy: Array.isArray(p.history) ? p.history : [] }
       }
     }
   } catch {
     /* unreadable or blocked storage: start clean */
   }
-  return { config: EMPTY_CONFIG, currentId: null, history: [] }
+  return { session: { config: EMPTY_CONFIG, currentId: null }, legacy: [] }
 }
 
-const sleep = (ms: number, signal: AbortSignal) =>
-  new Promise<void>((resolve, reject) => {
-    const t = window.setTimeout(resolve, ms)
-    signal.addEventListener('abort', () => {
-      window.clearTimeout(t)
-      reject(new DOMException('aborted', 'AbortError'))
-    })
-  })
+function initialState() {
+  const { session, legacy } = loadSession()
+  const lib = loadLibrary()
+  const known = new Set(lib.items.map((a) => a.id))
+  const migrated = legacy.map(normaliseAnalysis).filter((a): a is Analysis => a !== null && !known.has(a.id))
+  return { session, library: [...migrated, ...lib.items].slice(0, MAX_LIBRARY), loadError: lib.error }
+}
 
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [presets, reloadPresets] = useResource<PresetsResponse>((s) => api.presets(s), 'presets')
   const [crops, reloadCrops] = useResource<CropsResponse>((s) => api.crops(s), 'crops')
-  const [state, setState] = useState<Persisted>(load)
+  const [initial] = useState(initialState)
+  const [session, setSession] = useState<Session>(initial.session)
+  const [library, setLibrary] = useState<Analysis[]>(initial.library)
+  const [storageError, setStorageError] = useState<string | null>(initial.loadError)
   const [run, setRun] = useState<RunState>(IDLE)
   const inflight = useRef<AbortController | null>(null)
 
   useEffect(() => {
     try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+      sessionStorage.setItem(SESSION_KEY, JSON.stringify(session))
     } catch {
-      /* storage full or unavailable: the session simply is not restored after a reload */
+      /* storage full or unavailable: the form simply is not restored after a reload */
     }
-  }, [state])
+  }, [session])
+
+  useEffect(() => {
+    setStorageError(saveLibrary(library))
+  }, [library])
 
   useEffect(() => () => inflight.current?.abort(), [])
 
   const defaultPriorities = useMemo(() => presets.data?.default_priorities ?? {}, [presets.data])
-  const body = useMemo(() => toRequest(state.config, defaultPriorities), [state.config, defaultPriorities])
+  const body = useMemo(() => toRequest(session.config, defaultPriorities), [session.config, defaultPriorities])
   const signature = useMemo(() => signatureOf(body), [body])
-  const current = state.history.find((a) => a.id === state.currentId) ?? null
+  const current = library.find((a) => a.id === session.currentId) ?? null
 
-  const update = useCallback((fn: (c: FarmConfig) => FarmConfig) => setState((s) => ({ ...s, config: fn(s.config) })), [])
-  const selectPreset = useCallback((p: Preset) => setState((s) => ({ ...s, config: configFromPreset(p) })), [])
-  const resetConfig = useCallback(() => setState((s) => ({ ...s, config: EMPTY_CONFIG })), [])
+  const update = useCallback((fn: (c: FarmConfig) => FarmConfig) => setSession((s) => ({ ...s, config: fn(s.config) })), [])
+  const selectPreset = useCallback((p: Preset) => setSession((s) => ({ ...s, config: configFromPreset(p) })), [])
+  const resetConfig = useCallback(() => setSession((s) => ({ ...s, config: EMPTY_CONFIG })), [])
 
   const setLocation = useCallback(
     (lat: number | null, lon: number | null, name?: string) =>
@@ -124,59 +133,90 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     setRun(IDLE)
   }, [])
 
-  const analyse = useCallback(async () => {
-    if (!body) return false
-    inflight.current?.abort()
-    const ctrl = new AbortController()
-    inflight.current = ctrl
-    const startedAt = Date.now()
-    const config = state.config
-    setRun({ status: 'running', job: null, error: null, startedAt })
-    try {
-      const started = await api.startAnalysis(body, ctrl.signal)
-      let delay = 300
-      for (;;) {
-        const job = await api.analysis(started.analysis_id, ctrl.signal)
+  const store = useCallback((item: Analysis, open: boolean) => {
+    setLibrary((lib) => [item, ...lib.filter((a) => a.id !== item.id)].slice(0, MAX_LIBRARY))
+    if (open) setSession((s) => ({ ...s, currentId: item.id }))
+  }, [])
+
+  const analyse = useCallback(
+    async (override?: FarmConfig) => {
+      const config = override ?? session.config
+      const request = override ? toRequest(override, defaultPriorities) : body
+      if (!request) return false
+      if (override) setSession((s) => ({ ...s, config: override }))
+      inflight.current?.abort()
+      const ctrl = new AbortController()
+      inflight.current = ctrl
+      const startedAt = Date.now()
+      setRun({ status: 'running', job: null, error: null, startedAt })
+      try {
+        const started = await api.startAnalysis(request, ctrl.signal)
+        const job = await pollJob(started.analysis_id, ctrl.signal, (j) => setRun({ status: 'running', job: j, error: null, startedAt }))
         if (job.status === 'done' && job.envelope) {
           const envelope = job.envelope
-          const item: Analysis = {
-            id: envelope.analysis_id ?? started.analysis_id,
-            at: new Date().toISOString(),
-            name: envelope.result.site.name,
-            config,
-            signature,
-            envelope,
-          }
-          setState((s) => ({ ...s, currentId: item.id, history: [item, ...s.history.filter((a) => a.id !== item.id)].slice(0, MAX_HISTORY) }))
+          store(
+            {
+              id: envelope.analysis_id ?? started.analysis_id,
+              at: new Date().toISOString(),
+              name: envelope.result.site.name,
+              config,
+              signature: signatureOf(request),
+              envelope,
+            },
+            true,
+          )
           setRun(IDLE)
           return true
         }
-        if (job.status === 'error') {
-          setRun({ status: 'error', job, error: job.error?.detail ?? 'The analysis could not be completed.', startedAt })
-          return false
-        }
-        setRun({ status: 'running', job, error: null, startedAt })
-        await sleep(delay, ctrl.signal)
-        delay = Math.min(Math.round(delay * 1.35), 1500)
+        setRun({ status: 'error', job, error: job.error?.detail ?? 'The analysis could not be completed.', startedAt })
+        return false
+      } catch (err) {
+        if (ctrl.signal.aborted) return false
+        setRun({ status: 'error', job: null, error: errorMessage(err), startedAt })
+        return false
       }
-    } catch (err) {
-      if (ctrl.signal.aborted) return false
-      setRun({ status: 'error', job: null, error: errorMessage(err), startedAt })
-      return false
-    }
-  }, [body, signature, state.config])
+    },
+    [body, defaultPriorities, session.config, store],
+  )
+
+  const analysePreset = useCallback((p: Preset) => analyse(configFromPreset(p)), [analyse])
+
+  const saveEnvelope = useCallback(
+    (envelope: AnalysisEnvelope, opts?: { name?: string; open?: boolean }) => {
+      const config = configFromRequest(envelope.request, envelope.preset_id)
+      const id = envelope.analysis_id ?? `local-${Date.now().toString(36)}`
+      store(
+        {
+          id,
+          at: new Date().toISOString(),
+          name: opts?.name?.trim() || envelope.result.site.name,
+          config,
+          signature: signatureOf(toRequest(config, defaultPriorities)),
+          envelope,
+        },
+        !!opts?.open,
+      )
+      if (opts?.open) setSession((s) => ({ ...s, config }))
+      return id
+    },
+    [defaultPriorities, store],
+  )
 
   const openAnalysis = useCallback(
-    (id: string) => setState((s) => {
-      const a = s.history.find((x) => x.id === id)
-      return a ? { ...s, currentId: id, config: a.config } : s
-    }),
-    [],
+    (id: string) => {
+      const a = library.find((x) => x.id === id)
+      if (a) setSession({ currentId: id, config: a.config })
+    },
+    [library],
   )
-  const removeAnalysis = useCallback(
-    (id: string) => setState((s) => ({ ...s, history: s.history.filter((a) => a.id !== id), currentId: s.currentId === id ? null : s.currentId })),
-    [],
-  )
+  const removeAnalysis = useCallback((id: string) => {
+    setLibrary((lib) => lib.filter((a) => a.id !== id))
+    setSession((s) => (s.currentId === id ? { ...s, currentId: null } : s))
+  }, [])
+  const renameAnalysis = useCallback((id: string, name: string) => {
+    const clean = name.trim().slice(0, 80)
+    if (clean) setLibrary((lib) => lib.map((a) => (a.id === id ? { ...a, name: clean } : a)))
+  }, [])
   const reloadData = useCallback(() => {
     reloadPresets()
     reloadCrops()
@@ -186,7 +226,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     presets,
     crops,
     reloadData,
-    config: state.config,
+    config: session.config,
     update,
     selectPreset,
     setLocation,
@@ -195,13 +235,17 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     body,
     run,
     analyse,
+    analysePreset,
     cancelRun,
     current,
     // compared only once the default priorities are known, or every result would look out of date
     stale: presets.status === 'ready' && !!current && current.signature !== signature,
-    history: state.history,
+    history: library,
+    storageError,
     openAnalysis,
     removeAnalysis,
+    renameAnalysis,
+    saveEnvelope,
   }
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
