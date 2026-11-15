@@ -1,0 +1,212 @@
+[
+ {
+  "id": "chk_wheat_groundnut",
+  "name": "Wheat then groundnut",
+  "preset_ids": [
+   "chakwal"
+  ],
+  "cycle_years": 1,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 110,
+    "crop_id": "groundnut"
+   },
+   {
+    "year_offset": 0,
+    "plant_doy": 305,
+    "crop_id": "wheat"
+   }
+  ]
+ },
+ {
+  "id": "chk_wheat_sorghum",
+  "name": "Wheat then sorghum",
+  "preset_ids": [
+   "chakwal"
+  ],
+  "cycle_years": 1,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 175,
+    "crop_id": "sorghum"
+   },
+   {
+    "year_offset": 0,
+    "plant_doy": 305,
+    "crop_id": "wheat"
+   }
+  ]
+ },
+ {
+  "id": "chk_peas_groundnut",
+  "name": "Field pea then groundnut",
+  "preset_ids": [
+   "chakwal"
+  ],
+  "cycle_years": 1,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 110,
+    "crop_id": "groundnut"
+   },
+   {
+    "year_offset": 0,
+    "plant_doy": 305,
+    "crop_id": "peas"
+   }
+  ]
+ },
+ {
+  "id": "chk_2yr",
+  "name": "Groundnut, wheat, sorghum, pea (2-year)",
+  "preset_ids": [
+   "chakwal"
+  ],
+  "cycle_years": 2,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 110,
+    "crop_id": "groundnut"
+   },
+   {
+    "year_offset": 0,
+    "plant_doy": 305,
+    "crop_id": "wheat"
+   },
+   {
+    "year_offset": 1,
+    "plant_doy": 175,
+    "crop_id": "sorghum"
+   },
+   {
+    "year_offset": 1,
+    "plant_doy": 305,
+    "crop_id": "peas"
+   }
+  ]
+ },
+ {
+  "id": "shk_cotton_wheat",
+  "name": "Cotton then wheat",
+  "preset_ids": [
+   "sheikhupura"
+  ],
+  "cycle_years": 1,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 121,
+    "crop_id": "cotton"
+   },
+   {
+    "year_offset": 0,
+    "plant_doy": 324,
+    "crop_id": "wheat"
+   }
+  ]
+ },
+ {
+  "id": "shk_sorghum_wheat",
+  "name": "Sorghum then wheat",
+  "preset_ids": [
+   "sheikhupura"
+  ],
+  "cycle_years": 1,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 175,
+    "crop_id": "sorghum"
+   },
+   {
+    "year_offset": 0,
+    "plant_doy": 324,
+    "crop_id": "wheat"
+   }
+  ]
+ },
+ {
+  "id": "shk_soybean_wheat",
+  "name": "Soybean then wheat",
+  "preset_ids": [
+   "sheikhupura"
+  ],
+  "cycle_years": 1,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 175,
+    "crop_id": "soybean"
+   },
+   {
+    "year_offset": 0,
+    "plant_doy": 324,
+    "crop_id": "wheat"
+   }
+  ]
+ },
+ {
+  "id": "ames_maize",
+  "name": "Continuous maize",
+  "preset_ids": [
+   "ames_iowa"
+  ],
+  "cycle_years": 1,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 125,
+    "crop_id": "maize"
+   }
+  ]
+ },
+ {
+  "id": "ames_maize_soy",
+  "name": "Maize, soybean (2-year)",
+  "preset_ids": [
+   "ames_iowa"
+  ],
+  "cycle_years": 2,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 125,
+    "crop_id": "maize"
+   },
+   {
+    "year_offset": 1,
+    "plant_doy": 135,
+    "crop_id": "soybean"
+   }
+  ]
+ },
+ {
+  "id": "ames_3yr",
+  "name": "Maize, soybean, sorghum (3-year)",
+  "preset_ids": [
+   "ames_iowa"
+  ],
+  "cycle_years": 3,
+  "slots": [
+   {
+    "year_offset": 0,
+    "plant_doy": 125,
+    "crop_id": "maize"
+   },
+   {
+    "year_offset": 1,
+    "plant_doy": 135,
+    "crop_id": "soybean"
+   },
+   {
+    "year_offset": 2,
+    "plant_doy": 140,
+    "crop_id": "sorghum"
+   }
+  ]
+ }
+]

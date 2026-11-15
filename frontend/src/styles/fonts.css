@@ -1,0 +1,24 @@
+/* Self-hosted variable fonts (SIL OFL 1.1, licences in /public/fonts). */
+@font-face {
+  font-family: 'Outfit';
+  src: url('/fonts/Outfit-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Variable.woff2') format('woff2');
+  font-weight: 200 1000;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('/fonts/Nunito-Italic-Variable.woff2') format('woff2');
+  font-weight: 200 1000;
+  font-style: italic;
+  font-display: swap;
+}

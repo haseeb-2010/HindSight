@@ -1,0 +1,81 @@
+/*
+ * HindSight design tokens — the single source for colour, type, radius, shadow and motion.
+ *
+ * Palette origin: extracted on 2026-11-15 from the computed styles and Framer colour tokens of
+ * https://northtitan.framer.website/ (the HindSight brand reference). The NorthTitan token each
+ * value came from is noted beside it. Values marked "derived" are darker/lighter steps of a
+ * NorthTitan hue, added only where the original failed WCAG contrast for text or chart marks.
+ *
+ * Contrast (WCAG 2.x) checked for every text pairing used:
+ *   forest-950 on cream 11.4 · ink on cream 10.6 · muted on cream 4.9 / white 5.3
+ *   sage on forest-950 4.6 · mist on forest-900 5.8 · lime on forest-950 10.5
+ *   peri-ink on peri-50 5.3 · signal-ink on white 5.5 · signal-600 marks on white 4.0
+ *   muted on sand is only 4.5 — use ink for small text on sand surfaces.
+ */
+@theme {
+  /* Typography — fonts are self-hosted, see fonts.css */
+  --font-display: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+
+  /* ---- Raw palette (NorthTitan) ---- */
+  --color-cream: #f8f5ef; /* NT token-461380c6 · page background */
+  --color-cream-50: #fffdf9; /* NT token-19559476 · text on dark, lightest surface */
+  --color-sand: #f0ebe1; /* NT token-61bd38a0 · card surface */
+  --color-sand-300: #e2dfd8; /* NT token-719d83d8 · hairline */
+  --color-sand-400: #cfcbc2; /* NT token-33c9cf45 · strong hairline */
+  --color-forest-950: #1c3a2a; /* NT token-9b2a917f · primary, headings */
+  --color-forest-900: #25483a; /* NT token-4fb09055 · dark section */
+  --color-forest-800: #33594a; /* NT token-33b213aa */
+  --color-sage: #8aa396; /* NT token-88eaf42b */
+  --color-mist: #b8c7bf; /* derived from sage · secondary text on forest-900 */
+  --color-lime: #eef384; /* NT token-b90679b7 · accent */
+  --color-lime-100: #f7f9c4; /* NT token-5e15ff03 · accent tint */
+  --color-peri: #cdd7f8; /* NT token-17afab65 */
+  --color-peri-300: #b6c3f2; /* NT token-c732ed87 */
+  --color-peri-600: #7f91d9; /* NT token-6bd3cec9 · decorative only (3.0:1) */
+  --color-peri-50: #eef1fd; /* NT token-f1711108 */
+  --color-peri-ink: #4f5fa8; /* derived from peri-600 · periwinkle text on light */
+  --color-peri-chart: #5b6bb5; /* derived from peri-600 · chart series on white (5.0:1) */
+  --color-ink: #3b3935; /* NT token-18778e7d · body text */
+  --color-muted: #6e6b65; /* NT token-937c2992 · secondary text */
+  --color-signal: #ff6b1f; /* NT token-be907a60 · decorative orange */
+  --color-signal-600: #d9530e; /* derived · chart marks (4.0:1 on white) */
+  --color-signal-ink: #b4460c; /* derived · warning text (5.5:1 on white) */
+  --color-signal-50: #fff2ea; /* derived · warning tint */
+
+  /* ---- Semantic tokens ---- */
+  --color-background: #f8f5ef;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f0ebe1;
+  --color-foreground: #1c3a2a;
+  --color-body: #3b3935;
+  --color-primary: #1c3a2a;
+  --color-primary-hover: #25483a;
+  --color-primary-foreground: #fffdf9;
+  --color-accent: #eef384;
+  --color-accent-foreground: #1c3a2a;
+  --color-border: #e2dfd8;
+  --color-border-strong: #cfcbc2;
+  --color-success: #33594a;
+  --color-success-surface: #f7f9c4;
+  --color-warning: #b4460c;
+  --color-warning-surface: #fff2ea;
+  --color-mascot-blue: #5d9ee5; /* median body colour sampled from mascot-blue.png · decorative */
+  --color-mascot-mint: #72c8a1; /* median body colour sampled from mascot-mint.png · decorative */
+
+  /* ---- Radius ---- */
+  --radius-card: 1.5rem;
+  --radius-panel: 2rem;
+  --radius-canvas: 2.25rem;
+
+  /* ---- Shadows (NorthTitan layered, forest-tinted) ---- */
+  --shadow-hairline: 0 1px 2px rgb(28 59 41 / 0.06);
+  --shadow-soft: 0 2px 6px rgb(28 59 41 / 0.06), 0 12px 32px -4px rgb(28 59 41 / 0.06);
+  --shadow-lift: 0 2.8px 8.4px rgb(28 59 41 / 0.06), 0 16.8px 44.8px -5.6px rgb(28 59 41 / 0.1);
+  --shadow-float: 0 2px 6px rgb(28 59 41 / 0.06), 0 24px 64px -12px rgb(28 59 41 / 0.18);
+  --shadow-deep: 0 32px 87px -16px rgb(28 59 41 / 0.24);
+
+  /* ---- Motion ---- */
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+}

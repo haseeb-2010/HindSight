@@ -1,0 +1,1912 @@
+{
+ "meta": {
+  "engine_version": "0.3.0",
+  "record": {
+   "start_year": 1985,
+   "end_year": 2024
+  },
+  "windows": {
+   "early": [
+    1985,
+    2004
+   ],
+   "late": [
+    2005,
+    2024
+   ]
+  },
+  "warnings": []
+ },
+ "site": {
+  "name": "Sheikhupura, irrigated (Punjab)",
+  "lat": 31.71,
+  "lon": 73.98,
+  "soil_used": {
+   "source": "farmer",
+   "texture_class": "silt_loam",
+   "field_capacity_frac": 0.285,
+   "wilting_point_frac": 0.1,
+   "available_water_mm_per_m": 185.0
+  },
+  "climate_summary": {
+   "annual_rain_mm": 483,
+   "annual_et0_mm": 1780,
+   "mean_temp_c": 26.4
+  }
+ },
+ "climate_shift": [
+  {
+   "id": "cool_season_rain_mm",
+   "label": "Rain in the cool half-year",
+   "unit": "mm",
+   "early": 86.9,
+   "late": 114.1,
+   "change": 27.2,
+   "slope_per_decade": 6.25,
+   "p_value": 0.442
+  },
+  {
+   "id": "warm_season_rain_mm",
+   "label": "Rain in the warm half-year",
+   "unit": "mm",
+   "early": 304.3,
+   "late": 460.6,
+   "change": 156.3,
+   "slope_per_decade": 69.07,
+   "p_value": 0.002
+  },
+  {
+   "id": "annual_et0_mm",
+   "label": "Reference evapotranspiration",
+   "unit": "mm",
+   "early": 1864.8,
+   "late": 1696.0,
+   "change": -168.7,
+   "slope_per_decade": -73.74,
+   "p_value": 0.0
+  },
+  {
+   "id": "hot_days",
+   "label": "Days above 35 \u00b0C",
+   "unit": "days",
+   "early": 187.8,
+   "late": 172.7,
+   "change": -15.1,
+   "slope_per_decade": -5.26,
+   "p_value": 0.095
+  },
+  {
+   "id": "frost_days",
+   "label": "Days below 0 \u00b0C",
+   "unit": "days",
+   "early": 0.0,
+   "late": 0.2,
+   "change": 0.2,
+   "slope_per_decade": -0.0,
+   "p_value": 0.098
+  },
+  {
+   "id": "heavy_rain_days",
+   "label": "Days with 12.7 mm of rain or more",
+   "unit": "days",
+   "early": 7.0,
+   "late": 11.1,
+   "change": 4.1,
+   "slope_per_decade": 1.67,
+   "p_value": 0.032
+  }
+ ],
+ "rotations": [
+  {
+   "id": "current",
+   "name": "Cotton then Wheat (current)",
+   "is_current": true,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 121,
+     "crop_id": "cotton"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 324,
+     "crop_id": "wheat"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "wheat",
+     "bare_frac": 0.07
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "cotton",
+     "bare_frac": 0.27
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 1.0,
+    "p10": 1.0,
+    "failure_freq": 0.0,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "by_window": {
+     "early": {
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "cotton",
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 119.3,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 0
+     },
+     {
+      "crop_id": "wheat",
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 36.1,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 1420,
+    "irrigation_mm_per_year": 993,
+    "worst_years": {
+     "years": [
+      1985,
+      1986,
+      1987,
+      1988,
+      1989
+     ],
+     "mean_index": 1.0
+    }
+   },
+   "indicators": {
+    "stability": 1.0,
+    "water_use_mm": 1420,
+    "forage_share": 0.0,
+    "legume_share": 0.0,
+    "erosive_rain_on_bare_frac": 0.003,
+    "cover_frac": 0.973,
+    "residue_class_mean": 2.0,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.398,
+     "water_use": 0.0,
+     "forage": 0.0,
+     "nitrogen": 0.0,
+     "erosion": 1.0,
+     "organic_matter": 0.75,
+     "market": 0.5
+    },
+    "total": 0.366,
+    "rank": 4,
+    "pareto": true,
+    "rank_early": 4,
+    "rank_late": 5,
+    "rank_range": [
+     4,
+     5
+    ],
+    "rank_range_rain": [
+     4,
+     5
+    ]
+   },
+   "explanation": {
+    "summary": "No crop season fell below the failure line in 80 seasons of NASA weather, 1985-2024.",
+    "reasons": [
+     "Cotton fell below the failure line in 0 of 40 seasons.",
+     "Wheat fell below the failure line in 0 of 40 seasons.",
+     "Your 5 worst years in the record were 1985, 1986, 1987, 1988, 1989 (average index 1.00).",
+     "Ranks between #4 and #5 depending on how strong the legume effect is (0-32%).",
+     "Ranks between #4 and #5 if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 0% fell on bare soil."
+    ],
+    "benefits": [
+     "Least heavy rain on bare soil of the rotations compared."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "Irrigation is assumed to refill the root zone whenever the crop starts to stress."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "shk_soybean_wheat",
+   "name": "Soybean then Wheat",
+   "is_current": false,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 175,
+     "crop_id": "soybean"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 324,
+     "crop_id": "wheat"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "wheat",
+     "bare_frac": 0.07
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "soybean",
+     "bare_frac": 0.77
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "wheat",
+     "bare_frac": 0.47
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 1.1,
+    "p10": 1.065,
+    "failure_freq": 0.0,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     1.1,
+     1.1,
+     1.001,
+     1.1,
+     1.1,
+     1.1,
+     1.089,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.099,
+     1.005,
+     0.953,
+     1.034,
+     1.1,
+     1.068,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.099,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1
+    ],
+    "by_window": {
+     "early": {
+      "median": 1.1,
+      "p10": 1.005,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 1.1,
+      "p10": 1.1,
+      "failure_freq": 0.0
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "soybean",
+      "median": 1.0,
+      "p10": 0.93,
+      "failure_freq": 0.0,
+      "main_limit": "temperature",
+      "heat_days_mean": 101.9,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 0
+     },
+     {
+      "crop_id": "wheat",
+      "median": 1.2,
+      "p10": 1.2,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 36.1,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 1102,
+    "irrigation_mm_per_year": 779,
+    "worst_years": {
+     "years": [
+      1985,
+      1986,
+      1987,
+      1988,
+      1989
+     ],
+     "mean_index": 1.08
+    }
+   },
+   "indicators": {
+    "stability": 1.065,
+    "water_use_mm": 1102,
+    "forage_share": 0.0,
+    "legume_share": 0.5,
+    "erosive_rain_on_bare_frac": 0.088,
+    "cover_frac": 0.808,
+    "residue_class_mean": 2.0,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.789,
+     "water_use": 0.726,
+     "forage": 0.0,
+     "nitrogen": 1.0,
+     "erosion": 0.096,
+     "organic_matter": 0.32,
+     "market": 0.5
+    },
+    "total": 0.593,
+    "rank": 1,
+    "pareto": true,
+    "rank_early": 2,
+    "rank_late": 1,
+    "rank_range": [
+     1,
+     2
+    ],
+    "rank_range_rain": [
+     1,
+     2
+    ]
+   },
+   "explanation": {
+    "summary": "No crop season fell below the failure line in 80 seasons of NASA weather, 1985-2024.",
+    "reasons": [
+     "Soybean fell below the failure line in 0 of 40 seasons; the main limit was temperatures outside the crop's range.",
+     "Wheat fell below the failure line in 0 of 40 seasons.",
+     "Bad-year index 1.06, against 1.00 for your current rotation (better).",
+     "Crop water demand 1102 mm a year, 318 mm less than your current rotation.",
+     "In your 5 worst years (1985, 1986, 1987, 1988, 1989) this rotation would have averaged 1.08, against 1.00 for your current rotation.",
+     "Ranks between #1 and #2 depending on how strong the legume effect is (0-32%).",
+     "Ranks between #1 and #2 if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 9% fell on bare soil."
+    ],
+    "benefits": [
+     "Includes a legume, which fixes nitrogen for the following crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "Irrigation is assumed to refill the root zone whenever the crop starts to stress.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "swap_6",
+   "name": "Cotton then Field pea (dry) then bare fallow",
+   "is_current": false,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 121,
+     "crop_id": "cotton"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 324,
+     "crop_id": "peas"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "peas",
+     "bare_frac": 0.04
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "cotton",
+     "bare_frac": 0.27
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 1.1,
+    "p10": 1.1,
+    "failure_freq": 0.0,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1,
+     1.1
+    ],
+    "by_window": {
+     "early": {
+      "median": 1.1,
+      "p10": 1.1,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 1.1,
+      "p10": 1.1,
+      "failure_freq": 0.0
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "cotton",
+      "median": 1.2,
+      "p10": 1.2,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 119.3,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 0
+     },
+     {
+      "crop_id": "peas",
+      "median": 1.0,
+      "p10": 0.999,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 2.2,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 1146,
+    "irrigation_mm_per_year": 778,
+    "worst_years": {
+     "years": [
+      1985,
+      1986,
+      1987,
+      1988,
+      1989
+     ],
+     "mean_index": 1.1
+    }
+   },
+   "indicators": {
+    "stability": 1.1,
+    "water_use_mm": 1146,
+    "forage_share": 0.0,
+    "legume_share": 0.5,
+    "erosive_rain_on_bare_frac": 0.091,
+    "cover_frac": 0.808,
+    "residue_class_mean": 1.0,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 1.0,
+     "water_use": 0.626,
+     "forage": 0.0,
+     "nitrogen": 1.0,
+     "erosion": 0.064,
+     "organic_matter": 0.07,
+     "market": 0.5
+    },
+    "total": 0.591,
+    "rank": 2,
+    "pareto": true,
+    "rank_early": 1,
+    "rank_late": 2,
+    "rank_range": [
+     2,
+     3
+    ],
+    "rank_range_rain": [
+     1,
+     2
+    ]
+   },
+   "explanation": {
+    "summary": "No crop season fell below the failure line in 80 seasons of NASA weather, 1985-2024.",
+    "reasons": [
+     "Cotton fell below the failure line in 0 of 40 seasons.",
+     "Field pea (dry) fell below the failure line in 0 of 40 seasons.",
+     "Bad-year index 1.10, against 1.00 for your current rotation (better).",
+     "Crop water demand 1146 mm a year, 274 mm less than your current rotation.",
+     "In your 5 worst years (1985, 1986, 1987, 1988, 1989) this rotation would have averaged 1.10, against 1.00 for your current rotation.",
+     "Ranks between #2 and #3 depending on how strong the legume effect is (0-32%).",
+     "Ranks between #1 and #2 if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 9% fell on bare soil."
+    ],
+    "benefits": [
+     "Most stable in bad years of the rotations compared.",
+     "Includes a legume, which fixes nitrogen for the following crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "Irrigation is assumed to refill the root zone whenever the crop starts to stress.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "shk_sorghum_wheat",
+   "name": "Sorghum (grain/fodder) then Wheat",
+   "is_current": false,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 175,
+     "crop_id": "sorghum"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 324,
+     "crop_id": "wheat"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "wheat",
+     "bare_frac": 0.07
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "sorghum",
+     "bare_frac": 0.77
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "sorghum",
+     "bare_frac": 0.16
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "wheat",
+     "bare_frac": 0.63
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 1.0,
+    "p10": 1.0,
+    "failure_freq": 0.0,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.996,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "by_window": {
+     "early": {
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "sorghum",
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 70.0,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 0
+     },
+     {
+      "crop_id": "wheat",
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 36.1,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 982,
+    "irrigation_mm_per_year": 679,
+    "worst_years": {
+     "years": [
+      1985,
+      1986,
+      1987,
+      1988,
+      1989
+     ],
+     "mean_index": 1.0
+    }
+   },
+   "indicators": {
+    "stability": 1.0,
+    "water_use_mm": 982,
+    "forage_share": 0.5,
+    "legume_share": 0.0,
+    "erosive_rain_on_bare_frac": 0.088,
+    "cover_frac": 0.781,
+    "residue_class_mean": 3.0,
+    "market_mean": 2.0,
+    "family_repeats": 2
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.398,
+     "water_use": 1.0,
+     "forage": 1.0,
+     "nitrogen": 0.0,
+     "erosion": 0.096,
+     "organic_matter": 0.5,
+     "market": 0.5
+    },
+    "total": 0.46,
+    "rank": 3,
+    "pareto": true,
+    "rank_early": 3,
+    "rank_late": 3,
+    "rank_range": [
+     1,
+     3
+    ],
+    "rank_range_rain": [
+     3,
+     3
+    ]
+   },
+   "explanation": {
+    "summary": "No crop season fell below the failure line in 80 seasons of NASA weather, 1985-2024.",
+    "reasons": [
+     "Sorghum (grain/fodder) fell below the failure line in 0 of 40 seasons.",
+     "Wheat fell below the failure line in 0 of 40 seasons.",
+     "Bad-year index 1.00, against 1.00 for your current rotation (about the same).",
+     "Crop water demand 982 mm a year, 438 mm less than your current rotation.",
+     "In your 5 worst years (1985, 1986, 1987, 1988, 1989) this rotation would have averaged 1.00, against 1.00 for your current rotation.",
+     "Ranks between #1 and #3 depending on how strong the legume effect is (0-32%).",
+     "Stays ranked #3 even if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 9% fell on bare soil."
+    ],
+    "benefits": [
+     "Lowest crop water demand of the rotations compared.",
+     "Includes a forage or dual-purpose crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "Irrigation is assumed to refill the root zone whenever the crop starts to stress."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "swap_4",
+   "name": "Groundnut then Wheat then bare fallow",
+   "is_current": false,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 121,
+     "crop_id": "groundnut"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 324,
+     "crop_id": "wheat"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "wheat",
+     "bare_frac": 0.07
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "groundnut",
+     "bare_frac": 0.77
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "wheat",
+     "bare_frac": 0.63
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.991,
+    "p10": 0.934,
+    "failure_freq": 0.0,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     1.0,
+     1.026,
+     0.964,
+     0.951,
+     0.988,
+     0.956,
+     0.935,
+     1.01,
+     0.963,
+     0.977,
+     1.006,
+     1.046,
+     0.971,
+     0.925,
+     0.917,
+     0.917,
+     0.983,
+     0.91,
+     0.991,
+     0.98,
+     0.996,
+     1.011,
+     0.989,
+     1.024,
+     0.964,
+     1.002,
+     1.013,
+     0.964,
+     0.999,
+     0.982,
+     0.998,
+     0.986,
+     0.991,
+     1.007,
+     1.007,
+     1.056,
+     1.004,
+     1.053,
+     1.1,
+     1.006
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.974,
+      "p10": 0.917,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 1.003,
+      "p10": 0.98,
+      "failure_freq": 0.0
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "groundnut",
+      "median": 0.781,
+      "p10": 0.669,
+      "failure_freq": 0.0,
+      "main_limit": "temperature",
+      "heat_days_mean": 104.4,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 0
+     },
+     {
+      "crop_id": "wheat",
+      "median": 1.2,
+      "p10": 1.2,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 36.1,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 1218,
+    "irrigation_mm_per_year": 854,
+    "worst_years": {
+     "years": [
+      1985,
+      1986,
+      1987,
+      1988,
+      1989
+     ],
+     "mean_index": 0.986
+    }
+   },
+   "indicators": {
+    "stability": 0.934,
+    "water_use_mm": 1218,
+    "forage_share": 0.0,
+    "legume_share": 0.5,
+    "erosive_rain_on_bare_frac": 0.097,
+    "cover_frac": 0.795,
+    "residue_class_mean": 2.0,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.0,
+     "water_use": 0.461,
+     "forage": 0.0,
+     "nitrogen": 1.0,
+     "erosion": 0.0,
+     "organic_matter": 0.286,
+     "market": 0.5
+    },
+    "total": 0.359,
+    "rank": 5,
+    "pareto": false,
+    "rank_early": 5,
+    "rank_late": 4,
+    "rank_range": [
+     4,
+     6
+    ],
+    "rank_range_rain": [
+     4,
+     5
+    ]
+   },
+   "explanation": {
+    "summary": "No crop season fell below the failure line in 80 seasons of NASA weather, 1985-2024.",
+    "reasons": [
+     "Groundnut fell below the failure line in 0 of 40 seasons; the main limit was temperatures outside the crop's range.",
+     "Wheat fell below the failure line in 0 of 40 seasons.",
+     "Bad-year index 0.93, against 1.00 for your current rotation (worse).",
+     "Crop water demand 1218 mm a year, 202 mm less than your current rotation.",
+     "In your 5 worst years (1985, 1986, 1987, 1988, 1989) this rotation would have averaged 0.99, against 1.00 for your current rotation.",
+     "Ranks between #4 and #6 depending on how strong the legume effect is (0-32%).",
+     "Ranks between #4 and #5 if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 10% fell on bare soil."
+    ],
+    "benefits": [
+     "Includes a legume, which fixes nitrogen for the following crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "Irrigation is assumed to refill the root zone whenever the crop starts to stress.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "swap_7",
+   "name": "Cotton then Potato",
+   "is_current": false,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 121,
+     "crop_id": "cotton"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 324,
+     "crop_id": "potato"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "potato",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "potato",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "potato",
+     "bare_frac": 0.06
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "cotton",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "cotton",
+     "bare_frac": 0.27
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "potato",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 1.0,
+    "p10": 1.0,
+    "failure_freq": 0.0,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     1.0,
+     1.0,
+     1.0,
+     0.999,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     0.999,
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "by_window": {
+     "early": {
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "cotton",
+      "median": 1.0,
+      "p10": 1.0,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 119.3,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 0
+     },
+     {
+      "crop_id": "potato",
+      "median": 1.0,
+      "p10": 0.999,
+      "failure_freq": 0.0,
+      "main_limit": "none",
+      "heat_days_mean": 17.7,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 1292,
+    "irrigation_mm_per_year": 902,
+    "worst_years": {
+     "years": [
+      1985,
+      1986,
+      1987,
+      1988,
+      1989
+     ],
+     "mean_index": 1.0
+    }
+   },
+   "indicators": {
+    "stability": 1.0,
+    "water_use_mm": 1292,
+    "forage_share": 0.0,
+    "legume_share": 0.0,
+    "erosive_rain_on_bare_frac": 0.036,
+    "cover_frac": 0.89,
+    "residue_class_mean": 1.0,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.398,
+     "water_use": 0.292,
+     "forage": 0.0,
+     "nitrogen": 0.0,
+     "erosion": 0.649,
+     "organic_matter": 0.284,
+     "market": 0.5
+    },
+    "total": 0.324,
+    "rank": 6,
+    "pareto": true,
+    "rank_early": 6,
+    "rank_late": 6,
+    "rank_range": [
+     5,
+     6
+    ],
+    "rank_range_rain": [
+     6,
+     6
+    ]
+   },
+   "explanation": {
+    "summary": "No crop season fell below the failure line in 80 seasons of NASA weather, 1985-2024.",
+    "reasons": [
+     "Cotton fell below the failure line in 0 of 40 seasons.",
+     "Potato fell below the failure line in 0 of 40 seasons.",
+     "Bad-year index 1.00, against 1.00 for your current rotation (about the same).",
+     "Crop water demand 1292 mm a year, 128 mm less than your current rotation.",
+     "In your 5 worst years (1985, 1986, 1987, 1988, 1989) this rotation would have averaged 1.00, against 1.00 for your current rotation.",
+     "Ranks between #5 and #6 depending on how strong the legume effect is (0-32%).",
+     "Stays ranked #6 even if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 4% fell on bare soil."
+    ],
+    "benefits": [],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "Irrigation is assumed to refill the root zone whenever the crop starts to stress."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  }
+ ],
+ "validation": {
+  "ndvi_check": null
+ },
+ "provenance": [
+  {
+   "item": "Daily weather",
+   "kind": "reanalysis_estimate",
+   "source": "NASA POWER daily point API, AG community (MERRA-2 meteorology, CERES solar)"
+  },
+  {
+   "item": "Reference evapotranspiration",
+   "kind": "model_output",
+   "source": "FAO-56 Penman-Monteith on NASA POWER inputs"
+  },
+  {
+   "item": "Soil texture and depth",
+   "kind": "farmer_input",
+   "source": "farmer"
+  },
+  {
+   "item": "Field capacity and wilting point",
+   "kind": "model_output",
+   "source": "Saxton and Rawls (2006)"
+  },
+  {
+   "item": "Crop coefficients, root depth, Ky, temperature ranges",
+   "kind": "literature_parameter",
+   "source": "FAO-56, FAO-33, FAO EcoCrop"
+  },
+  {
+   "item": "Season index, failure frequency, water demand",
+   "kind": "model_output",
+   "source": "Hindsight engine"
+  },
+  {
+   "item": "Priorities, market ratings, current rotation",
+   "kind": "farmer_input",
+   "source": "farmer"
+  }
+ ]
+}

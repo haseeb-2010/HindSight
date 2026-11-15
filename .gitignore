@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+test_cache/
+try_cache.py
+
+# Partial MODIS downloads (see docs/FOR_PERSON_3.md)
+backend/data/cache/ndvi_partial_*.json
+backend/data/cache/*.tmp
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+frontend/.env.local
+
+# OS
+desktop.ini
+.DS_Store
+Thumbs.db

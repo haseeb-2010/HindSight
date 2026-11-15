@@ -1,0 +1,1990 @@
+{
+ "meta": {
+  "engine_version": "0.3.0",
+  "record": {
+   "start_year": 1985,
+   "end_year": 2024
+  },
+  "windows": {
+   "early": [
+    1985,
+    2004
+   ],
+   "late": [
+    2005,
+    2024
+   ]
+  },
+  "warnings": []
+ },
+ "site": {
+  "name": "Chakwal, rainfed (Pothwar)",
+  "lat": 32.93,
+  "lon": 72.86,
+  "soil_used": {
+   "source": "farmer",
+   "texture_class": "loam",
+   "field_capacity_frac": 0.26,
+   "wilting_point_frac": 0.126,
+   "available_water_mm_per_m": 134.1
+  },
+  "climate_summary": {
+   "annual_rain_mm": 805,
+   "annual_et0_mm": 1644,
+   "mean_temp_c": 23.8
+  }
+ },
+ "climate_shift": [
+  {
+   "id": "cool_season_rain_mm",
+   "label": "Rain in the cool half-year",
+   "unit": "mm",
+   "early": 158.3,
+   "late": 264.9,
+   "change": 106.7,
+   "slope_per_decade": 22.87,
+   "p_value": 0.081
+  },
+  {
+   "id": "warm_season_rain_mm",
+   "label": "Rain in the warm half-year",
+   "unit": "mm",
+   "early": 426.8,
+   "late": 760.4,
+   "change": 333.5,
+   "slope_per_decade": 108.44,
+   "p_value": 0.001
+  },
+  {
+   "id": "annual_et0_mm",
+   "label": "Reference evapotranspiration",
+   "unit": "mm",
+   "early": 1740.1,
+   "late": 1547.8,
+   "change": -192.3,
+   "slope_per_decade": -77.68,
+   "p_value": 0.0
+  },
+  {
+   "id": "hot_days",
+   "label": "Days above 35 \u00b0C",
+   "unit": "days",
+   "early": 145.1,
+   "late": 99.9,
+   "change": -45.2,
+   "slope_per_decade": -15.33,
+   "p_value": 0.002
+  },
+  {
+   "id": "frost_days",
+   "label": "Days below 0 \u00b0C",
+   "unit": "days",
+   "early": 0.2,
+   "late": 0.6,
+   "change": 0.4,
+   "slope_per_decade": -0.0,
+   "p_value": 0.724
+  },
+  {
+   "id": "heavy_rain_days",
+   "label": "Days with 12.7 mm of rain or more",
+   "unit": "days",
+   "early": 13.4,
+   "late": 22.6,
+   "change": 9.2,
+   "slope_per_decade": 3.73,
+   "p_value": 0.002
+  }
+ ],
+ "rotations": [
+  {
+   "id": "current",
+   "name": "Wheat then bare fallow (current)",
+   "is_current": true,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 305,
+     "crop_id": "wheat"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "wheat",
+     "bare_frac": 0.7
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.657,
+    "p10": 0.307,
+    "failure_freq": 0.35,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.364,
+     0.878,
+     0.814,
+     0.436,
+     0.653,
+     0.751,
+     0.512,
+     0.833,
+     0.668,
+     0.308,
+     0.805,
+     0.867,
+     0.415,
+     0.205,
+     0.347,
+     0.247,
+     0.028,
+     0.3,
+     0.684,
+     0.494,
+     0.97,
+     0.485,
+     0.948,
+     0.439,
+     0.66,
+     0.594,
+     0.592,
+     0.453,
+     0.819,
+     0.545,
+     0.783,
+     0.739,
+     0.629,
+     0.373,
+     0.992,
+     0.933,
+     0.975,
+     0.923,
+     0.779,
+     0.788
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.503,
+      "p10": 0.243,
+      "failure_freq": 0.5
+     },
+     "late": {
+      "median": 0.759,
+      "p10": 0.452,
+      "failure_freq": 0.2
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "wheat",
+      "median": 0.657,
+      "p10": 0.307,
+      "failure_freq": 0.35,
+      "main_limit": "water",
+      "heat_days_mean": 6.7,
+      "frost_days_mean": 0.4,
+      "n_seasons": 40,
+      "n_failed": 14
+     }
+    ],
+    "water_demand_mm_per_year": 359,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1994,
+      1998,
+      2000,
+      2001,
+      2002
+     ],
+     "mean_index": 0.218
+    }
+   },
+   "indicators": {
+    "stability": 0.307,
+    "water_use_mm": 359,
+    "forage_share": 0.0,
+    "legume_share": 0.0,
+    "erosive_rain_on_bare_frac": 0.756,
+    "cover_frac": 0.438,
+    "residue_class_mean": 3.0,
+    "market_mean": 2.0,
+    "family_repeats": 1
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.0,
+     "water_use": 0.801,
+     "forage": 0.0,
+     "nitrogen": 0.0,
+     "erosion": 0.183,
+     "organic_matter": 0.657,
+     "market": 0.5
+    },
+    "total": 0.31,
+    "rank": 6,
+    "pareto": true,
+    "rank_early": 6,
+    "rank_late": 6,
+    "rank_range": [
+     6,
+     6
+    ],
+    "rank_range_rain": [
+     6,
+     6
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 14 of 40 crop seasons (35%), mostly from dry spells. Worst year: 2001.",
+    "reasons": [
+     "Wheat fell below the failure line in 14 of 40 seasons; the main limit was dry spells.",
+     "Your 5 worst years in the record were 1994, 1998, 2000, 2001, 2002 (average index 0.22).",
+     "Stays ranked #6 whether the legume effect is 0%, 7%, 20% or 32%.",
+     "Stays ranked #6 even if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 76% fell on bare soil."
+    ],
+    "benefits": [],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "swap_4",
+   "name": "Field pea (dry) then bare fallow",
+   "is_current": false,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 305,
+     "crop_id": "peas"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "peas",
+     "bare_frac": 0.71
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.718,
+    "p10": 0.407,
+    "failure_freq": 0.2,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.782,
+     0.745,
+     0.897,
+     0.409,
+     0.903,
+     0.588,
+     0.784,
+     0.708,
+     0.802,
+     0.391,
+     0.877,
+     0.8,
+     0.597,
+     0.192,
+     0.453,
+     0.253,
+     0.149,
+     0.427,
+     0.644,
+     0.827,
+     0.769,
+     0.631,
+     0.86,
+     0.727,
+     0.853,
+     0.481,
+     0.676,
+     0.655,
+     0.661,
+     0.567,
+     0.664,
+     0.754,
+     0.594,
+     0.505,
+     0.923,
+     1.0,
+     1.0,
+     1.0,
+     0.961,
+     0.782
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.676,
+      "p10": 0.247,
+      "failure_freq": 0.35
+     },
+     "late": {
+      "median": 0.74,
+      "p10": 0.561,
+      "failure_freq": 0.05
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "peas",
+      "median": 0.717,
+      "p10": 0.407,
+      "failure_freq": 0.2,
+      "main_limit": "water",
+      "heat_days_mean": 2.3,
+      "frost_days_mean": 0.4,
+      "n_seasons": 40,
+      "n_failed": 8
+     }
+    ],
+    "water_demand_mm_per_year": 179,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1994,
+      1998,
+      2000,
+      2001,
+      2002
+     ],
+     "mean_index": 0.282
+    }
+   },
+   "indicators": {
+    "stability": 0.407,
+    "water_use_mm": 179,
+    "forage_share": 0.0,
+    "legume_share": 1.0,
+    "erosive_rain_on_bare_frac": 0.904,
+    "cover_frac": 0.274,
+    "residue_class_mean": 1.0,
+    "market_mean": 2.0,
+    "family_repeats": 1
+   },
+   "scores": {
+    "normalised": {
+     "stability": 1.0,
+     "water_use": 1.0,
+     "forage": 0.0,
+     "nitrogen": 1.0,
+     "erosion": 0.0,
+     "organic_matter": 0.0,
+     "market": 0.5
+    },
+    "total": 0.639,
+    "rank": 1,
+    "pareto": true,
+    "rank_early": 4,
+    "rank_late": 2,
+    "rank_range": [
+     1,
+     1
+    ],
+    "rank_range_rain": [
+     1,
+     1
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 8 of 40 crop seasons (20%), mostly from dry spells. Worst year: 2001.",
+    "reasons": [
+     "Field pea (dry) fell below the failure line in 8 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.41, against 0.31 for your current rotation (better).",
+     "Crop water demand 179 mm a year, 180 mm less than your current rotation.",
+     "In your 5 worst years (1994, 1998, 2000, 2001, 2002) this rotation would have averaged 0.28, against 0.22 for your current rotation.",
+     "Stays ranked #1 whether the legume effect is 0%, 7%, 20% or 32%.",
+     "Stays ranked #1 even if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 90% fell on bare soil."
+    ],
+    "benefits": [
+     "Most stable in bad years of the rotations compared.",
+     "Lowest crop water demand of the rotations compared.",
+     "Includes a legume, which fixes nitrogen for the following crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "chk_peas_groundnut",
+   "name": "Groundnut then Field pea (dry) then bare fallow",
+   "is_current": false,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 110,
+     "crop_id": "groundnut"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 305,
+     "crop_id": "peas"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "peas",
+     "bare_frac": 0.71
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "groundnut",
+     "bare_frac": 0.63
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "groundnut",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.661,
+    "p10": 0.361,
+    "failure_freq": 0.2,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.711,
+     0.585,
+     0.721,
+     0.411,
+     0.65,
+     0.614,
+     0.631,
+     0.612,
+     0.704,
+     0.394,
+     0.795,
+     0.739,
+     0.505,
+     0.305,
+     0.225,
+     0.243,
+     0.367,
+     0.263,
+     0.601,
+     0.672,
+     0.61,
+     0.621,
+     0.856,
+     0.823,
+     0.718,
+     0.476,
+     0.728,
+     0.635,
+     0.714,
+     0.637,
+     0.702,
+     0.8,
+     0.701,
+     0.618,
+     0.829,
+     0.999,
+     0.92,
+     0.921,
+     0.965,
+     0.772
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.607,
+      "p10": 0.261,
+      "failure_freq": 0.35
+     },
+     "late": {
+      "median": 0.723,
+      "p10": 0.617,
+      "failure_freq": 0.05
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "groundnut",
+      "median": 0.698,
+      "p10": 0.471,
+      "failure_freq": 0.125,
+      "main_limit": "water",
+      "heat_days_mean": 69.6,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 5
+     },
+     {
+      "crop_id": "peas",
+      "median": 0.663,
+      "p10": 0.142,
+      "failure_freq": 0.275,
+      "main_limit": "water",
+      "heat_days_mean": 2.3,
+      "frost_days_mean": 0.4,
+      "n_seasons": 40,
+      "n_failed": 11
+     }
+    ],
+    "water_demand_mm_per_year": 903,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1994,
+      1998,
+      2000,
+      2001,
+      2002
+     ],
+     "mean_index": 0.314
+    }
+   },
+   "indicators": {
+    "stability": 0.361,
+    "water_use_mm": 903,
+    "forage_share": 0.0,
+    "legume_share": 1.0,
+    "erosive_rain_on_bare_frac": 0.308,
+    "cover_frac": 0.63,
+    "residue_class_mean": 1.0,
+    "market_mean": 2.0,
+    "family_repeats": 2
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.54,
+     "water_use": 0.198,
+     "forage": 0.0,
+     "nitrogen": 1.0,
+     "erosion": 0.736,
+     "organic_matter": 0.342,
+     "market": 0.5
+    },
+    "total": 0.523,
+    "rank": 2,
+    "pareto": true,
+    "rank_early": 2,
+    "rank_late": 1,
+    "rank_range": [
+     2,
+     2
+    ],
+    "rank_range_rain": [
+     2,
+     2
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 16 of 80 crop seasons (20%), mostly from dry spells. Worst year: 1999.",
+    "reasons": [
+     "Groundnut fell below the failure line in 5 of 40 seasons; the main limit was dry spells.",
+     "Field pea (dry) fell below the failure line in 11 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.36, against 0.31 for your current rotation (better).",
+     "Crop water demand 903 mm a year, 544 mm more than your current rotation.",
+     "In your 5 worst years (1994, 1998, 2000, 2001, 2002) this rotation would have averaged 0.31, against 0.22 for your current rotation.",
+     "Stays ranked #2 whether the legume effect is 0%, 7%, 20% or 32%.",
+     "Stays ranked #2 even if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 31% fell on bare soil."
+    ],
+    "benefits": [
+     "Includes a legume, which fixes nitrogen for the following crop.",
+     "Keeps the soil covered for 63% of the year, against 44% now."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "chk_wheat_sorghum",
+   "name": "Sorghum (grain/fodder) then Wheat then bare fallow",
+   "is_current": false,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 175,
+     "crop_id": "sorghum"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 305,
+     "crop_id": "wheat"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "wheat",
+     "bare_frac": 0.7
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "sorghum",
+     "bare_frac": 0.77
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "sorghum",
+     "bare_frac": 0.16
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.593,
+    "p10": 0.34,
+    "failure_freq": 0.35,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.356,
+     0.702,
+     0.535,
+     0.431,
+     0.531,
+     0.717,
+     0.437,
+     0.706,
+     0.528,
+     0.418,
+     0.7,
+     0.724,
+     0.218,
+     0.349,
+     0.228,
+     0.219,
+     0.343,
+     0.316,
+     0.645,
+     0.442,
+     0.726,
+     0.537,
+     0.897,
+     0.518,
+     0.499,
+     0.6,
+     0.622,
+     0.55,
+     0.756,
+     0.617,
+     0.684,
+     0.661,
+     0.587,
+     0.487,
+     0.805,
+     0.843,
+     0.971,
+     0.961,
+     0.851,
+     0.877
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.44,
+      "p10": 0.227,
+      "failure_freq": 0.475
+     },
+     "late": {
+      "median": 0.673,
+      "p10": 0.516,
+      "failure_freq": 0.225
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "sorghum",
+      "median": 0.854,
+      "p10": 0.577,
+      "failure_freq": 0.075,
+      "main_limit": "water",
+      "heat_days_mean": 32.2,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 3
+     },
+     {
+      "crop_id": "wheat",
+      "median": 0.325,
+      "p10": 0.107,
+      "failure_freq": 0.625,
+      "main_limit": "water",
+      "heat_days_mean": 6.7,
+      "frost_days_mean": 0.4,
+      "n_seasons": 40,
+      "n_failed": 25
+     }
+    ],
+    "water_demand_mm_per_year": 823,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1994,
+      1998,
+      2000,
+      2001,
+      2002
+     ],
+     "mean_index": 0.329
+    }
+   },
+   "indicators": {
+    "stability": 0.34,
+    "water_use_mm": 823,
+    "forage_share": 0.5,
+    "legume_share": 0.0,
+    "erosive_rain_on_bare_frac": 0.094,
+    "cover_frac": 0.781,
+    "residue_class_mean": 3.0,
+    "market_mean": 2.0,
+    "family_repeats": 2
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.33,
+     "water_use": 0.287,
+     "forage": 1.0,
+     "nitrogen": 0.0,
+     "erosion": 1.0,
+     "organic_matter": 0.987,
+     "market": 0.5
+    },
+    "total": 0.481,
+    "rank": 3,
+    "pareto": true,
+    "rank_early": 5,
+    "rank_late": 5,
+    "rank_range": [
+     3,
+     3
+    ],
+    "rank_range_rain": [
+     3,
+     5
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 28 of 80 crop seasons (35%), mostly from dry spells. Worst year: 1997.",
+    "reasons": [
+     "Sorghum (grain/fodder) fell below the failure line in 3 of 40 seasons; the main limit was dry spells.",
+     "Wheat fell below the failure line in 25 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.34, against 0.31 for your current rotation (better).",
+     "Crop water demand 823 mm a year, 464 mm more than your current rotation.",
+     "In your 5 worst years (1994, 1998, 2000, 2001, 2002) this rotation would have averaged 0.33, against 0.22 for your current rotation.",
+     "Stays ranked #3 whether the legume effect is 0%, 7%, 20% or 32%.",
+     "Ranks between #3 and #5 if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 9% fell on bare soil."
+    ],
+    "benefits": [
+     "Least heavy rain on bare soil of the rotations compared.",
+     "Includes a forage or dual-purpose crop.",
+     "Keeps the soil covered for 78% of the year, against 44% now."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "chk_2yr",
+   "name": "Y1: Groundnut then Wheat \u00b7 Y2: Sorghum (grain/fodder) then Field pea (dry)",
+   "is_current": false,
+   "cycle_years": 2,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 110,
+     "crop_id": "groundnut"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 305,
+     "crop_id": "wheat"
+    },
+    {
+     "year_offset": 1,
+     "plant_doy": 175,
+     "crop_id": "sorghum"
+    },
+    {
+     "year_offset": 1,
+     "plant_doy": 305,
+     "crop_id": "peas"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "peas",
+     "bare_frac": 0.71
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "groundnut",
+     "bare_frac": 0.63
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "groundnut",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 1,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 2,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 3,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 4,
+     "crop_id": "wheat",
+     "bare_frac": 0.7
+    },
+    {
+     "year_offset": 1,
+     "month": 5,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 6,
+     "crop_id": "sorghum",
+     "bare_frac": 0.77
+    },
+    {
+     "year_offset": 1,
+     "month": 7,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 8,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 9,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 10,
+     "crop_id": "sorghum",
+     "bare_frac": 0.16
+    },
+    {
+     "year_offset": 1,
+     "month": 11,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 12,
+     "crop_id": "peas",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.611,
+    "p10": 0.33,
+    "failure_freq": 0.325,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.48,
+     0.655,
+     0.614,
+     0.426,
+     0.579,
+     0.654,
+     0.5,
+     0.65,
+     0.59,
+     0.408,
+     0.732,
+     0.717,
+     0.33,
+     0.325,
+     0.225,
+     0.226,
+     0.337,
+     0.29,
+     0.609,
+     0.511,
+     0.681,
+     0.553,
+     0.887,
+     0.629,
+     0.575,
+     0.536,
+     0.646,
+     0.561,
+     0.729,
+     0.602,
+     0.691,
+     0.729,
+     0.619,
+     0.517,
+     0.791,
+     0.899,
+     0.964,
+     0.987,
+     0.934,
+     0.858
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.506,
+      "p10": 0.284,
+      "failure_freq": 0.463
+     },
+     "late": {
+      "median": 0.686,
+      "p10": 0.551,
+      "failure_freq": 0.188
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "groundnut",
+      "median": 0.693,
+      "p10": 0.467,
+      "failure_freq": 0.125,
+      "main_limit": "water",
+      "heat_days_mean": 69.6,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 5
+     },
+     {
+      "crop_id": "wheat",
+      "median": 0.733,
+      "p10": 0.208,
+      "failure_freq": 0.25,
+      "main_limit": "water",
+      "heat_days_mean": 6.7,
+      "frost_days_mean": 0.4,
+      "n_seasons": 40,
+      "n_failed": 10
+     },
+     {
+      "crop_id": "sorghum",
+      "median": 0.854,
+      "p10": 0.577,
+      "failure_freq": 0.075,
+      "main_limit": "water",
+      "heat_days_mean": 32.2,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 3
+     },
+     {
+      "crop_id": "peas",
+      "median": 0.214,
+      "p10": 0.0,
+      "failure_freq": 0.85,
+      "main_limit": "water",
+      "heat_days_mean": 2.3,
+      "frost_days_mean": 0.4,
+      "n_seasons": 40,
+      "n_failed": 34
+     }
+    ],
+    "water_demand_mm_per_year": 863,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1994,
+      1998,
+      2000,
+      2001,
+      2002
+     ],
+     "mean_index": 0.317
+    }
+   },
+   "indicators": {
+    "stability": 0.33,
+    "water_use_mm": 863,
+    "forage_share": 0.25,
+    "legume_share": 0.5,
+    "erosive_rain_on_bare_frac": 0.201,
+    "cover_frac": 0.705,
+    "residue_class_mean": 2.0,
+    "market_mean": 2.0,
+    "family_repeats": 2
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.23,
+     "water_use": 0.243,
+     "forage": 0.5,
+     "nitrogen": 0.5,
+     "erosion": 0.868,
+     "organic_matter": 0.664,
+     "market": 0.5
+    },
+    "total": 0.456,
+    "rank": 4,
+    "pareto": true,
+    "rank_early": 1,
+    "rank_late": 3,
+    "rank_range": [
+     4,
+     4
+    ],
+    "rank_range_rain": [
+     4,
+     5
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 52 of 160 crop seasons (32%), mostly from dry spells. Worst year: 1999.",
+    "reasons": [
+     "Groundnut fell below the failure line in 5 of 40 seasons; the main limit was dry spells.",
+     "Wheat fell below the failure line in 10 of 40 seasons; the main limit was dry spells.",
+     "Sorghum (grain/fodder) fell below the failure line in 3 of 40 seasons; the main limit was dry spells.",
+     "Field pea (dry) fell below the failure line in 34 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.33, against 0.31 for your current rotation (better).",
+     "Crop water demand 863 mm a year, 504 mm more than your current rotation.",
+     "In your 5 worst years (1994, 1998, 2000, 2001, 2002) this rotation would have averaged 0.32, against 0.22 for your current rotation.",
+     "Stays ranked #4 whether the legume effect is 0%, 7%, 20% or 32%.",
+     "Ranks between #4 and #5 if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 20% fell on bare soil."
+    ],
+    "benefits": [
+     "Includes a legume, which fixes nitrogen for the following crop.",
+     "Includes a forage or dual-purpose crop.",
+     "Keeps the soil covered for 70% of the year, against 44% now."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "chk_wheat_groundnut",
+   "name": "Groundnut then Wheat then bare fallow",
+   "is_current": false,
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 110,
+     "crop_id": "groundnut"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 305,
+     "crop_id": "wheat"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "groundnut",
+     "bare_frac": 0.33
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "groundnut",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "wheat",
+     "bare_frac": 0.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.692,
+    "p10": 0.337,
+    "failure_freq": 0.225,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.528,
+     0.754,
+     0.734,
+     0.484,
+     0.602,
+     0.758,
+     0.534,
+     0.761,
+     0.674,
+     0.41,
+     0.837,
+     0.817,
+     0.444,
+     0.338,
+     0.259,
+     0.274,
+     0.328,
+     0.273,
+     0.674,
+     0.542,
+     0.84,
+     0.595,
+     0.98,
+     0.709,
+     0.662,
+     0.587,
+     0.718,
+     0.567,
+     0.836,
+     0.649,
+     0.84,
+     0.826,
+     0.746,
+     0.575,
+     0.941,
+     1.059,
+     0.972,
+     0.931,
+     0.93,
+     0.843
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.538,
+      "p10": 0.274,
+      "failure_freq": 0.425
+     },
+     "late": {
+      "median": 0.831,
+      "p10": 0.586,
+      "failure_freq": 0.025
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "groundnut",
+      "median": 0.642,
+      "p10": 0.448,
+      "failure_freq": 0.2,
+      "main_limit": "water",
+      "heat_days_mean": 69.6,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 8
+     },
+     {
+      "crop_id": "wheat",
+      "median": 0.733,
+      "p10": 0.208,
+      "failure_freq": 0.25,
+      "main_limit": "water",
+      "heat_days_mean": 6.7,
+      "frost_days_mean": 0.4,
+      "n_seasons": 40,
+      "n_failed": 10
+     }
+    ],
+    "water_demand_mm_per_year": 1082,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1994,
+      1998,
+      2000,
+      2001,
+      2002
+     ],
+     "mean_index": 0.325
+    }
+   },
+   "indicators": {
+    "stability": 0.337,
+    "water_use_mm": 1082,
+    "forage_share": 0.0,
+    "legume_share": 0.5,
+    "erosive_rain_on_bare_frac": 0.16,
+    "cover_frac": 0.795,
+    "residue_class_mean": 2.0,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.3,
+     "water_use": 0.0,
+     "forage": 0.0,
+     "nitrogen": 0.5,
+     "erosion": 0.919,
+     "organic_matter": 0.75,
+     "market": 0.5
+    },
+    "total": 0.419,
+    "rank": 5,
+    "pareto": true,
+    "rank_early": 3,
+    "rank_late": 4,
+    "rank_range": [
+     5,
+     5
+    ],
+    "rank_range_rain": [
+     3,
+     5
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 18 of 80 crop seasons (22%), mostly from dry spells. Worst year: 1999.",
+    "reasons": [
+     "Groundnut fell below the failure line in 8 of 40 seasons; the main limit was dry spells.",
+     "Wheat fell below the failure line in 10 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.34, against 0.31 for your current rotation (better).",
+     "Crop water demand 1082 mm a year, 723 mm more than your current rotation.",
+     "In your 5 worst years (1994, 1998, 2000, 2001, 2002) this rotation would have averaged 0.33, against 0.22 for your current rotation.",
+     "Stays ranked #5 whether the legume effect is 0%, 7%, 20% or 32%.",
+     "Ranks between #3 and #5 if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 16% fell on bare soil."
+    ],
+    "benefits": [
+     "Includes a legume, which fixes nitrogen for the following crop.",
+     "Keeps the soil covered for 80% of the year, against 44% now."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  }
+ ],
+ "validation": {
+  "ndvi_check": {
+   "r": 0.59,
+   "n_years": 24,
+   "p_value": 0.0026,
+   "note": "Pearson correlation between peak MODIS NDVI in crop months (good-quality pixels only) and the current rotation's annual index. One 250 m pixel that may not be a crop field. An independent check, not a calibration."
+  }
+ },
+ "provenance": [
+  {
+   "item": "Daily weather",
+   "kind": "reanalysis_estimate",
+   "source": "NASA POWER daily point API, AG community (MERRA-2 meteorology, CERES solar)"
+  },
+  {
+   "item": "Reference evapotranspiration",
+   "kind": "model_output",
+   "source": "FAO-56 Penman-Monteith on NASA POWER inputs"
+  },
+  {
+   "item": "Soil texture and depth",
+   "kind": "farmer_input",
+   "source": "farmer"
+  },
+  {
+   "item": "Field capacity and wilting point",
+   "kind": "model_output",
+   "source": "Saxton and Rawls (2006)"
+  },
+  {
+   "item": "Crop coefficients, root depth, Ky, temperature ranges",
+   "kind": "literature_parameter",
+   "source": "FAO-56, FAO-33, FAO EcoCrop"
+  },
+  {
+   "item": "Season index, failure frequency, water demand",
+   "kind": "model_output",
+   "source": "Hindsight engine"
+  },
+  {
+   "item": "Priorities, market ratings, current rotation",
+   "kind": "farmer_input",
+   "source": "farmer"
+  }
+ ]
+}

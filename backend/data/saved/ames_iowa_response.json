@@ -1,0 +1,2439 @@
+{
+ "meta": {
+  "engine_version": "0.3.0",
+  "record": {
+   "start_year": 1985,
+   "end_year": 2024
+  },
+  "windows": {
+   "early": [
+    1985,
+    2004
+   ],
+   "late": [
+    2005,
+    2024
+   ]
+  },
+  "warnings": []
+ },
+ "site": {
+  "name": "Ames, Iowa, USA (rainfed)",
+  "lat": 42.03,
+  "lon": -93.63,
+  "soil_used": {
+   "source": "farmer",
+   "texture_class": "silty_clay_loam",
+   "field_capacity_frac": 0.381,
+   "wilting_point_frac": 0.211,
+   "available_water_mm_per_m": 169.9
+  },
+  "climate_summary": {
+   "annual_rain_mm": 853,
+   "annual_et0_mm": 915,
+   "mean_temp_c": 9.7
+  }
+ },
+ "climate_shift": [
+  {
+   "id": "cool_season_rain_mm",
+   "label": "Rain in the cool half-year",
+   "unit": "mm",
+   "early": 231.5,
+   "late": 246.6,
+   "change": 15.1,
+   "slope_per_decade": 6.66,
+   "p_value": 0.442
+  },
+  {
+   "id": "warm_season_rain_mm",
+   "label": "Rain in the warm half-year",
+   "unit": "mm",
+   "early": 626.3,
+   "late": 602.5,
+   "change": -23.8,
+   "slope_per_decade": -25.84,
+   "p_value": 0.244
+  },
+  {
+   "id": "annual_et0_mm",
+   "label": "Reference evapotranspiration",
+   "unit": "mm",
+   "early": 901.8,
+   "late": 929.0,
+   "change": 27.2,
+   "slope_per_decade": 23.56,
+   "p_value": 0.136
+  },
+  {
+   "id": "hot_days",
+   "label": "Days above 35 \u00b0C",
+   "unit": "days",
+   "early": 5.3,
+   "late": 5.8,
+   "change": 0.5,
+   "slope_per_decade": -0.0,
+   "p_value": 0.365
+  },
+  {
+   "id": "frost_days",
+   "label": "Days below 0 \u00b0C",
+   "unit": "days",
+   "early": 147.6,
+   "late": 142.8,
+   "change": -4.8,
+   "slope_per_decade": -3.27,
+   "p_value": 0.124
+  },
+  {
+   "id": "heavy_rain_days",
+   "label": "Days with 12.7 mm of rain or more",
+   "unit": "days",
+   "early": 17.8,
+   "late": 20.8,
+   "change": 3.0,
+   "slope_per_decade": 0.62,
+   "p_value": 0.484
+  }
+ ],
+ "rotations": [
+  {
+   "id": "current",
+   "name": "Y1: Maize \u00b7 Y2: Soybean (current)",
+   "is_current": true,
+   "cycle_years": 2,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 125,
+     "crop_id": "maize"
+    },
+    {
+     "year_offset": 1,
+     "plant_doy": 135,
+     "crop_id": "soybean"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "maize",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "maize",
+     "bare_frac": 0.97
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 5,
+     "crop_id": "soybean",
+     "bare_frac": 0.45
+    },
+    {
+     "year_offset": 1,
+     "month": 6,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 7,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 8,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 9,
+     "crop_id": "soybean",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 1,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.949,
+    "p10": 0.69,
+    "failure_freq": 0.013,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.78,
+     1.08,
+     1.092,
+     0.6,
+     0.88,
+     1.091,
+     0.805,
+     1.032,
+     1.038,
+     1.059,
+     0.988,
+     0.962,
+     0.793,
+     0.998,
+     0.973,
+     0.911,
+     0.893,
+     0.935,
+     0.67,
+     0.991,
+     0.775,
+     0.88,
+     0.971,
+     1.063,
+     0.981,
+     1.1,
+     0.828,
+     0.538,
+     0.575,
+     1.067,
+     1.1,
+     1.1,
+     0.699,
+     0.996,
+     0.968,
+     0.692,
+     0.76,
+     0.705,
+     0.735,
+     0.901
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.968,
+      "p10": 0.769,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 0.891,
+      "p10": 0.68,
+      "failure_freq": 0.025
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "maize",
+      "median": 1.017,
+      "p10": 0.675,
+      "failure_freq": 0.025,
+      "main_limit": "water",
+      "heat_days_mean": 5.5,
+      "frost_days_mean": 0.2,
+      "n_seasons": 40,
+      "n_failed": 1
+     },
+     {
+      "crop_id": "soybean",
+      "median": 0.868,
+      "p10": 0.702,
+      "failure_freq": 0.0,
+      "main_limit": "water",
+      "heat_days_mean": 5.5,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 532,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1988,
+      2003,
+      2012,
+      2013,
+      2020
+     ],
+     "mean_index": 0.615
+    }
+   },
+   "indicators": {
+    "stability": 0.69,
+    "water_use_mm": 532,
+    "forage_share": 0.0,
+    "legume_share": 0.5,
+    "erosive_rain_on_bare_frac": 0.358,
+    "cover_frac": 0.39,
+    "residue_class_mean": 2.0,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.247,
+     "water_use": 0.0,
+     "forage": 0.0,
+     "nitrogen": 1.0,
+     "erosion": 1.0,
+     "organic_matter": 0.667,
+     "market": 0.5
+    },
+    "total": 0.49,
+    "rank": 5,
+    "pareto": true,
+    "rank_early": 5,
+    "rank_late": 5,
+    "rank_range": [
+     5,
+     6
+    ],
+    "rank_range_rain": [
+     5,
+     6
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 1 of 80 crop seasons (1%), mostly from dry spells. Worst year: 2012.",
+    "reasons": [
+     "Maize fell below the failure line in 1 of 40 seasons; the main limit was dry spells.",
+     "Soybean fell below the failure line in 0 of 40 seasons; the main limit was dry spells.",
+     "Your 5 worst years in the record were 1988, 2003, 2012, 2013, 2020 (average index 0.61).",
+     "Ranks between #5 and #6 depending on how strong the legume effect is (0-32%).",
+     "Ranks between #5 and #6 if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 36% fell on bare soil."
+    ],
+    "benefits": [
+     "Least heavy rain on bare soil of the rotations compared.",
+     "Includes a legume, which fixes nitrogen for the following crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "swap_1",
+   "name": "Y1: Sorghum (grain/fodder) \u00b7 Y2: Soybean",
+   "is_current": false,
+   "cycle_years": 2,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 125,
+     "crop_id": "sorghum"
+    },
+    {
+     "year_offset": 1,
+     "plant_doy": 135,
+     "crop_id": "soybean"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "sorghum",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "sorghum",
+     "bare_frac": 0.8
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 5,
+     "crop_id": "soybean",
+     "bare_frac": 0.45
+    },
+    {
+     "year_offset": 1,
+     "month": 6,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 7,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 8,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 9,
+     "crop_id": "soybean",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 1,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.945,
+    "p10": 0.806,
+    "failure_freq": 0.0,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.838,
+     0.984,
+     1.076,
+     0.692,
+     0.912,
+     1.013,
+     0.875,
+     0.889,
+     0.933,
+     1.0,
+     1.021,
+     0.955,
+     0.87,
+     1.036,
+     1.026,
+     1.019,
+     0.935,
+     0.996,
+     0.81,
+     0.979,
+     0.902,
+     0.911,
+     0.995,
+     0.983,
+     0.934,
+     1.061,
+     0.935,
+     0.661,
+     0.727,
+     1.015,
+     1.036,
+     1.073,
+     0.791,
+     1.032,
+     0.954,
+     0.808,
+     0.841,
+     0.813,
+     0.861,
+     1.023
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.967,
+      "p10": 0.835,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 0.935,
+      "p10": 0.785,
+      "failure_freq": 0.0
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "sorghum",
+      "median": 1.013,
+      "p10": 0.91,
+      "failure_freq": 0.0,
+      "main_limit": "water",
+      "heat_days_mean": 1.4,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     },
+     {
+      "crop_id": "soybean",
+      "median": 0.868,
+      "p10": 0.702,
+      "failure_freq": 0.0,
+      "main_limit": "water",
+      "heat_days_mean": 5.5,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 485,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1988,
+      2003,
+      2012,
+      2013,
+      2020
+     ],
+     "mean_index": 0.74
+    }
+   },
+   "indicators": {
+    "stability": 0.806,
+    "water_use_mm": 485,
+    "forage_share": 0.5,
+    "legume_share": 0.5,
+    "erosive_rain_on_bare_frac": 0.41,
+    "cover_frac": 0.356,
+    "residue_class_mean": 2.0,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 1.0,
+     "water_use": 0.94,
+     "forage": 1.0,
+     "nitrogen": 1.0,
+     "erosion": 0.0,
+     "organic_matter": 0.167,
+     "market": 0.5
+    },
+    "total": 0.703,
+    "rank": 1,
+    "pareto": true,
+    "rank_early": 1,
+    "rank_late": 1,
+    "rank_range": [
+     1,
+     1
+    ],
+    "rank_range_rain": [
+     1,
+     1
+    ]
+   },
+   "explanation": {
+    "summary": "No crop season fell below the failure line in 80 seasons of NASA weather, 1985-2024.",
+    "reasons": [
+     "Sorghum (grain/fodder) fell below the failure line in 0 of 40 seasons; the main limit was dry spells.",
+     "Soybean fell below the failure line in 0 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.81, against 0.69 for your current rotation (better).",
+     "Crop water demand 485 mm a year, 47 mm less than your current rotation.",
+     "In your 5 worst years (1988, 2003, 2012, 2013, 2020) this rotation would have averaged 0.74, against 0.61 for your current rotation.",
+     "Stays ranked #1 whether the legume effect is 0%, 7%, 20% or 32%.",
+     "Stays ranked #1 even if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 41% fell on bare soil."
+    ],
+    "benefits": [
+     "Most stable in bad years of the rotations compared.",
+     "Includes a legume, which fixes nitrogen for the following crop.",
+     "Includes a forage or dual-purpose crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "swap_4",
+   "name": "Y1: Sunflower \u00b7 Y2: Soybean",
+   "is_current": false,
+   "cycle_years": 2,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 125,
+     "crop_id": "sunflower"
+    },
+    {
+     "year_offset": 1,
+     "plant_doy": 135,
+     "crop_id": "soybean"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "sunflower",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "sunflower",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "sunflower",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "sunflower",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "sunflower",
+     "bare_frac": 0.63
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 5,
+     "crop_id": "soybean",
+     "bare_frac": 0.45
+    },
+    {
+     "year_offset": 1,
+     "month": 6,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 7,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 8,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 9,
+     "crop_id": "soybean",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 1,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    }
+   ],
+   "hindcast": {
+    "median": 1.004,
+    "p10": 0.791,
+    "failure_freq": 0.0,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.847,
+     1.08,
+     1.094,
+     0.677,
+     0.92,
+     1.097,
+     0.874,
+     1.032,
+     1.038,
+     1.078,
+     1.055,
+     1.027,
+     0.891,
+     1.067,
+     1.042,
+     1.004,
+     0.941,
+     0.987,
+     0.806,
+     1.063,
+     0.883,
+     0.904,
+     0.984,
+     1.08,
+     1.031,
+     1.1,
+     0.924,
+     0.644,
+     0.723,
+     1.075,
+     1.1,
+     1.1,
+     0.788,
+     1.016,
+     1.005,
+     0.791,
+     0.831,
+     0.797,
+     0.845,
+     1.007
+    ],
+    "by_window": {
+     "early": {
+      "median": 1.03,
+      "p10": 0.843,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 0.954,
+      "p10": 0.782,
+      "failure_freq": 0.0
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "sunflower",
+      "median": 1.112,
+      "p10": 0.883,
+      "failure_freq": 0.0,
+      "main_limit": "water",
+      "heat_days_mean": 1.5,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     },
+     {
+      "crop_id": "soybean",
+      "median": 0.868,
+      "p10": 0.702,
+      "failure_freq": 0.0,
+      "main_limit": "water",
+      "heat_days_mean": 5.5,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 489,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1988,
+      2003,
+      2012,
+      2013,
+      2020
+     ],
+     "mean_index": 0.728
+    }
+   },
+   "indicators": {
+    "stability": 0.791,
+    "water_use_mm": 489,
+    "forage_share": 0.0,
+    "legume_share": 0.5,
+    "erosive_rain_on_bare_frac": 0.398,
+    "cover_frac": 0.363,
+    "residue_class_mean": 1.5,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.903,
+     "water_use": 0.86,
+     "forage": 0.0,
+     "nitrogen": 1.0,
+     "erosion": 0.231,
+     "organic_matter": 0.103,
+     "market": 0.5
+    },
+    "total": 0.631,
+    "rank": 2,
+    "pareto": true,
+    "rank_early": 2,
+    "rank_late": 2,
+    "rank_range": [
+     2,
+     2
+    ],
+    "rank_range_rain": [
+     2,
+     2
+    ]
+   },
+   "explanation": {
+    "summary": "No crop season fell below the failure line in 80 seasons of NASA weather, 1985-2024.",
+    "reasons": [
+     "Sunflower fell below the failure line in 0 of 40 seasons; the main limit was dry spells.",
+     "Soybean fell below the failure line in 0 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.79, against 0.69 for your current rotation (better).",
+     "Crop water demand 489 mm a year, 43 mm less than your current rotation.",
+     "In your 5 worst years (1988, 2003, 2012, 2013, 2020) this rotation would have averaged 0.73, against 0.61 for your current rotation.",
+     "Stays ranked #2 whether the legume effect is 0%, 7%, 20% or 32%.",
+     "Stays ranked #2 even if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 40% fell on bare soil."
+    ],
+    "benefits": [
+     "Includes a legume, which fixes nitrogen for the following crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "swap_7",
+   "name": "Y1: Maize \u00b7 Y2: Groundnut",
+   "is_current": false,
+   "cycle_years": 2,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 125,
+     "crop_id": "maize"
+    },
+    {
+     "year_offset": 1,
+     "plant_doy": 135,
+     "crop_id": "groundnut"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "maize",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "maize",
+     "bare_frac": 0.97
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 5,
+     "crop_id": "groundnut",
+     "bare_frac": 0.45
+    },
+    {
+     "year_offset": 1,
+     "month": 6,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 7,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 8,
+     "crop_id": "groundnut",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 9,
+     "crop_id": "groundnut",
+     "bare_frac": 0.3
+    },
+    {
+     "year_offset": 1,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.927,
+    "p10": 0.72,
+    "failure_freq": 0.013,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.794,
+     1.0,
+     1.062,
+     0.645,
+     0.885,
+     1.028,
+     0.822,
+     0.969,
+     0.976,
+     1.017,
+     0.957,
+     0.916,
+     0.805,
+     0.991,
+     0.969,
+     0.932,
+     0.895,
+     0.965,
+     0.682,
+     0.935,
+     0.802,
+     0.911,
+     0.973,
+     0.984,
+     0.923,
+     1.077,
+     0.837,
+     0.587,
+     0.609,
+     0.993,
+     1.044,
+     1.092,
+     0.741,
+     1.006,
+     0.959,
+     0.724,
+     0.801,
+     0.742,
+     0.775,
+     0.917
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.946,
+      "p10": 0.783,
+      "failure_freq": 0.0
+     },
+     "late": {
+      "median": 0.914,
+      "p10": 0.713,
+      "failure_freq": 0.025
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "maize",
+      "median": 1.017,
+      "p10": 0.675,
+      "failure_freq": 0.025,
+      "main_limit": "water",
+      "heat_days_mean": 5.5,
+      "frost_days_mean": 0.2,
+      "n_seasons": 40,
+      "n_failed": 1
+     },
+     {
+      "crop_id": "groundnut",
+      "median": 0.823,
+      "p10": 0.737,
+      "failure_freq": 0.0,
+      "main_limit": "water",
+      "heat_days_mean": 1.5,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 512,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1988,
+      2003,
+      2012,
+      2013,
+      2020
+     ],
+     "mean_index": 0.649
+    }
+   },
+   "indicators": {
+    "stability": 0.72,
+    "water_use_mm": 512,
+    "forage_share": 0.0,
+    "legume_share": 0.5,
+    "erosive_rain_on_bare_frac": 0.37,
+    "cover_frac": 0.384,
+    "residue_class_mean": 2.0,
+    "market_mean": 2.0,
+    "family_repeats": 0
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.442,
+     "water_use": 0.4,
+     "forage": 0.0,
+     "nitrogen": 1.0,
+     "erosion": 0.769,
+     "organic_matter": 0.578,
+     "market": 0.5
+    },
+    "total": 0.565,
+    "rank": 3,
+    "pareto": true,
+    "rank_early": 4,
+    "rank_late": 3,
+    "rank_range": [
+     3,
+     4
+    ],
+    "rank_range_rain": [
+     3,
+     3
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 1 of 80 crop seasons (1%), mostly from dry spells. Worst year: 2012.",
+    "reasons": [
+     "Maize fell below the failure line in 1 of 40 seasons; the main limit was dry spells.",
+     "Groundnut fell below the failure line in 0 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.72, against 0.69 for your current rotation (better).",
+     "Crop water demand 512 mm a year, 20 mm less than your current rotation.",
+     "In your 5 worst years (1988, 2003, 2012, 2013, 2020) this rotation would have averaged 0.65, against 0.61 for your current rotation.",
+     "Ranks between #3 and #4 depending on how strong the legume effect is (0-32%).",
+     "Stays ranked #3 even if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 37% fell on bare soil."
+    ],
+    "benefits": [
+     "Includes a legume, which fixes nitrogen for the following crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "ames_3yr",
+   "name": "Y1: Maize \u00b7 Y2: Soybean \u00b7 Y3: Sorghum (grain/fodder)",
+   "is_current": false,
+   "cycle_years": 3,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 125,
+     "crop_id": "maize"
+    },
+    {
+     "year_offset": 1,
+     "plant_doy": 135,
+     "crop_id": "soybean"
+    },
+    {
+     "year_offset": 2,
+     "plant_doy": 140,
+     "crop_id": "sorghum"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "maize",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "maize",
+     "bare_frac": 0.97
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 5,
+     "crop_id": "soybean",
+     "bare_frac": 0.45
+    },
+    {
+     "year_offset": 1,
+     "month": 6,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 7,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 8,
+     "crop_id": "soybean",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 9,
+     "crop_id": "soybean",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 1,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 2,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 2,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 2,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 2,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 2,
+     "month": 5,
+     "crop_id": "sorghum",
+     "bare_frac": 0.61
+    },
+    {
+     "year_offset": 2,
+     "month": 6,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 2,
+     "month": 7,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 2,
+     "month": 8,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 2,
+     "month": 9,
+     "crop_id": "sorghum",
+     "bare_frac": 0.3
+    },
+    {
+     "year_offset": 2,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 2,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 2,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.929,
+    "p10": 0.719,
+    "failure_freq": 0.025,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.799,
+     0.993,
+     1.042,
+     0.644,
+     0.88,
+     1.024,
+     0.828,
+     0.933,
+     0.948,
+     1.011,
+     0.969,
+     0.925,
+     0.813,
+     0.988,
+     0.973,
+     0.926,
+     0.896,
+     0.96,
+     0.692,
+     0.955,
+     0.803,
+     0.905,
+     0.969,
+     0.988,
+     0.934,
+     1.058,
+     0.851,
+     0.585,
+     0.613,
+     1.004,
+     1.034,
+     1.067,
+     0.741,
+     0.989,
+     0.957,
+     0.722,
+     0.803,
+     0.741,
+     0.774,
+     0.918
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.941,
+      "p10": 0.788,
+      "failure_freq": 0.017
+     },
+     "late": {
+      "median": 0.911,
+      "p10": 0.711,
+      "failure_freq": 0.033
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "maize",
+      "median": 0.847,
+      "p10": 0.563,
+      "failure_freq": 0.075,
+      "main_limit": "water",
+      "heat_days_mean": 5.5,
+      "frost_days_mean": 0.2,
+      "n_seasons": 40,
+      "n_failed": 3
+     },
+     {
+      "crop_id": "soybean",
+      "median": 0.868,
+      "p10": 0.702,
+      "failure_freq": 0.0,
+      "main_limit": "water",
+      "heat_days_mean": 5.5,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     },
+     {
+      "crop_id": "sorghum",
+      "median": 1.036,
+      "p10": 0.891,
+      "failure_freq": 0.0,
+      "main_limit": "water",
+      "heat_days_mean": 1.5,
+      "frost_days_mean": 0.1,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 497,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1988,
+      2003,
+      2012,
+      2013,
+      2020
+     ],
+     "mean_index": 0.651
+    }
+   },
+   "indicators": {
+    "stability": 0.719,
+    "water_use_mm": 497,
+    "forage_share": 0.333,
+    "legume_share": 0.333,
+    "erosive_rain_on_bare_frac": 0.383,
+    "cover_frac": 0.374,
+    "residue_class_mean": 2.33,
+    "market_mean": 2.0,
+    "family_repeats": 1
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.435,
+     "water_use": 0.7,
+     "forage": 0.666,
+     "nitrogen": 0.666,
+     "erosion": 0.519,
+     "organic_matter": 0.541,
+     "market": 0.5
+    },
+    "total": 0.562,
+    "rank": 4,
+    "pareto": true,
+    "rank_early": 3,
+    "rank_late": 4,
+    "rank_range": [
+     3,
+     4
+    ],
+    "rank_range_rain": [
+     4,
+     4
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 3 of 120 crop seasons (2%), mostly from dry spells. Worst year: 2012.",
+    "reasons": [
+     "Maize fell below the failure line in 3 of 40 seasons; the main limit was dry spells.",
+     "Soybean fell below the failure line in 0 of 40 seasons; the main limit was dry spells.",
+     "Sorghum (grain/fodder) fell below the failure line in 0 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.72, against 0.69 for your current rotation (better).",
+     "Crop water demand 497 mm a year, 35 mm less than your current rotation.",
+     "In your 5 worst years (1988, 2003, 2012, 2013, 2020) this rotation would have averaged 0.65, against 0.61 for your current rotation.",
+     "Ranks between #3 and #4 depending on how strong the legume effect is (0-32%).",
+     "Stays ranked #4 even if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 38% fell on bare soil."
+    ],
+    "benefits": [
+     "Includes a legume, which fixes nitrogen for the following crop.",
+     "Includes a forage or dual-purpose crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model.",
+     "The legume effect is a flat +20% on the next crop; field studies range from +7% to +32%."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  },
+  {
+   "id": "swap_6",
+   "name": "Y1: Maize \u00b7 Y2: Sorghum (grain/fodder)",
+   "is_current": false,
+   "cycle_years": 2,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 125,
+     "crop_id": "maize"
+    },
+    {
+     "year_offset": 1,
+     "plant_doy": 135,
+     "crop_id": "sorghum"
+    }
+   ],
+   "calendar": [
+    {
+     "year_offset": 0,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 5,
+     "crop_id": "maize",
+     "bare_frac": 0.13
+    },
+    {
+     "year_offset": 0,
+     "month": 6,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 7,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 8,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 9,
+     "crop_id": "maize",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 0,
+     "month": 10,
+     "crop_id": "maize",
+     "bare_frac": 0.97
+    },
+    {
+     "year_offset": 0,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 0,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 1,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 2,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 3,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 4,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 5,
+     "crop_id": "sorghum",
+     "bare_frac": 0.45
+    },
+    {
+     "year_offset": 1,
+     "month": 6,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 7,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 8,
+     "crop_id": "sorghum",
+     "bare_frac": 0.0
+    },
+    {
+     "year_offset": 1,
+     "month": 9,
+     "crop_id": "sorghum",
+     "bare_frac": 0.47
+    },
+    {
+     "year_offset": 1,
+     "month": 10,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 11,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    },
+    {
+     "year_offset": 1,
+     "month": 12,
+     "crop_id": "fallow_bare",
+     "bare_frac": 1.0
+    }
+   ],
+   "hindcast": {
+    "median": 0.871,
+    "p10": 0.652,
+    "failure_freq": 0.037,
+    "years": [
+     1985,
+     1986,
+     1987,
+     1988,
+     1989,
+     1990,
+     1991,
+     1992,
+     1993,
+     1994,
+     1995,
+     1996,
+     1997,
+     1998,
+     1999,
+     2000,
+     2001,
+     2002,
+     2003,
+     2004,
+     2005,
+     2006,
+     2007,
+     2008,
+     2009,
+     2010,
+     2011,
+     2012,
+     2013,
+     2014,
+     2015,
+     2016,
+     2017,
+     2018,
+     2019,
+     2020,
+     2021,
+     2022,
+     2023,
+     2024
+    ],
+    "annual_index": [
+     0.729,
+     0.913,
+     0.979,
+     0.578,
+     0.814,
+     0.947,
+     0.77,
+     0.893,
+     0.9,
+     0.937,
+     0.907,
+     0.865,
+     0.75,
+     0.924,
+     0.917,
+     0.876,
+     0.834,
+     0.9,
+     0.629,
+     0.875,
+     0.744,
+     0.841,
+     0.892,
+     0.908,
+     0.866,
+     0.987,
+     0.786,
+     0.526,
+     0.552,
+     0.919,
+     0.957,
+     0.994,
+     0.68,
+     0.924,
+     0.883,
+     0.655,
+     0.741,
+     0.675,
+     0.723,
+     0.862
+    ],
+    "by_window": {
+     "early": {
+      "median": 0.885,
+      "p10": 0.719,
+      "failure_freq": 0.025
+     },
+     "late": {
+      "median": 0.851,
+      "p10": 0.645,
+      "failure_freq": 0.05
+     }
+    },
+    "by_slot": [
+     {
+      "crop_id": "maize",
+      "median": 0.847,
+      "p10": 0.563,
+      "failure_freq": 0.075,
+      "main_limit": "water",
+      "heat_days_mean": 5.5,
+      "frost_days_mean": 0.2,
+      "n_seasons": 40,
+      "n_failed": 3
+     },
+     {
+      "crop_id": "sorghum",
+      "median": 0.867,
+      "p10": 0.742,
+      "failure_freq": 0.0,
+      "main_limit": "water",
+      "heat_days_mean": 1.5,
+      "frost_days_mean": 0.0,
+      "n_seasons": 40,
+      "n_failed": 0
+     }
+    ],
+    "water_demand_mm_per_year": 482,
+    "irrigation_mm_per_year": 0,
+    "worst_years": {
+     "years": [
+      1988,
+      2003,
+      2012,
+      2013,
+      2020
+     ],
+     "mean_index": 0.588
+    }
+   },
+   "indicators": {
+    "stability": 0.652,
+    "water_use_mm": 482,
+    "forage_share": 0.5,
+    "legume_share": 0.0,
+    "erosive_rain_on_bare_frac": 0.385,
+    "cover_frac": 0.377,
+    "residue_class_mean": 3.0,
+    "market_mean": 2.0,
+    "family_repeats": 2
+   },
+   "scores": {
+    "normalised": {
+     "stability": 0.0,
+     "water_use": 1.0,
+     "forage": 1.0,
+     "nitrogen": 0.0,
+     "erosion": 0.481,
+     "organic_matter": 0.809,
+     "market": 0.5
+    },
+    "total": 0.449,
+    "rank": 6,
+    "pareto": true,
+    "rank_early": 6,
+    "rank_late": 6,
+    "rank_range": [
+     5,
+     6
+    ],
+    "rank_range_rain": [
+     5,
+     6
+    ]
+   },
+   "explanation": {
+    "summary": "Would have fallen below the failure line in 3 of 80 crop seasons (4%), mostly from dry spells. Worst year: 2012.",
+    "reasons": [
+     "Maize fell below the failure line in 3 of 40 seasons; the main limit was dry spells.",
+     "Sorghum (grain/fodder) fell below the failure line in 0 of 40 seasons; the main limit was dry spells.",
+     "Bad-year index 0.65, against 0.69 for your current rotation (worse).",
+     "Crop water demand 482 mm a year, 50 mm less than your current rotation.",
+     "In your 5 worst years (1988, 2003, 2012, 2013, 2020) this rotation would have averaged 0.59, against 0.61 for your current rotation.",
+     "Ranks between #5 and #6 depending on how strong the legume effect is (0-32%).",
+     "Ranks between #5 and #6 if NASA rainfall here is 30% too high or too low."
+    ],
+    "evidence": [
+     "Daily soil-water balance (FAO-56) run on NASA POWER daily weather, 1985-2024.",
+     "Season index from the FAO-33 water-production function and EcoCrop temperature ranges.",
+     "Heavy-rain days (12.7 mm or more) counted against the bare months of this rotation: 38% fell on bare soil."
+    ],
+    "benefits": [
+     "Lowest crop water demand of the rotations compared.",
+     "Includes a forage or dual-purpose crop."
+    ],
+    "gaps": [
+     "Weather is a NASA POWER grid-cell estimate about 50 km wide; your field may differ, especially in rainfall.",
+     "Crop values are generic FAO figures, not your local varieties.",
+     "Pests, disease, nutrients and management are not in the model."
+    ],
+    "local_review": [
+     "Confirm sowing dates and varieties with your local extension office.",
+     "Check that you can sell each crop and get seed in time.",
+     "Ask about pests and diseases that carry over between these crops."
+    ]
+   }
+  }
+ ],
+ "validation": {
+  "ndvi_check": {
+   "r": 0.39,
+   "n_years": 24,
+   "p_value": 0.059,
+   "note": "Pearson correlation between peak MODIS NDVI in crop months (good-quality pixels only) and the current rotation's annual index. One 250 m pixel that may not be a crop field. An independent check, not a calibration."
+  }
+ },
+ "provenance": [
+  {
+   "item": "Daily weather",
+   "kind": "reanalysis_estimate",
+   "source": "NASA POWER daily point API, AG community (MERRA-2 meteorology, CERES solar)"
+  },
+  {
+   "item": "Reference evapotranspiration",
+   "kind": "model_output",
+   "source": "FAO-56 Penman-Monteith on NASA POWER inputs"
+  },
+  {
+   "item": "Soil texture and depth",
+   "kind": "farmer_input",
+   "source": "farmer"
+  },
+  {
+   "item": "Field capacity and wilting point",
+   "kind": "model_output",
+   "source": "Saxton and Rawls (2006)"
+  },
+  {
+   "item": "Crop coefficients, root depth, Ky, temperature ranges",
+   "kind": "literature_parameter",
+   "source": "FAO-56, FAO-33, FAO EcoCrop"
+  },
+  {
+   "item": "Season index, failure frequency, water demand",
+   "kind": "model_output",
+   "source": "Hindsight engine"
+  },
+  {
+   "item": "Priorities, market ratings, current rotation",
+   "kind": "farmer_input",
+   "source": "farmer"
+  }
+ ]
+}

@@ -1,0 +1,93 @@
+[
+ {
+  "id": "chakwal",
+  "name": "Chakwal, rainfed (Pothwar)",
+  "lat": 32.93,
+  "lon": 72.86,
+  "soil": {
+   "texture_class": "loam",
+   "organic_matter_level": "low",
+   "depth_cm": 100
+  },
+  "water": {
+   "mode": "rainfed",
+   "seasonal_cap_mm": null
+  },
+  "current_rotation": {
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 305,
+     "crop_id": "wheat"
+    }
+   ]
+  },
+  "ndvi_point": {
+   "lat": 32.93,
+   "lon": 72.95,
+   "why": "The 72.86 pixel is Chakwal town; this cropland point 9 km east is used for the NDVI check."
+  }
+ },
+ {
+  "id": "sheikhupura",
+  "name": "Sheikhupura, irrigated (Punjab)",
+  "lat": 31.71,
+  "lon": 73.98,
+  "soil": {
+   "texture_class": "silt_loam",
+   "organic_matter_level": "low",
+   "depth_cm": 100
+  },
+  "water": {
+   "mode": "full",
+   "seasonal_cap_mm": null
+  },
+  "current_rotation": {
+   "cycle_years": 1,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 121,
+     "crop_id": "cotton"
+    },
+    {
+     "year_offset": 0,
+     "plant_doy": 324,
+     "crop_id": "wheat"
+    }
+   ]
+  },
+  "rotation_note": "Cotton then wheat. Rice-wheat is the real local system, but rice has no sourced Ky, so it cannot be scored. Final for this hackathon."
+ },
+ {
+  "id": "ames_iowa",
+  "name": "Ames, Iowa, USA (rainfed)",
+  "lat": 42.03,
+  "lon": -93.63,
+  "soil": {
+   "texture_class": "silty_clay_loam",
+   "organic_matter_level": "high",
+   "depth_cm": 100
+  },
+  "water": {
+   "mode": "rainfed",
+   "seasonal_cap_mm": null
+  },
+  "current_rotation": {
+   "cycle_years": 2,
+   "slots": [
+    {
+     "year_offset": 0,
+     "plant_doy": 125,
+     "crop_id": "maize"
+    },
+    {
+     "year_offset": 1,
+     "plant_doy": 135,
+     "crop_id": "soybean"
+    }
+   ]
+  }
+ }
+]

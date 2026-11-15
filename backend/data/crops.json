@@ -1,0 +1,590 @@
+[
+ {
+  "id": "wheat",
+  "name": "Wheat",
+  "family": "Poaceae",
+  "group": "cereal",
+  "is_legume": false,
+  "is_forage": false,
+  "deep_rooted": true,
+  "season_type": "cool",
+  "stage_days": [
+   20,
+   50,
+   60,
+   30
+  ],
+  "kc": {
+   "ini": 0.3,
+   "mid": 1.15,
+   "end": 0.25
+  },
+  "root_depth_m": 1.25,
+  "p_depletion": 0.55,
+  "ky": 1.15,
+  "temp_c": {
+   "kill": null,
+   "min": 5,
+   "opt_min": 15,
+   "opt_max": 23,
+   "max": 27
+  },
+  "heat_day_c": 32,
+  "residue_class": 3,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 wheat 'Dec, Calif. Desert' 160 d (closest arid row to Pakistan Nov-Apr season); T12 spring wheat, cereals Kc ini 0.30; T22 spring wheat 1.0-1.5 m; FAO-33 spring wheat (Pakistan wheat is spring type)",
+   "ky": "FAO-33 seasonal Ky, as reprinted in FAO-66 ch.2 Table 1",
+   "temp_c": "FAO EcoCrop (Triticum aestivum): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": true,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops.",
+  "ecocrop_ktmp": 0
+ },
+ {
+  "id": "maize",
+  "name": "Maize",
+  "family": "Poaceae",
+  "group": "cereal",
+  "is_legume": false,
+  "is_forage": false,
+  "deep_rooted": true,
+  "season_type": "warm",
+  "stage_days": [
+   30,
+   40,
+   50,
+   30
+  ],
+  "kc": {
+   "ini": 0.3,
+   "mid": 1.2,
+   "end": 0.35
+  },
+  "root_depth_m": 1.35,
+  "p_depletion": 0.55,
+  "ky": 1.25,
+  "temp_c": {
+   "kill": null,
+   "min": 10,
+   "opt_min": 18,
+   "opt_max": 33,
+   "max": 47
+  },
+  "heat_day_c": 35,
+  "residue_class": 3,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 maize 'Apr, Spain/Calif.' 150 d; T12 dry-harvest Kc end; T22 1.0-1.7 m",
+   "ky": "FAO-33 seasonal Ky, as reprinted in FAO-66 ch.2 Table 1",
+   "temp_c": "FAO EcoCrop (Zea mays): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": true,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops.",
+  "ecocrop_ktmp": null
+ },
+ {
+  "id": "sorghum",
+  "name": "Sorghum (grain/fodder)",
+  "family": "Poaceae",
+  "group": "cereal",
+  "is_legume": false,
+  "is_forage": true,
+  "deep_rooted": true,
+  "season_type": "warm",
+  "stage_days": [
+   20,
+   35,
+   40,
+   30
+  ],
+  "kc": {
+   "ini": 0.3,
+   "mid": 1.05,
+   "end": 0.55
+  },
+  "root_depth_m": 1.5,
+  "p_depletion": 0.55,
+  "ky": 0.9,
+  "temp_c": {
+   "kill": null,
+   "min": 8,
+   "opt_min": 22,
+   "opt_max": 35,
+   "max": 40
+  },
+  "heat_day_c": 38,
+  "residue_class": 3,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 sorghum 'May/Jun, USA, Pakistan, Med.'; T12 Kc mid 1.00-1.10; T22 1.0-2.0 m",
+   "ky": "FAO-33 seasonal Ky, as reprinted in FAO-66 ch.2 Table 1",
+   "temp_c": "FAO EcoCrop (Sorghum bicolor): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": true,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops.",
+  "ecocrop_ktmp": null
+ },
+ {
+  "id": "cotton",
+  "name": "Cotton",
+  "family": "Malvaceae",
+  "group": "fibre",
+  "is_legume": false,
+  "is_forage": false,
+  "deep_rooted": true,
+  "season_type": "warm",
+  "stage_days": [
+   30,
+   50,
+   60,
+   55
+  ],
+  "kc": {
+   "ini": 0.35,
+   "mid": 1.15,
+   "end": 0.6
+  },
+  "root_depth_m": 1.35,
+  "p_depletion": 0.65,
+  "ky": 0.85,
+  "temp_c": {
+   "kill": null,
+   "min": 15,
+   "opt_min": 22,
+   "opt_max": 36,
+   "max": 42
+  },
+  "heat_day_c": 38,
+  "residue_class": 1,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 cotton 'Mar-May, Egypt, Pakistan, Calif.'; T12 fibre Kc ini 0.35, mid 1.15-1.20, end 0.70-0.50; T22 1.0-1.7 m",
+   "ky": "FAO-33 seasonal Ky, as reprinted in FAO-66 ch.2 Table 1",
+   "temp_c": "FAO EcoCrop (Gossypium hirsutum): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": true,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops.",
+  "ecocrop_ktmp": null
+ },
+ {
+  "id": "soybean",
+  "name": "Soybean",
+  "family": "Fabaceae",
+  "group": "legume",
+  "is_legume": true,
+  "is_forage": false,
+  "deep_rooted": false,
+  "season_type": "warm",
+  "stage_days": [
+   20,
+   30,
+   60,
+   25
+  ],
+  "kc": {
+   "ini": 0.4,
+   "mid": 1.15,
+   "end": 0.5
+  },
+  "root_depth_m": 0.95,
+  "p_depletion": 0.5,
+  "ky": 0.85,
+  "temp_c": {
+   "kill": null,
+   "min": 10,
+   "opt_min": 20,
+   "opt_max": 33,
+   "max": 38
+  },
+  "heat_day_c": 35,
+  "residue_class": 1,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 soybean 'May, Central USA'; T12 legumes Kc ini 0.40; T22 0.6-1.3 m",
+   "ky": "FAO-33 seasonal Ky, as reprinted in FAO-66 ch.2 Table 1",
+   "temp_c": "FAO EcoCrop (Glycine max): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": true,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops.",
+  "ecocrop_ktmp": null
+ },
+ {
+  "id": "groundnut",
+  "name": "Groundnut",
+  "family": "Fabaceae",
+  "group": "legume",
+  "is_legume": true,
+  "is_forage": false,
+  "deep_rooted": false,
+  "season_type": "warm",
+  "stage_days": [
+   25,
+   35,
+   45,
+   25
+  ],
+  "kc": {
+   "ini": 0.4,
+   "mid": 1.15,
+   "end": 0.6
+  },
+  "root_depth_m": 0.75,
+  "p_depletion": 0.5,
+  "ky": 0.7,
+  "temp_c": {
+   "kill": null,
+   "min": 10,
+   "opt_min": 22,
+   "opt_max": 32,
+   "max": 45
+  },
+  "heat_day_c": 38,
+  "residue_class": 1,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 groundnut 'dry season, West Africa'; T22 0.5-1.0 m",
+   "ky": "FAO-33 seasonal Ky, as reprinted in FAO-66 ch.2 Table 1",
+   "temp_c": "FAO EcoCrop (Arachis hypogaea): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": true,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops.",
+  "ecocrop_ktmp": null
+ },
+ {
+  "id": "peas",
+  "name": "Field pea (dry)",
+  "family": "Fabaceae",
+  "group": "legume",
+  "is_legume": true,
+  "is_forage": false,
+  "deep_rooted": false,
+  "season_type": "cool",
+  "stage_days": [
+   20,
+   30,
+   35,
+   15
+  ],
+  "kc": {
+   "ini": 0.4,
+   "mid": 1.15,
+   "end": 0.3
+  },
+  "root_depth_m": 0.8,
+  "p_depletion": 0.4,
+  "ky": 1.15,
+  "temp_c": {
+   "kill": null,
+   "min": 4,
+   "opt_min": 10,
+   "opt_max": 24,
+   "max": 30
+  },
+  "heat_day_c": 30,
+  "residue_class": 1,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 peas 'Mar/Apr, Mediterranean' 100 d; T12 peas dry/seed; T22 peas dry 0.6-1.0 m, p 0.40",
+   "ky": "FAO-33 seasonal Ky, as reprinted in FAO-66 ch.2 Table 1",
+   "temp_c": "FAO EcoCrop (Pisum sativum): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": true,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops.",
+  "ecocrop_ktmp": 0
+ },
+ {
+  "id": "sunflower",
+  "name": "Sunflower",
+  "family": "Asteraceae",
+  "group": "oilseed",
+  "is_legume": false,
+  "is_forage": false,
+  "deep_rooted": true,
+  "season_type": "warm",
+  "stage_days": [
+   25,
+   35,
+   45,
+   25
+  ],
+  "kc": {
+   "ini": 0.35,
+   "mid": 1.05,
+   "end": 0.35
+  },
+  "root_depth_m": 1.15,
+  "p_depletion": 0.45,
+  "ky": 0.95,
+  "temp_c": {
+   "kill": null,
+   "min": 5,
+   "opt_min": 17,
+   "opt_max": 34,
+   "max": 45
+  },
+  "heat_day_c": 38,
+  "residue_class": 2,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 sunflower 'Apr/May, Med., Calif.'; T12 oil crops Kc ini 0.35, mid 1.0-1.15; T22 0.8-1.5 m",
+   "ky": "FAO-33 seasonal Ky, as reprinted in FAO-66 ch.2 Table 1",
+   "temp_c": "FAO EcoCrop (Helianthus annuus): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": true,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops.",
+  "ecocrop_ktmp": 0
+ },
+ {
+  "id": "potato",
+  "name": "Potato",
+  "family": "Solanaceae",
+  "group": "tuber",
+  "is_legume": false,
+  "is_forage": false,
+  "deep_rooted": false,
+  "season_type": "cool",
+  "stage_days": [
+   25,
+   30,
+   45,
+   30
+  ],
+  "kc": {
+   "ini": 0.5,
+   "mid": 1.15,
+   "end": 0.75
+  },
+  "root_depth_m": 0.5,
+  "p_depletion": 0.35,
+  "ky": 1.1,
+  "temp_c": {
+   "kill": null,
+   "min": 7,
+   "opt_min": 15,
+   "opt_max": 25,
+   "max": 30
+  },
+  "heat_day_c": 30,
+  "residue_class": 1,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 potato '(semi-)arid, Jan/Nov'; T12 roots/tubers Kc ini 0.50; T22 0.4-0.6 m",
+   "ky": "FAO-33 seasonal Ky, as reprinted in FAO-66 ch.2 Table 1",
+   "temp_c": "FAO EcoCrop (Solanum tuberosum): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": true,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops.",
+  "ecocrop_ktmp": 0
+ },
+ {
+  "id": "rice",
+  "name": "Rice",
+  "family": "Poaceae",
+  "group": "cereal",
+  "is_legume": false,
+  "is_forage": false,
+  "deep_rooted": false,
+  "season_type": "warm",
+  "stage_days": [
+   30,
+   30,
+   60,
+   30
+  ],
+  "kc": {
+   "ini": 1.05,
+   "mid": 1.2,
+   "end": 0.6
+  },
+  "root_depth_m": 0.75,
+  "p_depletion": 0.2,
+  "ky": null,
+  "temp_c": {
+   "kill": null,
+   "min": 10,
+   "opt_min": 20,
+   "opt_max": 30,
+   "max": 36
+  },
+  "heat_day_c": 35,
+  "residue_class": 2,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 rice tropics/Med.; T12; T22 p 0.20 of saturation. NO Ky in FAO-33.",
+   "ky": "NOT FOUND",
+   "temp_c": "FAO EcoCrop (Oryza sativa): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": false,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops. Cannot run: no sourced Ky.",
+  "ecocrop_ktmp": null
+ },
+ {
+  "id": "chickpea",
+  "name": "Chickpea",
+  "family": "Fabaceae",
+  "group": "legume",
+  "is_legume": true,
+  "is_forage": false,
+  "deep_rooted": true,
+  "season_type": "cool",
+  "stage_days": [
+   20,
+   30,
+   45,
+   25
+  ],
+  "kc": {
+   "ini": 0.4,
+   "mid": 1.0,
+   "end": 0.35
+  },
+  "root_depth_m": 0.8,
+  "p_depletion": 0.5,
+  "ky": null,
+  "temp_c": {
+   "kill": null,
+   "min": 7,
+   "opt_min": 15,
+   "opt_max": 29,
+   "max": 35
+  },
+  "heat_day_c": 30,
+  "residue_class": 1,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T12 chickpea; T22 0.6-1.0 m. NO Table 11 row and NO Ky in FAO-33.",
+   "ky": "NOT FOUND",
+   "temp_c": "FAO EcoCrop (Cicer arietinum): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": false,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops. Cannot run: no sourced Ky.",
+  "ecocrop_ktmp": 0
+ },
+ {
+  "id": "mung_bean",
+  "name": "Mung bean",
+  "family": "Fabaceae",
+  "group": "legume",
+  "is_legume": true,
+  "is_forage": false,
+  "deep_rooted": false,
+  "season_type": "warm",
+  "stage_days": [
+   20,
+   30,
+   30,
+   20
+  ],
+  "kc": {
+   "ini": 0.4,
+   "mid": 1.05,
+   "end": 0.35
+  },
+  "root_depth_m": 0.8,
+  "p_depletion": 0.45,
+  "ky": null,
+  "temp_c": {
+   "kill": null,
+   "min": 8,
+   "opt_min": 21,
+   "opt_max": 36,
+   "max": 40
+  },
+  "heat_day_c": 38,
+  "residue_class": 1,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11/T12/T22 'green gram and cowpeas'. NO Ky in FAO-33.",
+   "ky": "NOT FOUND",
+   "temp_c": "FAO EcoCrop (Vigna radiata): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": false,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops. Cannot run: no sourced Ky.",
+  "ecocrop_ktmp": null
+ },
+ {
+  "id": "pearl_millet",
+  "name": "Pearl millet",
+  "family": "Poaceae",
+  "group": "cereal",
+  "is_legume": false,
+  "is_forage": true,
+  "deep_rooted": true,
+  "season_type": "warm",
+  "stage_days": [
+   15,
+   25,
+   40,
+   25
+  ],
+  "kc": {
+   "ini": 0.3,
+   "mid": 1.0,
+   "end": 0.3
+  },
+  "root_depth_m": 1.5,
+  "p_depletion": 0.55,
+  "ky": null,
+  "temp_c": {
+   "kill": null,
+   "min": 12,
+   "opt_min": 25,
+   "opt_max": 35,
+   "max": 40
+  },
+  "heat_day_c": 40,
+  "residue_class": 3,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T11 millet 'Jun, Pakistan'; T22 1.0-2.0 m. NO Ky in FAO-33.",
+   "ky": "NOT FOUND",
+   "temp_c": "FAO EcoCrop (Pennisetum glaucum): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": false,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops. Cannot run: no sourced Ky.",
+  "ecocrop_ktmp": 0
+ },
+ {
+  "id": "mustard",
+  "name": "Rapeseed / mustard",
+  "family": "Brassicaceae",
+  "group": "oilseed",
+  "is_legume": false,
+  "is_forage": false,
+  "deep_rooted": true,
+  "season_type": "cool",
+  "stage_days": [
+   25,
+   35,
+   45,
+   25
+  ],
+  "kc": {
+   "ini": 0.35,
+   "mid": 1.05,
+   "end": 0.35
+  },
+  "root_depth_m": 1.25,
+  "p_depletion": 0.6,
+  "ky": null,
+  "temp_c": {
+   "kill": null,
+   "min": 7,
+   "opt_min": 15,
+   "opt_max": 28,
+   "max": 40
+  },
+  "heat_day_c": 30,
+  "residue_class": 2,
+  "sources": {
+   "fao56": "Allen et al. 1998, FAO-56 Tables 11, 12, 22: T12/T22 rapeseed, canola. NO Table 11 row and NO Ky in FAO-33.",
+   "ky": "NOT FOUND",
+   "temp_c": "FAO EcoCrop (Brassica juncea): TMIN/TOPMN/TOPMX/TMAX; copy from github.com/OpenCLIM/ecocrop EcoCrop_DB.csv",
+   "heat_day_c": "ASSUMPTION - reported only, not used in the index"
+  },
+  "verified": false,
+  "notes": "Checked 2026-11-14 against FAO-56 HTML tables, FAO-66 Table 1 and the EcoCrop database. Rules: Zr = midpoint of the Table 22 range; Kc end = dry-harvest value; Kc ini = Table 12 group value. EcoCrop KTMP kept for reference only (ecocrop_ktmp): it is defined for monthly mean minimum minus 5 \u00b0C, so applying it to daily lows would wrongly kill hardy winter crops. Cannot run: no sourced Ky.",
+  "ecocrop_ktmp": 0
+ }
+]

@@ -1,0 +1,288 @@
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    background: var(--color-background);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--color-background);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-foreground);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-lime);
+    color: var(--color-forest-950);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-forest-950);
+    outline-offset: 3px;
+  }
+
+  .on-dark :focus-visible {
+    outline-color: var(--color-lime);
+  }
+
+  section[id],
+  [data-anchor] {
+    scroll-margin-top: 104px;
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+  @media (width >= 40rem) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(28 58 42 / 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(28 58 42 / 0.055) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility bg-grid-dark {
+  background-image:
+    linear-gradient(to right, rgb(238 243 132 / 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(238 243 132 / 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+@utility text-balance-safe {
+  text-wrap: balance;
+}
+
+/* ---------------------------------------------------------------- motion */
+
+@keyframes hs-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -12px, 0);
+  }
+}
+
+@keyframes hs-float-tilt {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translate3d(0, -9px, 0) rotate(1deg);
+  }
+}
+
+@keyframes hs-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes hs-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes hs-pop {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hs-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes hs-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(51 89 74 / 0.45);
+  }
+  75%,
+  100% {
+    box-shadow: 0 0 0 7px rgb(51 89 74 / 0);
+  }
+}
+
+@keyframes hs-indeterminate {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(260%);
+  }
+}
+
+@keyframes hs-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes hs-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(3%, -4%, 0) scale(1.06);
+  }
+}
+
+@keyframes hs-grow-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.animate-float {
+  animation: hs-float 6.5s ease-in-out infinite;
+}
+
+.animate-float-tilt {
+  animation: hs-float-tilt 8s ease-in-out infinite;
+}
+
+.animate-drift {
+  animation: hs-drift 18s ease-in-out infinite;
+}
+
+.animate-rise {
+  animation: hs-rise 0.9s var(--ease-soft) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+.animate-pop {
+  animation: hs-pop 0.8s var(--ease-spring) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+.animate-fade {
+  animation: hs-fade 0.6s ease-out both;
+  animation-delay: var(--delay, 0ms);
+}
+
+.animate-pulse-dot {
+  animation: hs-pulse 2.2s ease-out infinite;
+}
+
+.draw-path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hs-draw 1.1s var(--ease-soft) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--color-sand) 25%, #f7f3ec 50%, var(--color-sand) 75%);
+  background-size: 200% 100%;
+  animation: hs-shimmer 1.6s linear infinite;
+  border-radius: 0.5rem;
+}
+
+.bar-grow {
+  transform-origin: bottom;
+  animation: hs-grow-y 0.7s var(--ease-soft) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* Scroll reveal (toggled by useReveal). An animation, not a transition, so it never fights
+   the hover transitions or translate/scale utilities on the same element. */
+.reveal {
+  opacity: 0;
+}
+
+.reveal.is-visible {
+  animation: hs-rise 0.85s var(--ease-soft) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* Timeline connector that draws itself; the untransformed wrapper is what gets observed. */
+.reveal-line > * {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 1.6s var(--ease-soft) 0.25s;
+}
+
+.reveal-line.is-visible > * {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+  .reveal {
+    opacity: 1;
+  }
+  .reveal-line > * {
+    transform: none;
+  }
+}
