@@ -81,7 +81,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
 
     steps:
@@ -90,67 +89,6 @@ jobs:
         with:
           name: hindsight-app
 
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_1BAD8016E8824EECBE3712A9C3C3132D }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_25EC56780F2A42568B7D757C3AA1F87C }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E2D59127ACAA4FD09150920176AFE507 }}
-
-      - name: Configure the App Service for Python
-        id: configure
-        run: |
-          set -euo pipefail
-          manual() {
-            echo "::error::$1"
-            echo "Set these by hand in the Azure portal (App Service '$APP_NAME'), then re-run this workflow:"
-            echo "  Settings > Configuration > Stack settings: Python $PYTHON_VERSION"
-            echo "  Settings > Configuration > Startup command: $STARTUP_COMMAND"
-            echo "  Settings > Environment variables: SCM_DO_BUILD_DURING_DEPLOYMENT = true"
-            exit 1
-          }
-
-          RG=$(az webapp list --query "[?name=='$APP_NAME'].resourceGroup | [0]" -o tsv)
-          [ -n "$RG" ] || manual "Could not find the App Service '$APP_NAME' with this deployment identity."
-          echo "rg=$RG" >> "$GITHUB_OUTPUT"
-
-          KIND=$(az webapp show -g "$RG" -n "$APP_NAME" --query kind -o tsv)
-          case "$KIND" in
-            *linux*) ;;
-            *) echo "::error::App Service '$APP_NAME' is a Windows app (kind: $KIND). Python needs a Linux App Service - create a new one with the Python runtime."; exit 1 ;;
-          esac
-
-          if ! az webapp list-runtimes --os-type linux -o tsv 2>/dev/null | grep -q "PYTHON:$PYTHON_VERSION"; then
-            echo "::warning::Python $PYTHON_VERSION was not found in this region's App Service runtime list. If the site does not start, lower PYTHON_VERSION in this workflow."
-          fi
-
-          WANT_FX="PYTHON|$PYTHON_VERSION"
-          HAVE_FX=$(az webapp config show -g "$RG" -n "$APP_NAME" --query linuxFxVersion -o tsv)
-          HAVE_CMD=$(az webapp config show -g "$RG" -n "$APP_NAME" --query appCommandLine -o tsv)
-          HAVE_BUILD=$(az webapp config appsettings list -g "$RG" -n "$APP_NAME" --query "[?name=='SCM_DO_BUILD_DURING_DEPLOYMENT'].value | [0]" -o tsv)
-          CHANGED=0
-
-          if [ "$HAVE_FX" != "$WANT_FX" ] || [ "$HAVE_CMD" != "$STARTUP_COMMAND" ]; then
-            echo "Runtime: '$HAVE_FX' -> '$WANT_FX'; startup command: '$HAVE_CMD' -> '$STARTUP_COMMAND'"
-            az webapp config set -g "$RG" -n "$APP_NAME" --linux-fx-version "$WANT_FX" --startup-file "$STARTUP_COMMAND" -o none \
-              || manual "This deployment identity is not allowed to change the App Service runtime."
-            CHANGED=1
-          fi
-
-          if [ "$HAVE_BUILD" != "true" ] && [ "$HAVE_BUILD" != "1" ]; then
-            echo "Turning on build-on-deploy (SCM_DO_BUILD_DURING_DEPLOYMENT)"
-            az webapp config appsettings set -g "$RG" -n "$APP_NAME" --settings SCM_DO_BUILD_DURING_DEPLOYMENT=true -o none \
-              || manual "This deployment identity is not allowed to change the App Service settings."
-            CHANGED=1
-          fi
-
-          if [ "$CHANGED" = "1" ]; then
-            echo "Configuration changed - waiting for the App Service to restart before deploying."
-            sleep 90
-          else
-            echo "App Service is already configured."
-          fi
-
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
@@ -158,12 +96,12 @@ jobs:
           app-name: ${{ env.APP_NAME }}
           slot-name: 'Production'
           package: release.zip
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1BAD8016E8824EECBE3712A9C3C3132D }}
 
       - name: Check the live site
         run: |
           set -euo pipefail
-          HOST=$(az webapp show -g "${{ steps.configure.outputs.rg }}" -n "$APP_NAME" --query defaultHostName -o tsv)
-          URL="https://$HOST"
+          URL="https://$APP_NAME.azurewebsites.net"
           echo "Site: $URL"
           for i in $(seq 1 40); do
             BODY=$(curl -fsS -m 20 "$URL/api/health" 2>/dev/null || true)
