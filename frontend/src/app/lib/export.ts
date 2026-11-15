@@ -57,7 +57,8 @@ const cell = (v: unknown): string => {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
 }
 
-const range = (r: [number, number] | null | undefined) => (r ? `${r[0]}-${r[1]}` : '')
+// Written as "3 to 5": a spreadsheet would read "3-5" as a date.
+const range = (r: [number, number] | null | undefined) => (r ? `${r[0]} to ${r[1]}` : '')
 
 /** Header lines that say exactly which run a comparison file came from. Each starts with "# ". */
 export function comparisonNotes(env: AnalysisEnvelope, meta?: ExportMeta): string[] {

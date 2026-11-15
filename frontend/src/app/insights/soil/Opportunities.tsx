@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { InfoTip } from '../../../components/ui/InfoTip'
 import { rotationLabel } from '../../../lib/analysis'
+import { cx } from '../../../lib/cx'
 import type { Rotation } from '../../../lib/types'
 import { MascotNote } from '../../components/controls'
 import { METRIC_BY_ID, fmtMetric, tradeoffs } from '../../lib/insights'
@@ -19,8 +20,7 @@ interface Wording {
   review: string
 }
 
-const alt = (n: number) => `${n === 1 ? 'the alternative' : `the ${n} alternatives`}`
-const of = (k: number, n: number) => (n === 1 ? 'The alternative' : k === n ? `All ${n} alternatives` : `${k} of ${alt(n)}`)
+const of = (k: number, n: number) => (n === 1 ? 'The alternative' : k === n ? `All ${n} alternatives` : `${k} of the ${n} alternatives`)
 const verb = (k: number, n: number, one: string, many: string) => (n === 1 || k === 1 ? one : many)
 
 const WORDING: Record<ProxyId, Wording> = {
@@ -85,23 +85,54 @@ function Track({ p, d }: { p: SoilProxy; d: ProxyDiff }) {
   )
 }
 
-function OpportunityCard({ id, alts, cur }: { id: ProxyId; alts: Rotation[]; cur: Rotation }) {
+interface Summary {
+  id: ProxyId
+  p: SoilProxy
+  w: Wording
+  /** Alternatives that move the proxy in the soil-care direction, in rank order. */
+  more: { r: Rotation; d: ProxyDiff }[]
+  /** The other alternatives, counted in words. */
+  rest: string[]
+  curText: string
+  n: number
+}
+
+function summarise(id: ProxyId, alts: Rotation[], cur: Rotation): Summary {
   const p = PROXY_BY_ID[id]
   const w = WORDING[id]
   const diffs = alts.map((r) => ({ r, d: proxyDiff(p, r, cur) }))
-  const more = diffs.filter((x) => x.d.shift === 'more')
-  const same = diffs.filter((x) => x.d.shift === 'same').length
-  const less = diffs.filter((x) => x.d.shift === 'less').length
-  const unknown = diffs.filter((x) => x.d.shift === 'unknown').length
-  const curText = p.fmt(p.get(cur), cur)
-  const n = alts.length
-  const rest = [same ? `${same} about the same` : null, less ? w.less(less) : null, unknown ? `${unknown} not available` : null].filter((x): x is string => !!x)
+  const count = (shift: ProxyDiff['shift']) => diffs.filter((x) => x.d.shift === shift).length
+  const same = count('same')
+  const less = count('less')
+  const unknown = count('unknown')
+  return {
+    id,
+    p,
+    w,
+    more: diffs.filter((x) => x.d.shift === 'more'),
+    rest: [same ? `${same} about the same` : null, less ? w.less(less) : null, unknown ? `${unknown} not available` : null].filter((x): x is string => !!x),
+    curText: p.fmt(p.get(cur), cur),
+    n: alts.length,
+  }
+}
 
+function ProxyName({ p }: { p: SoilProxy }) {
+  return (
+    <span className="inline-flex flex-wrap items-center gap-x-1">
+      {p.subtitle ?? p.title}
+      {p.subtitle ? ` (${p.title.toLowerCase()})` : ''} <InfoTip label={p.title}>{p.tip}</InfoTip>
+    </span>
+  )
+}
+
+/** A proxy on which at least one alternative moves in the soil-care direction. */
+function OpportunityCard({ s, cur }: { s: Summary; cur: Rotation }) {
+  const { p, w, more } = s
   // For soil cover the engine output can also say what came with it: the modelled water demand of the same alternatives.
   const water = METRIC_BY_ID.water
-  const thirstier = id === 'cover' ? more.filter((x) => tradeoffs(x.r, cur).some((t) => t.metric.id === 'water' && t.verdict === 'unfavourable')).length : 0
+  const thirstier = s.id === 'cover' ? more.filter((x) => tradeoffs(x.r, cur).some((t) => t.metric.id === 'water' && t.verdict === 'unfavourable')).length : 0
   let extra: ReactNode = null
-  if (id === 'cover' && more.length > 0 && thirstier > 0) {
+  if (thirstier > 0) {
     extra = (
       <>
         {' '}
@@ -119,90 +150,120 @@ function OpportunityCard({ id, alts, cur }: { id: ProxyId; alts: Rotation[]; cur
         </span>
         <div className="min-w-0">
           <h4 className="text-[1.0625rem] leading-snug">{w.heading(cur)}</h4>
-          <p className="mt-0.5 flex flex-wrap items-center gap-x-1 text-[0.75rem] leading-snug font-bold text-ink">
-            {p.subtitle ?? p.title}
-            {p.subtitle ? ` (${p.title.toLowerCase()})` : ''} <InfoTip label={p.title}>{p.tip}</InfoTip>
+          <p className="mt-0.5 text-[0.75rem] leading-snug font-bold text-ink">
+            <ProxyName p={p} />
           </p>
         </div>
       </div>
 
       <p className="mt-3.5 text-[0.9375rem] leading-relaxed text-ink">
-        {more.length > 0 ? w.some(more.length, n, curText, cur) : w.none(curText, cur)}
+        {w.some(more.length, s.n, s.curText, cur)}
         {extra}
       </p>
 
-      {more.length > 0 && (
-        <ul className="mt-3 space-y-2.5 border-t border-border pt-3">
-          {more.map(({ r, d }) => (
-            <li key={r.id}>
-              <span className="flex items-baseline justify-between gap-3">
-                <span className="min-w-0 text-[0.8125rem] leading-snug font-bold text-forest-950">
-                  <span className="mr-1.5 font-display font-semibold tabular-nums">#{r.scores?.rank}</span>
-                  {rotationLabel(r)}
-                </span>
-                <span className="shrink-0 text-right whitespace-nowrap tabular-nums">
-                  <span className="font-display text-[0.9375rem] font-semibold text-forest-950">{p.fmt(d.value, r)}</span>{' '}
-                  <span className="text-[0.75rem] font-bold text-ink">({p.fmtDelta(d.delta)})</span>
-                </span>
+      <ul className="mt-3 space-y-2.5 border-t border-border pt-3">
+        {more.map(({ r, d }) => (
+          <li key={r.id}>
+            <span className="flex items-baseline justify-between gap-3">
+              <span className="min-w-0 text-[0.8125rem] leading-snug font-bold text-forest-950">
+                <span className="mr-1.5 font-display font-semibold tabular-nums">#{r.scores?.rank}</span>
+                {rotationLabel(r)}
               </span>
-              <Track p={p} d={d} />
-            </li>
-          ))}
-        </ul>
-      )}
-      {more.length > 0 && p.axisLabels && (
+              <span className="shrink-0 text-right whitespace-nowrap tabular-nums">
+                <span className="font-display text-[0.9375rem] font-semibold text-forest-950">{p.fmt(d.value, r)}</span>{' '}
+                <span className="text-[0.75rem] font-bold text-ink">({p.fmtDelta(d.delta)})</span>
+              </span>
+            </span>
+            <Track p={p} d={d} />
+          </li>
+        ))}
+      </ul>
+      {p.axisLabels && (
         <p className="mx-2 mt-0.5 flex justify-between text-[0.6875rem] font-bold text-muted tabular-nums" aria-hidden="true">
           <span>{p.axisLabels[0]}</span>
           <span>{p.axisLabels[1]}</span>
         </p>
       )}
 
-      {rest.length > 0 && (
-        <p className="mt-3 text-[0.8125rem] leading-snug font-semibold text-ink">
-          {more.length > 0 ? 'The rest: ' : n === 1 ? 'The alternative: ' : `Of the ${n} alternatives: `}
-          {rest.join(', ')}.
-        </p>
-      )}
+      {s.rest.length > 0 && <p className="mt-3 text-[0.8125rem] leading-snug font-semibold text-ink">The rest: {s.rest.join(', ')}.</p>}
       <p className="mt-auto pt-3.5 text-[0.8125rem] leading-snug text-muted">{w.review}</p>
     </article>
   )
 }
 
+/** The proxies on which no alternative moves in the soil-care direction, said plainly in one place. */
+function NoChange({ items, cur, className }: { items: Summary[]; cur: Rotation; className?: string }) {
+  return (
+    <article className={cx('rounded-[1.5rem] bg-sand/60 p-5 ring-1 ring-border', className)}>
+      <h4 className="text-[1.0625rem] leading-snug">Where no alternative goes further than your current rotation</h4>
+      <ul className="mt-3.5 space-y-4">
+        {items.map((s) => (
+          <li key={s.id} className="flex gap-3">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white text-forest-950 ring-1 ring-border-strong" aria-hidden="true">
+              <s.p.icon className="h-4 w-4" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[0.75rem] leading-snug font-bold text-ink">
+                <ProxyName p={s.p} />
+              </p>
+              <p className="mt-0.5 text-[0.9375rem] leading-snug text-ink">{s.w.none(s.curText, cur)}</p>
+              {s.rest.length > 0 && (
+                <p className="mt-1 text-[0.8125rem] leading-snug font-semibold text-ink">
+                  {s.n === 1 ? 'The alternative: ' : `Of the ${s.n} alternatives: `}
+                  {s.rest.join(', ')}.
+                </p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </article>
+  )
+}
+
+const DIRECTIONS = 'more days under crop, a larger legume share, a higher residue class, less heavy rain on bare soil, or fewer same-family sequences'
+
 /** How the alternatives differ from the current rotation on each proxy, stated only where the numbers show it. */
 export function Opportunities({ all, cur }: { all: Rotation[]; cur: Rotation }) {
   const alts = all.filter((r) => !r.is_current)
   const ids: ProxyId[] = ['cover', 'legume', 'erosion', 'residue', 'family']
-  const anyMore = ids.filter((id) => alts.some((r) => proxyDiff(PROXY_BY_ID[id], r, cur).shift === 'more')).length
+  const summaries = ids.map((id) => summarise(id, alts, cur))
+  const moved = summaries.filter((s) => s.more.length > 0)
+  const unmoved = summaries.filter((s) => s.more.length === 0)
+  const cells = moved.length + (unmoved.length ? 1 : 0)
   return (
     <section aria-labelledby="soil-opportunities-title" className="space-y-4">
-      <div>
-        <h3 id="soil-opportunities-title" className="text-[1.25rem] leading-tight">
-          Which alternatives move a soil-care proxy, and which do not?
-        </h3>
-        <p className="mt-1 max-w-3xl text-[0.9375rem] leading-relaxed text-ink">
-          {alts.length === 0
-            ? 'The engine returned only your current rotation, so there is no alternative to compare it with.'
-            : anyMore === 0
-              ? `None of the ${alts.length === 1 ? 'alternative’s' : `${alts.length} alternatives’`} soil-care proxies differs from your current rotation in the direction the soil-care scoring rewards.`
-              : `On ${anyMore} of the ${ids.length} proxies, at least one alternative differs from your current rotation in the direction the soil-care scoring rewards. Each card names them, with the values.`}
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+        <div className="min-w-0">
+          <h3 id="soil-opportunities-title" className="text-[1.25rem] leading-tight">
+            Which alternatives move a soil-care proxy, and which do not?
+          </h3>
+          <p className="mt-1 max-w-3xl text-[0.9375rem] leading-relaxed text-ink">
+            {alts.length === 0
+              ? 'The engine returned only your current rotation, so there is no alternative to compare it with.'
+              : moved.length === 0
+                ? `On none of the ${ids.length} proxies does an alternative go further than your current rotation in the soil-care direction: ${DIRECTIONS}.`
+                : `On ${moved.length} of the ${ids.length} proxies, at least one alternative goes further than your current rotation in the soil-care direction: ${DIRECTIONS}. Each card names the alternatives, with their values.`}
+          </p>
+          {moved.length > 0 && (
+            <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[0.8125rem] font-semibold text-ink">
+              <LegendKey swatch={<span className="h-4 w-4 rounded-full border-[3px] border-peri-chart bg-white" />}>Your current rotation</LegendKey>
+              <LegendKey swatch={<span className="h-3 w-3 rounded-full bg-forest-950" />}>The alternative named above the line</LegendKey>
+            </ul>
+          )}
+        </div>
         {alts.length > 0 && (
-          <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-[0.8125rem] font-semibold text-ink">
-            <LegendKey swatch={<span className="h-4 w-4 rounded-full border-[3px] border-peri-chart bg-white" />}>Your current rotation</LegendKey>
-            <LegendKey swatch={<span className="h-3 w-3 rounded-full bg-forest-950" />}>The alternative named above the line</LegendKey>
-          </ul>
+          <MascotNote mascot="mint" className="max-w-sm">
+            “Worth reviewing” means worth a closer look with someone who knows your land. It is not an instruction.
+          </MascotNote>
         )}
       </div>
       {alts.length > 0 && (
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {ids.map((id) => (
-            <OpportunityCard key={id} id={id} alts={alts} cur={cur} />
+        <div className={cx('grid items-stretch gap-4', cells > 1 && 'md:grid-cols-2', cells > 1 && cells !== 2 && cells !== 4 && 'xl:grid-cols-3')}>
+          {moved.map((s) => (
+            <OpportunityCard key={s.id} s={s} cur={cur} />
           ))}
-          <div className="flex flex-col justify-center rounded-[1.5rem] bg-peri-50/70 p-5 ring-1 ring-peri">
-            <MascotNote mascot="mint">
-              “Worth reviewing” means worth a closer look with someone who knows your land. It is not an instruction, and a proxy that moves is not a soil that has changed.
-            </MascotNote>
-          </div>
+          {unmoved.length > 0 && <NoChange items={unmoved} cur={cur} className={cx(cells === 5 && 'xl:col-span-2', cells > 1 && cells % 2 === 1 && 'md:max-xl:col-span-2')} />}
         </div>
       )}
     </section>

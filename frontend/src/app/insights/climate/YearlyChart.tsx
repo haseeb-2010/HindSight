@@ -161,7 +161,7 @@ export function YearlyChart({
         aria-label={`${summary} Use the left and right arrow keys to read each year. A table of every value follows the chart.`}
         onKeyDown={onKey}
         onBlur={() => setActive(null)}
-        className="relative rounded-xl outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest-950"
+        className="relative overflow-hidden rounded-xl outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest-950"
       >
         <svg
           width={width}
@@ -208,6 +208,11 @@ export function YearlyChart({
               )
             })}
           </g>
+          {hi <= 0 && (
+            <text x={PAD.l + innerW / 2} y={PAD.t + innerH / 2} textAnchor="middle" className="fill-ink text-[13px] font-bold">
+              {withUnit(0, unit, yearDigits)} in every year of this record
+            </text>
+          )}
           {yearTicks.map(({ yr, i }) => (
             <text key={yr} x={x(i) + step / 2} y={height - 7} textAnchor="middle" className="fill-muted text-[11px] font-bold">
               {yr}
@@ -253,20 +258,26 @@ export function YearlyChart({
 
       <figcaption className="mt-4 rounded-2xl bg-sand/60 px-4 py-3 text-[0.9375rem] leading-relaxed text-ink">{shiftSentence(shift, earlyIn, lateIn)}</figcaption>
 
-      <dl className="mt-4 grid gap-x-8 gap-y-3 text-[0.875rem] sm:grid-cols-2">
-        <div>
-          <dt className="font-bold text-muted">Highest year in the record</dt>
-          <dd className="mt-0.5 font-semibold text-forest-950 tabular-nums">
-            {withUnit(hi, unit, yearDigits)} {whenText(years, values, hi)}
-          </dd>
-        </div>
-        <div>
-          <dt className="font-bold text-muted">Lowest year in the record</dt>
-          <dd className="mt-0.5 font-semibold text-forest-950 tabular-nums">
-            {withUnit(lo, unit, yearDigits)} {whenText(years, values, lo)}
-          </dd>
-        </div>
-      </dl>
+      {hi === lo ? (
+        <p className="mt-4 text-[0.875rem] font-semibold text-forest-950 tabular-nums">
+          Every one of the {n} years in the record has the same value: {withUnit(hi, unit, yearDigits)}.
+        </p>
+      ) : (
+        <dl className="mt-4 grid gap-x-8 gap-y-3 text-[0.875rem] sm:grid-cols-2">
+          <div>
+            <dt className="font-bold text-muted">Highest year in the record</dt>
+            <dd className="mt-0.5 font-semibold text-forest-950 tabular-nums">
+              {withUnit(hi, unit, yearDigits)} {whenText(years, values, hi)}
+            </dd>
+          </div>
+          <div>
+            <dt className="font-bold text-muted">Lowest year in the record</dt>
+            <dd className="mt-0.5 font-semibold text-forest-950 tabular-nums">
+              {withUnit(lo, unit, yearDigits)} {whenText(years, values, lo)}
+            </dd>
+          </div>
+        </dl>
+      )}
 
       <details className="group mt-4 rounded-2xl bg-sand/50">
         <summary className="flex cursor-pointer list-none items-center gap-2 rounded-2xl px-4 py-3 text-[0.875rem] font-extrabold text-forest-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-forest-950 [&::-webkit-details-marker]:hidden">

@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react'
 import { Mascot } from '../../components/ui/Mascot'
 import { currentRotation, rankedRotations, rotationLabel } from '../../lib/analysis'
-import { fmtNum, fmtPct, isNum } from '../../lib/format'
+import { fmtNum, isNum } from '../../lib/format'
 import { Callout, Segmented } from '../components/controls'
 import { isScenarioActive, scenarioText } from '../lib/config'
 import { calendarByYear, exposureSentence, METRIC_BY_ID, monthlyShare, tradeoffs } from '../lib/insights'
 import { HBars, Panel, RotationPicker, TIP } from '../results/shared'
 import { BareHeatmap } from './season/BareHeatmap'
-import { cropOrder, monthRuns, mostlyBareMonths, runsText } from './season/calendar'
+import { cropOrder, monthRuns, mostlyBareMonths, runsText, sharePct } from './season/calendar'
 import { CropTimeline } from './season/CropTimeline'
 import { RainContext } from './season/RainContext'
 import { RotationStrips } from './season/RotationStrips'
@@ -60,9 +60,9 @@ export default function SeasonalExposure({ env, names }: InsightProps) {
     bareText && monthly && rainShare !== null
       ? `${multi ? `In year ${year + 1} of the rotation, the` : 'The'} mostly bare months (${bareText}) bring on average ${fmtNum(inBare('rain_mm'))} mm of the record’s ${fmtNum(
           allYear('rain_mm'),
-        )} mm of rain a year (${fmtPct(rainShare)})` +
+        )} mm of rain a year (${sharePct(rainShare)})` +
         (heavyShare !== null
-          ? ` and ${fmtNum(inBare('heavy_rain_days'), 1)} of its ${fmtNum(allYear('heavy_rain_days'), 1)} heavy-rain days a year (${fmtPct(heavyShare)}).`
+          ? ` and ${fmtNum(inBare('heavy_rain_days'), 1)} of its ${fmtNum(allYear('heavy_rain_days'), 1)} heavy-rain days a year (${sharePct(heavyShare)}).`
           : '. No day in the record reached the heavy-rain threshold.')
       : null
 
@@ -71,9 +71,9 @@ export default function SeasonalExposure({ env, names }: InsightProps) {
   const versus = cur && !rotation.is_current ? tradeoffs(rotation, cur).find((t) => t.metric.id === 'erosion') : undefined
   const indicatorSentence = !isNum(mine)
     ? 'Not available: the engine did not return this indicator for the rotation.'
-    : `Counted day by day over ${rec.start_year}–${rec.end_year}, ${fmtPct(mine)} of the record’s heavy-rain days fell while this rotation’s calendar had no crop in the ground` +
+    : `Counted day by day over ${rec.start_year}–${rec.end_year}, ${sharePct(mine)} of the record’s heavy-rain days fell while this rotation’s calendar had no crop in the ground` +
       (versus && isNum(versus.base) && isNum(versus.delta)
-        ? `, ${versus.verdict === 'similar' ? 'about the same as' : versus.delta < 0 ? 'lower than' : 'higher than'} your current rotation (${fmtPct(versus.base)}).`
+        ? `, ${versus.verdict === 'similar' ? 'about the same as' : versus.delta < 0 ? 'lower than' : 'higher than'} your current rotation (${sharePct(versus.base)}).`
         : '.')
 
   return (
@@ -86,7 +86,7 @@ export default function SeasonalExposure({ env, names }: InsightProps) {
         </p>
       </div>
 
-      <div ref={top} className="scroll-mt-24">
+      <div ref={top} className="scroll-mt-36">
         <Panel>
           <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
             <div className="min-w-0">
@@ -146,6 +146,10 @@ export default function SeasonalExposure({ env, names }: InsightProps) {
       )}
 
       <Panel title="Rainfall and heavy-rain days beside the bare months">
+        <p className="-mt-2 mb-4 max-w-3xl text-[0.875rem] leading-relaxed text-muted">
+          What the {scenarioOn ? 'adjusted ' : ''}NASA POWER record for this location brings in each calendar month, on the same twelve months as the calendar above. These are
+          gridded estimates for the area, not measurements on the field.
+        </p>
         {scenarioOn && (
           <Callout tone="warn" className="mb-4" title="These values describe an adjusted record, not what was observed">
             This analysis ran with a what-if scenario{scenario ? ` (${scenario})` : ''} applied to the historical record, so the monthly rainfall and the exposure indicator below
@@ -153,13 +157,7 @@ export default function SeasonalExposure({ env, names }: InsightProps) {
           </Callout>
         )}
         {monthly && climate ? (
-          <>
-            <p className="-mt-2 mb-4 max-w-3xl text-[0.875rem] leading-relaxed text-muted">
-              What the {scenarioOn ? 'adjusted ' : ''}NASA POWER record for this location brings in each calendar month, on the same twelve months as the calendar above. These are
-              gridded estimates for the area, not measurements on the field.
-            </p>
-            <RainContext rotation={rotation} row={row} year={year} hasCalendar={hasCalendar} climate={climate} active={active} setActive={setActive} />
-          </>
+          <RainContext rotation={rotation} row={row} year={year} hasCalendar={hasCalendar} climate={climate} active={active} setActive={setActive} />
         ) : (
           <Callout tone="plain" title="Monthly rainfall is not stored with this analysis">
             This analysis was saved without the month-by-month weather values, so no rainfall chart is drawn. The calendar above and the engine’s indicator below are still
@@ -173,7 +171,7 @@ export default function SeasonalExposure({ env, names }: InsightProps) {
             tip={TIP.erosion}
             caption="Share of the record’s heavy-rain days that fell on days with no crop in the ground."
             max={1}
-            format={(v) => fmtPct(v)}
+            format={sharePct}
             rows={[
               { key: rotation.id, label: rotationLabel(rotation), value: mine, current: rotation.is_current },
               ...(cur && !rotation.is_current ? [{ key: cur.id, label: rotationLabel(cur), value: erosion.get(cur), current: true }] : []),

@@ -101,8 +101,8 @@ export function TradeoffSummary({ env }: { env: AnalysisEnvelope }) {
           </p>
         </div>
 
-        <dl className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-          <ValuePair label="Crop water demand" tip={`${TIP.water} ${METRIC_BY_ID.water.context}`} t={demand} name={name} />
+        <dl className="grid min-w-0 gap-3 sm:grid-cols-2 lg:grid-cols-1 lg:self-start xl:grid-cols-2">
+          <ValuePair label="Crop water demand" tip={METRIC_BY_ID.water.context} t={demand} name={name} />
           {noIrrigation ? (
             <div className="min-w-0 rounded-2xl bg-sand/50 p-4">
               <dt className="flex items-center gap-1 text-[0.8125rem] leading-tight font-bold text-ink">
@@ -117,7 +117,7 @@ export function TradeoffSummary({ env }: { env: AnalysisEnvelope }) {
               </dd>
             </div>
           ) : (
-            <ValuePair label="Irrigation requirement" tip={TIP.irrigation} t={irrigation} name={name} />
+            <ValuePair label="Irrigation requirement" tip={METRIC_BY_ID.irrigation.context} t={irrigation} name={name} />
           )}
         </dl>
       </div>

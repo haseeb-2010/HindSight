@@ -3,6 +3,7 @@ import {
   ArrowDownRight,
   ArrowRight,
   ArrowUpRight,
+  ChartColumn,
   CircleDashed,
   CircleDot,
   CloudRain,
@@ -123,6 +124,7 @@ function IndicatorCard({
   lateLabel,
   series,
   windows,
+  hint,
 }: {
   s: ClimateShift
   on: boolean
@@ -132,8 +134,11 @@ function IndicatorCard({
   lateLabel: string
   series: YearSeries | null
   windows: Windows
+  /** One plain line saying what the indicator is. */
+  hint?: string
 }) {
   const descId = useId()
+  const hintId = useId()
   const reading = readShift(s)
   const d = meanDigits(s.unit)
   const Icon = ICONS[s.id] ?? Gauge
@@ -148,13 +153,11 @@ function IndicatorCard({
       </span>
     </span>
   )
-  const stat = (label: string, value: string, extra?: string | null) => (
-    <span className="block min-w-0">
-      <span className="block text-[0.75rem] leading-tight font-bold text-ink">{label}</span>
-      <span className="mt-1 block font-display text-[1rem] leading-tight font-semibold text-forest-950 tabular-nums">{value}</span>
-      {extra && <span className="block text-[0.75rem] font-bold text-ink tabular-nums">{extra}</span>}
-    </span>
-  )
+  const stats: [string, string, string | null][] = [
+    ['Change', signed(change, s.unit, d), rel],
+    ['Trend per decade', signed(s.slope_per_decade, s.unit, 1), null],
+    ['Trend test', fmtP(s.p_value), null],
+  ]
 
   return (
     <label
@@ -164,13 +167,20 @@ function IndicatorCard({
         on ? 'bg-lime-100 shadow-soft ring-2 ring-forest-950' : 'bg-white shadow-hairline ring-1 ring-border hover:shadow-soft hover:ring-border-strong',
       )}
     >
-      <input type="radio" name={name} className="sr-only" checked={on} onChange={onSelect} aria-label={s.label} aria-describedby={descId} />
+      <input type="radio" name={name} className="sr-only" checked={on} onChange={onSelect} aria-label={s.label} aria-describedby={hint ? `${hintId} ${descId}` : descId} />
       <span className="flex items-start justify-between gap-3">
-        <span className="flex min-w-0 items-center gap-2.5">
+        <span className="flex min-w-0 items-start gap-2.5">
           <span className={cx('flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors', on ? 'bg-forest-950 text-lime' : 'bg-sand text-forest-950')}>
             <Icon className="h-[1.125rem] w-[1.125rem]" aria-hidden="true" />
           </span>
-          <span className="font-display text-[1.0625rem] leading-snug font-semibold text-forest-950">{s.label}</span>
+          <span className="min-w-0">
+            <span className="block font-display text-[1.0625rem] leading-snug font-semibold text-forest-950">{s.label}</span>
+            {hint && (
+              <span id={hintId} className="mt-0.5 block text-[0.75rem] leading-snug font-semibold text-muted">
+                {hint}
+              </span>
+            )}
+          </span>
         </span>
         <span aria-hidden="true" className={cx('mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2', on ? 'border-forest-950' : 'border-sand-400')}>
           {on && <span className="h-2.5 w-2.5 rounded-full bg-forest-950" />}
@@ -192,18 +202,25 @@ function IndicatorCard({
           </span>
         )}
 
-        <span className={cx('mt-4 grid grid-cols-3 gap-3 border-t pt-3.5', on ? 'border-forest-950/15' : 'border-border')}>
-          {stat('Change', signed(change, s.unit, d), rel)}
-          {stat('Trend per decade', signed(s.slope_per_decade, s.unit, 1))}
-          {stat('Trend test', fmtP(s.p_value))}
+        {/* Column by column in the markup (label, value, note), row by row on screen, so the three values share a line. */}
+        <span className={cx('mt-4 grid grid-flow-col grid-cols-3 grid-rows-[auto_auto_auto] gap-x-3 border-t pt-3.5', on ? 'border-forest-950/15' : 'border-border')}>
+          {stats.flatMap(([label, value, note]) => [
+            <span key={label} className="self-end text-[0.75rem] leading-tight font-bold text-ink">
+              {label}
+            </span>,
+            <span key={`${label}-value`} className="mt-1 font-display text-[1rem] leading-tight font-semibold text-forest-950 tabular-nums">
+              {value}
+            </span>,
+            <span key={`${label}-note`} className="text-[0.75rem] font-bold text-ink tabular-nums">
+              {note}
+            </span>,
+          ])}
         </span>
 
-        {on && series && (
-          <span className="mt-auto flex items-center gap-1.5 pt-3.5 text-[0.75rem] font-extrabold text-forest-950">
-            <ArrowDown className="h-3.5 w-3.5" strokeWidth={2.6} aria-hidden="true" />
-            Shown year by year in the chart below
-          </span>
-        )}
+        <span className={cx('mt-auto flex items-center gap-1.5 pt-3.5 text-[0.75rem] font-extrabold', on ? 'text-forest-950' : 'text-muted')}>
+          {on ? <ArrowDown className="h-3.5 w-3.5" strokeWidth={2.6} aria-hidden="true" /> : <ChartColumn className="h-3.5 w-3.5" strokeWidth={2.4} aria-hidden="true" />}
+          {series ? (on ? 'Shown year by year in the chart below' : 'Show every year in the chart') : on ? 'Finding shown below' : 'Show this finding'}
+        </span>
       </span>
     </label>
   )
@@ -218,6 +235,7 @@ export function IndicatorCards({
   lateLabel,
   seriesFor,
   windows,
+  hintFor,
 }: {
   shifts: ClimateShift[]
   selected: string
@@ -226,6 +244,7 @@ export function IndicatorCards({
   lateLabel: string
   seriesFor: (id: string) => YearSeries | null
   windows: Windows
+  hintFor?: (id: string) => string | undefined
 }) {
   const name = useId()
   return (
@@ -246,6 +265,7 @@ export function IndicatorCards({
             lateLabel={lateLabel}
             series={seriesFor(s.id)}
             windows={windows}
+            hint={hintFor?.(s.id)}
           />
         ))}
       </div>

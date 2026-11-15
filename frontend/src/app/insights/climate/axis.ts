@@ -10,7 +10,7 @@ export function niceAxis(dataMax: number, whole = false, target = 4): { max: num
   if (whole && step < 1) step = 1
   const count = Math.max(1, Math.ceil(dataMax / step - 1e-9))
   const ticks = Array.from({ length: count + 1 }, (_, i) => Number((i * step).toPrecision(12)))
-  return { max: count * step, ticks, digits: step >= 1 && Number.isInteger(step) ? 0 : step >= 0.1 ? 1 : 2 }
+  return { max: ticks[count], ticks, digits: step >= 1 && Number.isInteger(step) ? 0 : step >= 0.1 ? 1 : 2 }
 }
 
 /** "134 days", "1 day", "1,934 mm": a value with the engine's unit. */

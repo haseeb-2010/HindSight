@@ -76,6 +76,17 @@ export function ScaledScores({ env, all, cur }: { env: AnalysisEnvelope; all: Ro
   const sentence = currentSentence(all, cur)
   const n = all.length
 
+  if (n < 2) {
+    return (
+      <Panel title="What the ranking actually uses">
+        <Callout tone="plain" title="Not available for this analysis" className="max-w-4xl">
+          The ranking rescales each proxy between the lowest and the highest rotation in an analysis. The engine returned only your current rotation, so there is nothing to
+          scale it against.
+        </Callout>
+      </Panel>
+    )
+  }
+
   return (
     <Panel title="What the ranking actually uses">
       <p className="-mt-1 max-w-3xl text-[0.9375rem] leading-relaxed text-ink">

@@ -3,7 +3,7 @@ import { cx } from '../../../lib/cx'
 import { fmtNum, fmtPct, isNum } from '../../../lib/format'
 import type { ClimateContext, MonthlyClimate, Rotation } from '../../../lib/types'
 import { BARE_RULES, bareLevel, monthName, monthlyShare } from '../../lib/insights'
-import { fractionWords, HATCH, monthRuns, mostlyBareMonths, runsText, type Row } from './calendar'
+import { fractionWords, HATCH, monthRuns, mostlyBareMonths, runsText, sharePct, type Row } from './calendar'
 import { Swatch } from './CropTimeline'
 import { ActiveColumn, FigureHead, FOCUS_RING, MonthAxis, Readout, TrackRow, useMonthReader } from './track'
 
@@ -69,7 +69,7 @@ export function RainContext({
   active: number | null
   setActive: (m: number | null) => void
 }) {
-  const { track, bind } = useMonthReader(active, setActive)
+  const { track, bind, focused } = useMonthReader(active, setActive)
   const monthly = [...climate.monthly].sort((a, b) => a.month - b.month)
   const heavyMm = climate.thresholds?.heavy_rain_mm
   const heavyWord = isNum(heavyMm) ? `${heavyMm} mm or more` : 'heavy rain'
@@ -100,9 +100,9 @@ export function RainContext({
     : !bareText
       ? ` No month is mostly bare in this rotation${yearNote}, so no bare months are marked.`
       : rainShare !== null && heavyShare !== null
-        ? ` The mostly bare months of this rotation${yearNote}, ${bareText}, hold ${fmtPct(rainShare)} of the record’s yearly rainfall and ${fmtPct(heavyShare)} of its heavy-rain days.`
+        ? ` The mostly bare months of this rotation${yearNote}, ${bareText}, hold ${sharePct(rainShare)} of the record’s yearly rainfall and ${sharePct(heavyShare)} of its heavy-rain days.`
         : rainShare !== null
-          ? ` The mostly bare months of this rotation${yearNote}, ${bareText}, hold ${fmtPct(rainShare)} of the record’s yearly rainfall.`
+          ? ` The mostly bare months of this rotation${yearNote}, ${bareText}, hold ${sharePct(rainShare)} of the record’s yearly rainfall.`
           : ''
 
   const m = active !== null ? monthly[active] : null
@@ -118,13 +118,13 @@ export function RainContext({
           <li className="inline-flex items-center gap-2">
             <Swatch color="var(--color-forest-800)" /> Heavy-rain days, record average
           </li>
-          {hasCalendar && (
+          {hasCalendar && bare.size > 0 && (
             <li className="inline-flex items-center gap-2">
               <Swatch bare /> Mostly bare month in this rotation{yearNote}: modelled bare-soil fraction of {fractionWords(BARE_RULES.higherFrom)} or more
             </li>
           )}
         </ul>
-        <Readout month={active}>
+        <Readout month={active} live={focused}>
           {m ? (
             <>
               {fmtNum(m.rain_mm, 1)} mm rain · {fmtNum(m.heavy_rain_days, 2)} heavy-rain days

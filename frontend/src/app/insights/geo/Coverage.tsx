@@ -270,7 +270,7 @@ function NdviCard({ env, preset }: { env: AnalysisEnvelope; preset: Preset | nul
           <Missing />
         )}
       </Row>
-      <Row label="Resolution" tip="One 250 m pixel covers 6.25 hectares and can mix several fields, roads or buildings.">
+      <Row label="Resolution" tip="One 250 m pixel covers 6.25 hectares and can mix several fields.">
         {SOURCES.modis.resolution}
       </Row>
       <Row

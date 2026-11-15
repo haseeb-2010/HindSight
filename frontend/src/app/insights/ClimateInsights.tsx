@@ -6,6 +6,7 @@ import { Callout } from '../components/controls'
 import { isScenarioActive, scenarioText } from '../lib/config'
 import { shiftSentence } from '../lib/insights'
 import { Panel } from '../results/shared'
+import { indicatorInfo } from './climate/definitions'
 import { HowToRead } from './climate/HowToRead'
 import { IndicatorCards, ShiftChips, type YearSeries } from './climate/IndicatorCards'
 import { YearlyChart } from './climate/YearlyChart'
@@ -42,6 +43,7 @@ export default function ClimateInsights({ env }: InsightProps) {
     return { years, values }
   }
   const series = selected ? seriesFor(selected.id) : null
+  const info = selected ? indicatorInfo(selected.id, ctx) : null
   const anySeries = shifts.some((s) => seriesFor(s.id) !== null)
 
   return (
@@ -88,12 +90,14 @@ export default function ClimateInsights({ env }: InsightProps) {
             lateLabel={lateSpan ?? 'Later period'}
             seriesFor={seriesFor}
             windows={windows}
+            hintFor={(id) => indicatorInfo(id, ctx)?.hint}
           />
 
           <Panel title={series ? `${selected.label}: every year of the record` : selected.label} action={<ShiftChips s={selected} />}>
             {series ? (
               <>
                 <p className="-mt-2 mb-4 max-w-3xl text-[0.875rem] leading-relaxed text-muted">
+                  {info && <span className="font-semibold text-ink">{info.definition} </span>}
                   Each bar is one year of the {scenarioOn ? 'adjusted ' : ''}NASA POWER record for this location, {series.years[0]}–{series.years[series.years.length - 1]}.
                   {earlySpan && lateSpan ? ' The two shaded bands are the periods being compared, and each line is that period’s mean as reported by the engine.' : ''}
                 </p>
@@ -101,6 +105,7 @@ export default function ClimateInsights({ env }: InsightProps) {
               </>
             ) : (
               <div className="space-y-4">
+                {info && <p className="-mt-2 max-w-3xl text-[0.875rem] leading-relaxed font-semibold text-ink">{info.definition}</p>}
                 <Callout tone="plain" title="Yearly values are not stored with this analysis">
                   {ctx
                     ? 'The year-by-year values for this indicator were not saved with the analysis, so no chart is drawn.'

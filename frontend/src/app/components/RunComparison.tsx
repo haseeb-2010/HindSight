@@ -381,6 +381,9 @@ export default function RunComparison({ runs, baselineId, kind, names }: RunComp
   // a difference between two different rotations is marked, so it is not read as one rotation changing
   const flagged = (run: RunSummary) => subject === 'top' && run !== base && !sameRotation(run.top, base.top)
   const anyFlagged = compare && all.some(flagged)
+  // said only when the engine values are in fact equal (typical when only the weights differ)
+  const unchanged =
+    compare && subject === 'current' && !!base.current && all.every((r) => !!r.current && HEADLINE.every((m) => isNum(m.get(r.current as Rotation)) && m.get(r.current as Rotation) === m.get(base.current as Rotation)))
   // the "about the same" margins, read from the indicator definitions (one per unit)
   const margins = [...new Map(HEADLINE.map((m) => [m.unit, m.unit === 'percent' ? `${(m.similar * 100).toFixed(0)} percentage points` : m.unit === 'mm' ? `${m.similar} mm` : `${m.similar.toFixed(2)} index points`])).values()]
   const similarText = margins.length > 1 ? `${margins.slice(0, -1).join(', ')} or ${margins[margins.length - 1]}` : margins.join('')
@@ -456,8 +459,8 @@ export default function RunComparison({ runs, baselineId, kind, names }: RunComp
                       Run
                     </th>
                     {all.map((run, i) => (
-                      <th key={run.id} scope="col" className={cx('px-3 pt-3 pb-3 text-left align-top font-normal', i === baseIndex && !single && 'rounded-t-2xl bg-sand/60')}>
-                        <RunHead run={run} kind={kind} isBase={i === baseIndex} single={single} detail={all.length <= 3} tight={all.length >= 5} />
+                      <th key={run.id} scope="col" className={cx('px-3 pt-3 pb-3 text-left align-top font-normal', i === baseIndex && compare && 'rounded-t-2xl bg-sand/60')}>
+                        <RunHead run={run} kind={kind} isBase={i === baseIndex} single={!compare} detail={all.length <= 3} tight={all.length >= 5} />
                       </th>
                     ))}
                   </tr>
@@ -468,7 +471,7 @@ export default function RunComparison({ runs, baselineId, kind, names }: RunComp
                       <tr>
                         <RowHead label="Field" />
                         {all.map((run, i) => (
-                          <Cell key={run.id} base={i === baseIndex && !single}>
+                          <Cell key={run.id} base={i === baseIndex && compare}>
                             <span className="font-bold text-forest-950">{run.envelope.result.site.name}</span>
                             <span className="block text-[0.75rem] font-semibold text-ink tabular-nums">{fmtCoord(run.envelope.result.site.lat, run.envelope.result.site.lon)}</span>
                           </Cell>
@@ -477,7 +480,7 @@ export default function RunComparison({ runs, baselineId, kind, names }: RunComp
                       <tr>
                         <RowHead label="Current rotation" />
                         {all.map((run, i) => (
-                          <Cell key={run.id} base={i === baseIndex && !single}>
+                          <Cell key={run.id} base={i === baseIndex && compare}>
                             <span className="font-bold text-forest-950">{run.current ? rotationLabel(run.current) : 'Not available'}</span>
                           </Cell>
                         ))}
@@ -487,7 +490,7 @@ export default function RunComparison({ runs, baselineId, kind, names }: RunComp
                   <tr>
                     <RowHead label="Highest-ranked rotation" tip={TIP.rank} />
                     {all.map((run, i) => (
-                      <Cell key={run.id} base={i === baseIndex && !single}>
+                      <Cell key={run.id} base={i === baseIndex && compare}>
                         <TopCell run={run} base={base} compare={compare} names={names} />
                       </Cell>
                     ))}
@@ -495,7 +498,7 @@ export default function RunComparison({ runs, baselineId, kind, names }: RunComp
                   <tr>
                     <RowHead label="Current rotation’s rank" tip={TIP.rank} />
                     {all.map((run, i) => (
-                      <Cell key={run.id} base={i === baseIndex && !single}>
+                      <Cell key={run.id} base={i === baseIndex && compare}>
                         <RankCell run={run} base={base} compare={compare} />
                       </Cell>
                     ))}
@@ -511,7 +514,7 @@ export default function RunComparison({ runs, baselineId, kind, names }: RunComp
                     <tr key={m.id}>
                       <RowHead label={m.label} tip={tipFor(m, base.envelope)} note={m.favoured === 'higher' ? 'Higher is favourable' : 'Lower is favourable'} />
                       {all.map((run, i) => (
-                        <Cell key={run.id} base={i === baseIndex && !single}>
+                        <Cell key={run.id} base={i === baseIndex && compare}>
                           <MetricCell m={m} run={run} rot={rotOf(run)} t={deltas(run)[m.id]} flagged={flagged(run)} />
                         </Cell>
                       ))}
@@ -526,8 +529,8 @@ export default function RunComparison({ runs, baselineId, kind, names }: RunComp
                 const d = deltas(run)
                 const rot = rotOf(run)
                 return (
-                  <li key={run.id} className={cx('rounded-2xl p-4 ring-1', i === baseIndex && !single ? 'bg-sand/50 ring-border-strong' : 'bg-white ring-border')}>
-                    <RunHead run={run} kind={kind} isBase={i === baseIndex} single={single} detail />
+                  <li key={run.id} className={cx('rounded-2xl p-4 ring-1', i === baseIndex && compare ? 'bg-sand/50 ring-border-strong' : 'bg-white ring-border')}>
+                    <RunHead run={run} kind={kind} isBase={i === baseIndex} single={!compare} detail />
                     <dl className="mt-3.5 space-y-3 border-t border-border pt-3.5 text-[0.875rem]">
                       {showField && (
                         <div>
@@ -578,6 +581,7 @@ export default function RunComparison({ runs, baselineId, kind, names }: RunComp
               is not a verdict on the rotation. “About the same” means a difference smaller than {similarText}.
             </p>
           )}
+          {unchanged && <p>The current rotation’s five indicators are identical in every run here. Only the ranking differs.</p>}
           {anyFlagged && <p>† A different rotation is highest-ranked in this run than in the baseline, so this difference compares two different rotations.</p>}
           <p>Index values are historical simulated seasonal indices, not crop yield. Water demand and irrigation are modelled amounts per year, not measured farm water use.</p>
         </div>

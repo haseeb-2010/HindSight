@@ -38,7 +38,7 @@ export function CropTimeline({
   active: number | null
   setActive: (m: number | null) => void
 }) {
-  const { track, bind } = useMonthReader(active, setActive)
+  const { track, bind, focused } = useMonthReader(active, setActive)
   const row = rows[year] ?? []
   const lanes = yearLanes(rows, year)
   const cyclic = rotation.cycle_years === 1
@@ -86,7 +86,7 @@ export function CropTimeline({
             )}
           </li>
         </ul>
-        <Readout month={active}>
+        <Readout month={active} live={focused}>
           {!cell
             ? 'not in the engine calendar'
             : cell.crop_id === FALLOW || cell.bare_frac >= 1
@@ -151,7 +151,12 @@ export function CropTimeline({
         <ol className="mt-2 flex flex-wrap items-center gap-x-1.5 gap-y-2">
           {sequence.map((s, i) => (
             <li key={`${s.crop_id}-${s.months[0]}`} className="flex items-center gap-1.5">
-              {i > 0 && <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted" aria-label="then" />}
+              {i > 0 && (
+                <>
+                  <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted" aria-hidden="true" />
+                  <span className="sr-only">then</span>
+                </>
+              )}
               <span className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[0.8125rem] font-bold text-ink ring-1 ring-border-strong">
                 <Swatch color={color(s.crop_id)} bare={s.crop_id === FALLOW} />
                 <span>

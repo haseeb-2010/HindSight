@@ -97,7 +97,7 @@ function DemoDetails({ preset, env, busy, onAnalyse }: { preset: Preset; env: An
       <p className="mt-3 text-[0.75rem] font-extrabold tracking-[0.06em] text-ink uppercase">Data available on the server</p>
       <DataStatus preset={preset} className="mt-1.5" />
       <AnalyseButton preset={preset} busy={busy} onAnalyse={onAnalyse} className="mt-4 w-full" />
-      <p className="mt-2 text-[0.8125rem] leading-snug text-ink">Runs the engine for this farm and opens the result here in place of the current one. The current analysis stays in My Analyses.</p>
+      <p className="mt-2 text-[0.8125rem] leading-snug text-ink">Runs the engine for this farm with its own settings and makes the result the open analysis. The analysis open now stays in My Analyses.</p>
     </>
   )
 }
@@ -141,7 +141,7 @@ export default function GeoContext({ env }: InsightProps) {
     id: p.id,
     lat: p.lat,
     lon: p.lon,
-    label: p.id === analysedPreset?.id ? `${presetTitle(p)}: demonstration location, analysed here` : `${presetTitle(p)}: demonstration location. Select to see its details.`,
+    label: `${presetTitle(p)}: demonstration location${p.id === analysedPreset?.id ? ', analysed here' : selected === p.id ? ', details shown' : '. Select to see its details.'}`,
     active: p.id === analysedPreset?.id ? selected === 'site' : selected === p.id,
   }))
   if (ndviPoint) markers.push({ id: 'modis-pixel', lat: ndviPoint.lat, lon: ndviPoint.lon, label: 'Position of the MODIS pixel read for the greenness check (250 m, far smaller than this mark)', kind: 'reference' })
@@ -161,7 +161,7 @@ export default function GeoContext({ env }: InsightProps) {
 
       {run.status !== 'idle' && (
         <div ref={progress} className="space-y-3">
-          <RunProgress run={run} onRetry={() => void analyse()} onCancel={cancelRun} title="Analysing the demonstration farm…" />
+          <RunProgress run={run} onRetry={() => void analyse()} onCancel={cancelRun} title="Analysing the farm…" />
           {run.status === 'error' && (
             <Button variant="secondary" onClick={cancelRun}>
               Dismiss and keep the current analysis
@@ -213,7 +213,7 @@ export default function GeoContext({ env }: InsightProps) {
             </p>
             {view === 'all' && demos.length > 1 && (
               <p className="mt-1.5 text-[0.8125rem] leading-snug font-bold text-ink">
-                Markers that are close together overlap at this scale. Zoom in, or choose a location with the buttons {''}
+                Markers that are close together overlap at this scale. Zoom in, or choose a location with the buttons{' '}
                 <span className="lg:hidden">below</span>
                 <span className="hidden lg:inline">beside the map</span>.
               </p>
@@ -256,12 +256,11 @@ export default function GeoContext({ env }: InsightProps) {
 
       <Panel title="Demonstration locations compared">
         <p className="-mt-2 mb-4 max-w-3xl text-[0.875rem] text-muted">
-          Three real locations, each with its own water supply and current rotation. The data status shows what the HindSight server already holds for each one.
+          Real locations, each with its own water supply and current rotation. The data status shows what the HindSight server already holds for each one.
         </p>
         <DemoComparison presets={presets} analysedId={analysedPreset?.id ?? null} selectedId={shownPreset?.id ?? null} busy={busy} onAnalyse={start} onShow={showOnMap} onReload={reloadData} />
         <p className="mt-4 text-[0.8125rem] leading-snug text-ink">
-          “Analyse this farm” runs the engine for that farm with its own settings and opens the result here in place of the current one. The current analysis stays in My
-          Analyses.
+          “Analyse this farm” runs the engine for that farm with its own settings and makes the result the open analysis. The analysis open now stays in My Analyses.
         </p>
       </Panel>
     </div>

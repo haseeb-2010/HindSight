@@ -46,7 +46,11 @@ function MeasureBars({ id, title, tip, order, cur, max, active, onActive, senten
     <div className="min-w-0">
       <MeasureHeading title={title} tip={tip} id={id} />
       {/* Leaving is handled on the list, so moving from one row to the next does not flicker through "nothing selected". */}
-      <ul className="mt-3 space-y-1" onPointerLeave={(e) => e.pointerType === 'mouse' && onActive(null)}>
+      <ul
+        className="mt-3 space-y-1"
+        aria-label={`${title} in millimetres per year, one bar for each rotation.${sentence ? ` ${sentence}` : ''}`}
+        onPointerLeave={(e) => e.pointerType === 'mouse' && onActive(null)}
+      >
         {order.map((r) => {
           const v = valueOf(r, id)
           const note = r === cur ? 'The rotation the others are compared with' : deltaNote(waterTradeoff(r, cur, id))
@@ -195,7 +199,8 @@ export function WaterComparison({ env }: { env: AnalysisEnvelope }) {
         </dl>
       ) : (
         <p className="font-semibold">
-          Hover or tap a rotation to read {noIrrigation ? 'its values' : 'both measures for it'} together. With a keyboard, focus the {noIrrigation ? 'chart' : 'charts'} and use the ↑ and ↓ keys.
+          {noIrrigation ? 'Hover or tap a rotation to see its rank and values here.' : 'Hover or tap a rotation to read both measures for it together.'} With a keyboard, focus the{' '}
+          {noIrrigation ? 'chart' : 'charts'} and use the ↑ and ↓ keys.
         </p>
       )}
     </div>
@@ -242,7 +247,7 @@ export function WaterComparison({ env }: { env: AnalysisEnvelope }) {
         aria-label={`Water comparison ${noIrrigation ? 'chart' : 'charts'}. Use the up and down arrow keys to read the values for one rotation at a time.`}
         onKeyDown={onKey}
         onBlur={() => setActive(null)}
-        className="mt-4 rounded-2xl outline-offset-[14px]"
+        className="mt-4 rounded-2xl outline-offset-[12px]"
       >
         {noIrrigation ? (
           // One chart only: the statement, the readout and the note share the second column.
@@ -275,7 +280,7 @@ export function WaterComparison({ env }: { env: AnalysisEnvelope }) {
         )}
       </div>
 
-      {!noIrrigation && <div className="mt-4">{footnote}</div>}
+      {!noIrrigation && <div className="mt-6">{footnote}</div>}
     </Panel>
   )
 }

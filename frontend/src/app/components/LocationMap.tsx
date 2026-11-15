@@ -5,8 +5,9 @@ import { cx } from '../../lib/cx'
 
 const round2 = (v: number) => Math.round(v * 100) / 100
 const wrapLon = (lon: number) => ((((lon + 180) % 360) + 360) % 360) - 180
-const validPoint = (lat: number | null, lon: number | null): lat is number =>
-  lat !== null && lon !== null && Number.isFinite(lat) && Number.isFinite(lon) && Math.abs(lat) <= 90 && Math.abs(lon) <= 180
+/** The position as Leaflet wants it, or null when either coordinate is missing or out of range. */
+const pointOf = (lat: number | null, lon: number | null): [number, number] | null =>
+  lat !== null && lon !== null && Number.isFinite(lat) && Number.isFinite(lon) && Math.abs(lat) <= 90 && Math.abs(lon) <= 180 ? [lat, lon] : null
 
 // NASA POWER meteorology comes from MERRA-2, whose grid cells are 0.5° of latitude by 0.625° of
 // longitude, centred on multiples of those steps. The box shows the size of that cell.
@@ -131,6 +132,22 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
   const fixed = useRef(readOnly)
   fixed.current = readOnly
 
+  // Only marks inside the visible map take keyboard focus: a focused mark beyond the map's edge would be
+  // clipped, so its focus ring could not be seen. The picker's own pin keeps its tab stop, as it always had.
+  const syncTabStops = () => {
+    const m = map.current
+    if (!m) return
+    const view = m.getBounds()
+    for (const { marker: mk, kind } of extra.current.values()) {
+      const node = mk.getElement()
+      if (node && kind === 'place') node.tabIndex = view.contains(mk.getLatLng()) ? 0 : -1
+    }
+    const pinEl = marker.current?.getElement()
+    if (pinEl && marker.current) pinEl.tabIndex = !fixed.current || view.contains(marker.current.getLatLng()) ? 0 : -1
+  }
+  const tabStops = useRef(syncTabStops)
+  tabStops.current = syncTabStops
+
   useEffect(() => {
     if (!el.current) return
     const m = L.map(el.current, { center: [24, 45], zoom: 2, minZoom: 2, scrollWheelZoom: false, worldCopyJump: true })
@@ -141,6 +158,7 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
     m.on('click', (e) => {
       if (!fixed.current) pick.current?.(round2(e.latlng.lat), round2(wrapLon(e.latlng.lng)))
     })
+    m.on('moveend', () => tabStops.current())
     map.current = m
     const ro = new ResizeObserver(() => m.invalidateSize())
     ro.observe(el.current)
@@ -168,7 +186,8 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
   useEffect(() => {
     const m = map.current
     if (!m) return
-    if (!validPoint(lat, lon) || lon === null) {
+    const at = pointOf(lat, lon)
+    if (!at) {
       marker.current?.remove()
       cell.current?.remove()
       marker.current = null
@@ -177,7 +196,7 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
     }
     const name = readOnly ? (pointLabel ?? 'Analysed location') : 'Selected field location. Drag to adjust.'
     if (!marker.current) {
-      const pin = L.marker([lat, lon], { icon: PIN, draggable: !readOnly, keyboard: true, title: name, alt: 'Selected field location', zIndexOffset: 1000 }).addTo(m)
+      const pin = L.marker(at, { icon: PIN, draggable: !readOnly, keyboard: true, title: name, alt: 'Selected field location', zIndexOffset: 1000 }).addTo(m)
       pin.on('dragend', () => {
         const p = pin.getLatLng()
         pick.current?.(round2(Math.max(-90, Math.min(90, p.lat))), round2(wrapLon(p.lng)))
@@ -192,7 +211,7 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
       })
       marker.current = pin
     } else {
-      marker.current.setLatLng([lat, lon])
+      marker.current.setLatLng(at)
     }
     if (readOnly) marker.current.dragging?.disable()
     else marker.current.dragging?.enable()
@@ -202,18 +221,20 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
       if (readOnly) pinEl.setAttribute('aria-label', name)
       else pinEl.removeAttribute('aria-label')
     }
-    const bounds = weatherCell(lat, lon)
+    const bounds = weatherCell(at[0], at[1])
     if (!cell.current) {
       cell.current = L.rectangle(bounds, { color: '#1c3a2a', weight: 1.5, dashArray: '6 6', fillColor: '#eef384', fillOpacity: 0.16, interactive: false }).addTo(m)
     } else {
       cell.current.setBounds(bounds)
     }
-    if (m.getZoom() < 6 || !m.getBounds().pad(-0.15).contains([lat, lon])) m.setView([lat, lon], Math.max(m.getZoom(), 8), { animate: true })
+    if (m.getZoom() < 6 || !m.getBounds().pad(-0.15).contains(at)) m.setView(at, Math.max(m.getZoom(), 8), { animate: true })
+    tabStops.current()
   }, [lat, lon, readOnly, pointLabel])
 
   /* ---- secondary markers: kept in place between renders so keyboard focus survives a selection ---- */
-  const list = (markers ?? []).filter((k) => validPoint(k.lat, k.lon))
+  const list = (markers ?? []).filter((k) => pointOf(k.lat, k.lon) !== null)
   const markersKey = list.map((k) => [k.id, k.lat, k.lon, k.label, k.kind ?? 'place', k.active ? 1 : 0].join('|')).join(';')
+  const placesKey = list.map((k) => [k.id, k.lat, k.lon].join('|')).join(';')
   const latest = useRef(list)
   latest.current = list
   useEffect(() => {
@@ -257,6 +278,7 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
         if (kind === 'place') node.setAttribute('aria-pressed', k.active ? 'true' : 'false')
       }
     }
+    tabStops.current()
   }, [markersKey])
 
   /* ---- what is in view ---- */
@@ -267,9 +289,10 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
     if (!m) return
     const changed = lastFocus.current !== focusKey
     lastFocus.current = focusKey
+    const at = pointOf(lat, lon)
     if (focusKey === 'all') {
       const pts: [number, number][] = latest.current.map((k) => [k.lat, k.lon])
-      if (validPoint(lat, lon) && lon !== null) pts.push([lat, lon])
+      if (at) pts.push(at)
       if (pts.length) {
         const bounds = L.latLngBounds(pts)
         // Room for the marks themselves: the pin stands 34 px above its point.
@@ -283,12 +306,13 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
       }
     } else if (focusKey === 'point') {
       // the point effect above already brings a new point into view; this returns to it from another view
-      if (changed && validPoint(lat, lon) && lon !== null) m.setView([lat, lon], 8, { animate: true })
+      if (changed && at) m.setView(at, 8, { animate: true })
     } else {
       const target = latest.current.find((k) => `marker:${k.id}` === focusKey)
       if (target && (m.getZoom() < 6 || !m.getBounds().pad(-0.1).contains([target.lat, target.lon]))) m.setView([target.lat, target.lon], 8, { animate: true })
     }
-  }, [focusKey, markersKey, lat, lon])
+    // placesKey, not markersKey: a new label or active mark must not undo the user's own panning and zooming
+  }, [focusKey, placesKey, lat, lon])
 
   /* ---- future data layers (see MapOverlay): none exist today ---- */
   useEffect(() => {
@@ -298,7 +322,7 @@ export function LocationMap({ lat, lon, onPick, className, markers, onMarkerSele
     return () => layers.forEach((layer) => layer.remove())
   }, [overlays])
 
-  const hasPoint = validPoint(lat, lon)
+  const hasPoint = pointOf(lat, lon) !== null
   const labels: LegendLabels = typeof legend === 'object' ? legend : {}
   const box = (
     <div className={cx('hs-map relative isolate z-0 overflow-hidden rounded-[1.25rem] ring-1 ring-border', className)}>

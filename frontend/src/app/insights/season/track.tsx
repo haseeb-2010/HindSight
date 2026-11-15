@@ -1,4 +1,4 @@
-import { useRef, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
+import { useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import { cx } from '../../../lib/cx'
 import { monthName } from '../../lib/insights'
 import { SHORT_MONTHS } from './calendar'
@@ -64,6 +64,8 @@ export function MonthAxis({ active, marked }: { active: number | null; marked?: 
  */
 export function useMonthReader(active: number | null, setActive: (m: number | null) => void) {
   const track = useRef<HTMLDivElement>(null)
+  // The month being read is shared by the three charts, so only the chart that holds keyboard focus announces it.
+  const [focused, setFocused] = useState(false)
   const at = (e: PointerEvent<HTMLElement>): number | null => {
     const r = track.current?.getBoundingClientRect()
     if (!r || r.width <= 0) return null
@@ -84,7 +86,11 @@ export function useMonthReader(active: number | null, setActive: (m: number | nu
     onPointerLeave: (e: PointerEvent<HTMLElement>) => {
       if (e.pointerType === 'mouse') setActive(null)
     },
-    onBlur: () => setActive(null),
+    onFocus: () => setFocused(true),
+    onBlur: () => {
+      setFocused(false)
+      setActive(null)
+    },
     onKeyDown: (e: KeyboardEvent<HTMLElement>) => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return
       e.preventDefault()
@@ -94,17 +100,28 @@ export function useMonthReader(active: number | null, setActive: (m: number | nu
       else setActive((active + (e.key === 'ArrowLeft' ? 11 : 1)) % 12)
     },
   }
-  return { track, bind }
+  return { track, bind, focused }
 }
 
 /**
- * The box that prints the month being read. Announced politely to screen readers.
+ * The box that prints the month being read. With `live` it is announced politely to screen readers.
  * It keeps room for two lines on phones and one on wider screens, so the chart under it never moves while reading.
  */
-export function Readout({ month, children, idle = 'Hover, tap or use ← → keys to read a month' }: { month: number | null; children: ReactNode; idle?: string }) {
+export function Readout({
+  month,
+  children,
+  live,
+  idle = 'Hover, tap or use ← → keys to read a month',
+}: {
+  month: number | null
+  children: ReactNode
+  /** True while this chart holds keyboard focus. */
+  live: boolean
+  idle?: string
+}) {
   return (
     <div className="flex min-h-[2.75rem] items-center sm:min-h-[1.625rem]">
-      <div aria-live="polite" className="rounded-lg bg-sand px-2.5 py-1 text-[0.75rem] leading-snug font-bold text-ink tabular-nums">
+      <div aria-live={live ? 'polite' : 'off'} className="rounded-lg bg-sand px-2.5 py-1 text-[0.75rem] leading-snug font-bold text-ink tabular-nums">
         {month === null ? (
           <span>{idle}</span>
         ) : (
@@ -122,4 +139,5 @@ export function FigureHead({ children }: { children: ReactNode }) {
   return <div className="mb-3 space-y-2">{children}</div>
 }
 
-export const FOCUS_RING = 'rounded-xl outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest-950'
+/** For the focusable chart container: a visible keyboard focus ring, and sideways scrubbing on touch screens. */
+export const FOCUS_RING = 'touch-pan-y rounded-xl outline-offset-4 focus-visible:outline-2 focus-visible:outline-forest-950'

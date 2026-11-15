@@ -14,17 +14,10 @@ import { analysisDateOf, analysisIdOf } from '../lib/export'
 import { readShift, stabilitySentence } from '../lib/insights'
 import { waterLabel } from '../lib/labels'
 import { CITATIONS } from '../results/ProvenanceTab'
-import {
-  briefData,
-  ClimateContextSection,
-  CurrentAssessment,
-  DisclaimerSection,
-  EvidenceSection,
-  FarmSnapshot,
-  LeadingAlternatives,
-  VerificationChecklist,
-  type BriefData,
-} from './sections'
+import { LeadingAlternatives } from './AlternativesSection'
+import { DisclaimerSection, EvidenceSection, VerificationChecklist } from './EvidenceSections'
+import { ClimateContextSection, CurrentAssessment, FarmSnapshot } from './FieldSections'
+import { briefData, type BriefData } from './parts'
 
 export interface BriefAnalysis {
   /** The name the analysis is saved under. */

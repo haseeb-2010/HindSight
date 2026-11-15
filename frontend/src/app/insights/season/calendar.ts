@@ -1,6 +1,6 @@
 // Layout helpers for the seasonal exposure explorer. They only regroup the engine's rotation calendar
 // (one entry per month: the crop in the ground for most of the month, and the share of days with no crop).
-import { fmtPct } from '../../../lib/format'
+import { fmtPct, isNum } from '../../../lib/format'
 import type { CalendarCell, Rotation } from '../../../lib/types'
 import { BARE_RULES, bareLevel, monthName, monthSpanText } from '../../lib/insights'
 
@@ -171,3 +171,9 @@ export function bareRuleText(): { lower: string; moderate: string; higher: strin
 }
 
 export const SHORT_MONTHS = Array.from({ length: 12 }, (_, i) => monthName(i + 1, true))
+
+/** A share as a whole percentage, with one decimal below 1% so that a small share is never printed as "0%". */
+export function sharePct(v: number | null | undefined): string {
+  if (!isNum(v) || v <= 0 || v >= 0.01) return fmtPct(v)
+  return v < 0.0005 ? 'under 0.1%' : fmtPct(v, 1)
+}

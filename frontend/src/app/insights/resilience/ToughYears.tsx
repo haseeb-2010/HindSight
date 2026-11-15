@@ -218,7 +218,7 @@ export function ToughYears({ env, cur }: { env: AnalysisEnvelope; cur: Rotation 
       </ul>
 
       {/* Table on wide screens */}
-      <div className="mt-4 hidden lg:block">
+      <div className="mt-4 hidden xl:block">
         <table
           ref={tableRef}
           className="w-full border-separate border-spacing-0 text-[0.875rem]"
@@ -308,7 +308,7 @@ export function ToughYears({ env, cur }: { env: AnalysisEnvelope; cur: Rotation 
       </div>
 
       {/* Stacked cards on small screens */}
-      <ul className="mt-4 grid gap-3 md:grid-cols-2 lg:hidden">
+      <ul className="mt-4 grid gap-3 md:grid-cols-2 xl:hidden">
         {rows.map((row) => (
           <li key={row.rotation.id} className={cx('rounded-2xl p-4 ring-1', row.rotation.is_current ? 'bg-peri-50/70 ring-peri' : 'bg-white ring-border')}>
             <div className="flex items-start gap-2.5">

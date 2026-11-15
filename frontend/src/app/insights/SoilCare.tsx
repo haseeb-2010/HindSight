@@ -28,7 +28,7 @@ function EngineBenefits({ env, all }: { env: AnalysisEnvelope; all: Rotation[] }
         </Callout>
       ) : rows.length === 0 ? (
         <p className="mt-4 rounded-2xl bg-sand/60 p-4 text-[0.9375rem] leading-relaxed font-semibold text-ink">
-          The engine lists no soil-related benefit for any of the {all.length} rotations in this analysis.
+          The engine lists no soil-related benefit for {all.length === 1 ? 'the rotation' : `any of the ${all.length} rotations`} in this analysis.
         </p>
       ) : (
         <ul className="mt-4 space-y-3">
@@ -51,10 +51,13 @@ function EngineBenefits({ env, all }: { env: AnalysisEnvelope; all: Rotation[] }
           ))}
         </ul>
       )}
-      <p className="mt-4 text-[0.8125rem] leading-snug text-muted">
-        Where a sentence says a legume fixes nitrogen for the following crop, that is the engine’s general assumption about legumes. Nitrogen is not measured or balanced
-        in this analysis. “Of the rotations compared” means the rotations in this run only.
-      </p>
+      {rows.length > 0 && (
+        <p className="mt-4 text-[0.8125rem] leading-snug text-muted">
+          {rows.some((x) => x.benefits.some((b) => /nitrogen/i.test(b))) &&
+            'Where a sentence says a legume fixes nitrogen for the following crop, that is the engine’s general assumption about legumes. Nitrogen is not measured or balanced in this analysis. '}
+          These sentences compare only the rotations in this run.
+        </p>
+      )}
     </Panel>
   )
 }

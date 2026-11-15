@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { cx } from '../../../lib/cx'
 import { fmtPct } from '../../../lib/format'
 import type { Rotation } from '../../../lib/types'
@@ -49,12 +50,15 @@ export function BareHeatmap({
   active: number | null
   setActive: (m: number | null) => void
 }) {
-  const { track, bind } = useMonthReader(active, setActive)
+  const { track, bind, focused } = useMonthReader(active, setActive)
+  // The row being read: the one under the pointer or chosen with the up and down keys, otherwise the year shown in the calendar.
+  const [rowPick, setRowPick] = useState<number | null>(null)
+  const readRow = rowPick !== null && rowPick < rows.length ? rowPick : year
   const multi = rotation.cycle_years > 1
   const cells = rows.flat().filter((c) => c !== null)
   const count = (l: BareLevel) => cells.filter((c) => bareLevel(c.bare_frac) === l).length
   const total = cells.length
-  const cell = active !== null ? rows[year]?.[active] : null
+  const cell = active !== null ? rows[readRow]?.[active] : null
   const sentence =
     total === 0
       ? 'The engine did not return a calendar for this rotation.'
@@ -66,27 +70,46 @@ export function BareHeatmap({
     <figure className="m-0 min-w-0">
       <FigureHead>
         <LevelLegend />
-        <Readout month={active}>
-          {cell ? `${fmtPct(cell.bare_frac)} of days bare${multi ? ` in year ${year + 1}` : ''} · ${BARE_LABELS[bareLevel(cell.bare_frac)].toLowerCase()}` : 'not in the engine calendar'}
+        <Readout month={active} live={focused}>
+          {cell
+            ? `${fmtPct(cell.bare_frac)} of days bare${multi ? ` in year ${readRow + 1}` : ''} · ${BARE_LABELS[bareLevel(cell.bare_frac)].toLowerCase()}`
+            : 'not in the engine calendar'}
         </Readout>
       </FigureHead>
 
       <div
         {...bind}
-        aria-label={`Modelled bare-soil fraction for each month${multi ? ` of the ${rotation.cycle_years}-year cycle` : ''}, as a percentage of the month’s days. ${sentence} Use the left and right arrow keys to read each month; a table of all values follows.`}
+        onKeyDown={(e) => {
+          if (multi && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+            e.preventDefault()
+            setRowPick((readRow + (e.key === 'ArrowUp' ? rows.length - 1 : 1)) % rows.length)
+            if (active === null) setActive(0)
+            return
+          }
+          bind.onKeyDown(e)
+        }}
+        onPointerLeave={(e) => {
+          bind.onPointerLeave(e)
+          if (e.pointerType === 'mouse') setRowPick(null)
+        }}
+        onBlur={() => {
+          bind.onBlur()
+          setRowPick(null)
+        }}
+        aria-label={`Modelled bare-soil fraction for each month${multi ? ` of the ${rotation.cycle_years}-year cycle` : ''}, as a percentage of the month’s days. ${sentence} Use the left and right arrow keys to read each month${multi ? ' and the up and down arrow keys to change the rotation year' : ''}; a table of all values follows.`}
         className={cx('space-y-1.5', FOCUS_RING)}
       >
         {rows.map((row, y) => (
           <TrackRow key={y} label={multi ? `Year ${y + 1}` : 'Every year'} sub={multi && y === year ? 'shown in the calendar above' : undefined}>
-            <div ref={y === 0 ? track : undefined} className="grid grid-cols-12" aria-hidden="true">
+            <div ref={y === 0 ? track : undefined} className="grid grid-cols-12" aria-hidden="true" onPointerEnter={() => setRowPick(y)} onPointerDown={() => setRowPick(y)}>
               {row.map((c, m) => {
                 const level = c ? bareLevel(c.bare_frac) : null
-                const on = active === m && y === year
+                const on = active === m && y === readRow
                 return (
                   <span key={m} className="px-px">
                     <span
                       className={cx(
-                        'flex h-11 items-center justify-center rounded-lg text-[0.6875rem] font-extrabold tabular-nums transition-shadow sm:text-[0.8125rem]',
+                        'flex h-11 items-center justify-center rounded-lg text-[0.6875rem] font-extrabold tabular-nums transition-shadow sm:text-[0.75rem] lg:text-[0.8125rem]',
                         level ? LEVEL_CLASS[level] : 'border border-dashed border-sand-400 text-muted',
                         on && 'ring-2 ring-forest-950 ring-offset-2 ring-offset-white',
                         active === m && !on && 'ring-1 ring-forest-950/40',
@@ -95,7 +118,7 @@ export function BareHeatmap({
                       {c ? (
                         <>
                           {Math.round(c.bare_frac * 100)}
-                          <span className="hidden sm:inline">%</span>
+                          <span className="hidden md:inline">%</span>
                         </>
                       ) : (
                         '–'

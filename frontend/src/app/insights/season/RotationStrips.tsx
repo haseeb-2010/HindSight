@@ -2,9 +2,9 @@ import { rotationLabel } from '../../../lib/analysis'
 import { cx } from '../../../lib/cx'
 import { fmtPct } from '../../../lib/format'
 import type { Rotation } from '../../../lib/types'
-import { BARE_LABELS, bareLevel, barePeriods, calendarByYear, fmtMetric, METRIC_BY_ID, monthName, monthSpanText } from '../../lib/insights'
+import { BARE_LABELS, bareLevel, barePeriods, calendarByYear, METRIC_BY_ID, monthName, monthSpanText } from '../../lib/insights'
 import { LEVEL_CLASS } from './BareHeatmap'
-import { SHORT_MONTHS } from './calendar'
+import { sharePct, SHORT_MONTHS } from './calendar'
 
 /** Where the calendar shows mostly bare soil, in words, so the strip is never read by shading alone. */
 function bareWords(r: Rotation): string {
@@ -82,7 +82,7 @@ export function RotationStrips({ rotations, selected, onSelect }: { rotations: R
               {hasCalendar && <span className="mt-2.5 block text-[0.8125rem] leading-snug font-semibold text-ink">{bareWords(r)}</span>}
               <span className="mt-auto flex items-baseline justify-between gap-3 pt-3 text-[0.8125rem]">
                 <span className="font-bold text-ink">{erosion.short}</span>
-                <span className="font-display text-[1rem] font-semibold text-forest-950 tabular-nums">{fmtMetric(erosion, erosion.get(r))}</span>
+                <span className="font-display text-[1rem] font-semibold text-forest-950 tabular-nums">{sharePct(erosion.get(r))}</span>
               </span>
             </button>
           </li>
