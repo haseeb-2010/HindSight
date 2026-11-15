@@ -20,6 +20,7 @@ import requests
 from fastapi import FastAPI, Query
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -439,6 +440,8 @@ app = FastAPI(title="HindSight API", version=API_VERSION,
 _origins = [o.strip() for o in os.environ.get(
     "HINDSIGHT_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173").split(",") if o.strip()]
 app.add_middleware(CORSMiddleware, allow_origins=_origins, allow_methods=["GET", "POST"], allow_headers=["*"])
+# Compress scripts, styles and JSON (the app bundle shrinks about 3.5x; analysis results even more).
+app.add_middleware(GZipMiddleware, minimum_size=1024, compresslevel=6)
 
 
 def _error(status: int, code: str, detail: str, **extra) -> JSONResponse:
@@ -666,11 +669,22 @@ class _SpaFiles(StaticFiles):
 
     async def get_response(self, path: str, scope):
         try:
-            return await super().get_response(path, scope)
+            response = await super().get_response(path, scope)
         except StarletteHTTPException as exc:
             if exc.status_code == 404 and not path.startswith("api") and "." not in path.rsplit("/", 1)[-1]:
-                return await super().get_response("index.html", scope)
+                response = await super().get_response("index.html", scope)
+                response.headers["Cache-Control"] = "no-cache"
+                return response
             raise
+        path = path.replace("\\", "/")  # Starlette hands over an OS path (backslashes on Windows)
+        if path.startswith("assets/"):
+            # Vite fingerprints these file names, so a new build always gets new names: cache them for good.
+            response.headers["Cache-Control"] = "public, max-age=31536000, immutable"
+        elif path.endswith(".html") or path in ("", "."):
+            response.headers["Cache-Control"] = "no-cache"  # always pick up a new deployment
+        else:
+            response.headers["Cache-Control"] = "public, max-age=86400"  # fonts, mascots, logo
+        return response
 
 
 if FRONTEND_DIST.is_dir():  # serve the built app when it exists (production-style single process)

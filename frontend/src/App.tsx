@@ -3,8 +3,20 @@ import { Link, Navigate, Route, Routes } from 'react-router-dom'
 import { Logo } from './components/brand/Logo'
 import { HomePage } from './pages/HomePage'
 
-// The workspace (map, charts, forms) loads only when someone opens it.
-const AppRoutes = lazy(() => import('./app/AppRoutes'))
+// The workspace (map, charts, forms) is a separate bundle so the homepage paints fast.
+const loadAppRoutes = () => import('./app/AppRoutes')
+const AppRoutes = lazy(loadAppRoutes)
+
+// Once the homepage is idle, fetch the workspace bundle in the background so
+// "Explore Your Field" opens without a wait. Skipped when the visitor asked to save data.
+if (typeof window !== 'undefined') {
+  const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData
+  if (!saveData) {
+    const warm = () => void loadAppRoutes().catch(() => {})
+    const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback
+    window.addEventListener('load', () => (idle ? idle(warm, { timeout: 4000 }) : window.setTimeout(warm, 1500)), { once: true })
+  }
+}
 
 function Centered({ children }: { children: React.ReactNode }) {
   return <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 text-center">{children}</div>
