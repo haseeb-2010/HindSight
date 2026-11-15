@@ -24,7 +24,7 @@ export function StepNav({ active, issues, locked, hasResults, stale, onGo }: Ste
   }
 
   return (
-    <nav aria-label="Analysis steps" className="print:hidden">
+    <nav aria-label="Analysis steps" className="min-w-0 print:hidden">
       {/* Mobile and tablet: progress row */}
       <div className="lg:hidden">
         <p className="mb-2 text-[0.75rem] font-extrabold tracking-[0.08em] text-muted uppercase">

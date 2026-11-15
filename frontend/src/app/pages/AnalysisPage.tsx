@@ -55,7 +55,9 @@ export function AnalysisPage() {
   const next = () => go(STEP_IDS[Math.min(STEP_IDS.length - 1, index + 1)])
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[16.5rem_minmax(0,1fr)] lg:gap-8 print:block">
+    // grid-cols-1 is minmax(0,1fr): on phones the column must not grow to fit the sideways-scrolling
+    // step strip (about 1000px of pills), or every step and results tab is wider than the screen.
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[16.5rem_minmax(0,1fr)] lg:gap-8 print:block">
       <StepNav active={step} issues={issues} locked={!located} hasResults={!!current} stale={ws.stale} onGo={(s) => go(s)} />
       <div className="min-w-0">
         {step === 'field' && <FieldStep onNext={() => (issues.field ? undefined : next())} issue={issues.field} />}

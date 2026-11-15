@@ -108,7 +108,7 @@ export function HBars({ title, tip, unit, rows, format, max, caption }: { title:
         {rows.map((r) => (
           <li key={r.key}>
             <div className="flex items-baseline justify-between gap-3 text-[0.8125rem]">
-              <span className={cx('min-w-0 truncate font-bold', r.current ? 'text-peri-ink' : 'text-ink')} title={r.label}>
+              <span className={cx('min-w-0 font-bold sm:truncate', r.current ? 'text-peri-ink' : 'text-ink')} title={r.label}>
                 {r.label}
                 {r.current && <span className="font-extrabold"> · current</span>}
               </span>
@@ -161,7 +161,9 @@ export function RotationPicker({ rotations, selected, onSelect, label }: { rotat
 
 export function Panel({ title, tip, children, className, action }: { title?: ReactNode; tip?: string; children: ReactNode; className?: string; action?: ReactNode }) {
   return (
-    <section className={cx('rounded-[1.5rem] bg-white p-5 shadow-hairline ring-1 ring-border sm:p-6', className)}>
+    // min-w-0: as a grid/flex item a panel must be allowed to shrink to the screen, or one long
+    // single-line label (a truncated rotation name) stretches it and the whole page past the viewport.
+    <section className={cx('min-w-0 rounded-[1.5rem] bg-white p-5 shadow-hairline ring-1 ring-border sm:p-6', className)}>
       {title && (
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <h3 className="flex items-center gap-1.5 text-[1.1875rem] leading-tight">
