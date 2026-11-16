@@ -1,6 +1,6 @@
 <div align="center">
 
-<a href="https://tryhindsight-bdd8hufna5e8bpgz.westus3-01.azurewebsites.net">
+<a href="https://tryhindsight.earth">
   <img src="frontend/public/social/hindsight-preview.jpg" alt="HindSight: Look back at your land. Replay 40 years of NASA weather on your field and compare crop rotations side by side." width="100%">
 </a>
 
@@ -27,7 +27,7 @@ so a farmer can see how their crop rotation, and the alternatives, would have fa
   <img alt="Tests" src="https://img.shields.io/badge/tests-199_passing-33594a">
 </p>
 
-[**Try it live**](https://tryhindsight-bdd8hufna5e8bpgz.westus3-01.azurewebsites.net) ·
+[**Try it live**](https://tryhindsight.earth) ·
 [The idea](#-the-idea) ·
 [Features](#-features) ·
 [How it works](#-how-it-works) ·
@@ -366,11 +366,9 @@ HindSight/
 | [FastAPI](https://fastapi.tiangolo.com/) | [Tailwind CSS](https://tailwindcss.com/) | [GitHub Actions](https://github.com/features/actions) |
 | [Uvicorn](https://www.uvicorn.org/) | [React Router](https://reactrouter.com/) | [Microsoft Azure App Service](https://azure.microsoft.com/products/app-service/) |
 | [Pydantic](https://docs.pydantic.dev/) | [Leaflet](https://leafletjs.com/) | [Node.js](https://nodejs.org/) |
-| [Requests](https://requests.readthedocs.io/) | [Lucide icons](https://lucide.dev/) | |
+| [Requests](https://requests.readthedocs.io/) | [Lucide icons](https://lucide.dev/) | [Claude Code](https://claude.com/claude-code) |
 
 **Fonts:** [Outfit](https://fonts.google.com/specimen/Outfit) and [Nunito](https://fonts.google.com/specimen/Nunito), both under the SIL Open Font License.
-
-**AI assistance:** [Claude](https://claude.ai/) and [Claude Code](https://claude.com/claude-code) by Anthropic helped draft code, tests and documentation, with every file reviewed by the team. HindSight itself uses no AI. See [`docs/AI_USE.md`](docs/AI_USE.md) for exactly which files and how.
 
 ---
 
@@ -454,6 +452,6 @@ More in [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) and [`docs/DATA_SOURCES.md`
 
 <br><br>
 
-<a href="https://tryhindsight-bdd8hufna5e8bpgz.westus3-01.azurewebsites.net"><b>🌾 Look back at your land →</b></a>
+<a href="https://tryhindsight.earth"><b>🌾 Look back at your land →</b></a>
 
 </div>
